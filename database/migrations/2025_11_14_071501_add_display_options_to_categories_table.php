@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        if (Schema::hasTable('categories')) {
+            Schema::table('categories', function (Blueprint $table) {
+                // Only add columns that don't exist
+                if (!Schema::hasColumn('categories', 'show_in_navbar')) {
+                    $table->boolean('show_in_navbar')->default(true)->after('is_featured');
+                }
+                if (!Schema::hasColumn('categories', 'show_in_homepage')) {
+                    $table->boolean('show_in_homepage')->default(false)->after('show_in_navbar');
+                }
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropColumn(['show_in_navbar', 'show_in_homepage']);
+        });
+    }
+};
