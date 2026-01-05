@@ -125,10 +125,6 @@
 
             <!-- Highlight Notes -->
             @if(isset($highlightNotes) && $highlightNotes->count() > 0)
-            <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-3">
-            <!-- Highlight Notes -->
-            @if(isset($highlightNotes) && $highlightNotes->count() > 0)
             <div x-data="highlightNotesDropdown()">
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
