@@ -125,7 +125,7 @@
 
             <!-- Highlight Notes -->
             @if(isset($highlightNotes) && $highlightNotes->count() > 0)
-            <div>
+            <div x-data="highlightNotesDropdown()">
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
@@ -135,14 +135,22 @@
                     </span>
                 </label>
                 <div class="relative">
-                    <select name="highlight_notes[]" id="highlightNotesSelect" multiple
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200">
-                        @foreach($highlightNotes as $note)
-                        <option value="{{ $note->id }}" {{ in_array($note->id, old('highlight_notes', $productData['highlight_notes'] ?? [])) ? 'selected' : '' }}>
-                            {{ $note->name }}
-                        </option>
-                        @endforeach
-                    </select>
+                    <button @click="open = !open" type="button" class="w-full px-4 py-3 text-left border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 hover:border-gray-400 flex justify-between items-center">
+                        <span x-text="selectedCount > 0 ? selectedCount + ' notes selected' : 'Select highlight notes'" class="truncate text-gray-700"></span>
+                        <svg class="w-4 h-4 ml-2 text-gray-500 transition-transform duration-200 flex-shrink-0" :class="{'rotate-180': open}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" class="absolute z-20 mt-2 w-full bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <input type="text" placeholder="Search notes..." x-model="search" class="w-full px-3 py-2 border-b border-gray-200 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                        <template x-for="note in filteredNotes" :key="note.id">
+                            <label class="flex items-center px-4 py-2 cursor-pointer hover:bg-amber-50">
+                                <input type="checkbox" :value="note.id" x-model="selected" name="highlight_notes[]" class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-500 mr-3">
+                                <span x-text="note.name" class="text-sm text-gray-700"></span>
+                            </label>
+                        </template>
+                        <div x-show="filteredNotes.length === 0" class="px-4 py-2 text-gray-400">No results found.</div>
+                    </div>
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Select highlight notes to display on product page (searchable)</p>
             </div>
@@ -150,7 +158,7 @@
 
             <!-- Scent Families -->
             @if(isset($scentFamilies) && $scentFamilies->count() > 0)
-            <div>
+            <div x-data="scentFamiliesDropdown()">
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
@@ -161,14 +169,22 @@
                     </span>
                 </label>
                 <div class="relative">
-                    <select name="scent_families[]" id="scentFamiliesSelect" multiple
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200">
-                        @foreach($scentFamilies as $family)
-                        <option value="{{ $family->id }}" {{ in_array($family->id, old('scent_families', $productData['scent_families'] ?? [])) ? 'selected' : '' }}>
-                            {{ $family->name }}
-                        </option>
-                        @endforeach
-                    </select>
+                    <button @click="open = !open" type="button" class="w-full px-4 py-3 text-left border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 hover:border-gray-400 flex justify-between items-center">
+                        <span x-text="selectedCount > 0 ? selectedCount + ' families selected' : 'Select scent families'" class="truncate text-gray-700"></span>
+                        <svg class="w-4 h-4 ml-2 text-gray-500 transition-transform duration-200 flex-shrink-0" :class="{'rotate-180': open}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" class="absolute z-20 mt-2 w-full bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <input type="text" placeholder="Search families..." x-model="search" class="w-full px-3 py-2 border-b border-gray-200 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        <template x-for="family in filteredFamilies" :key="family.id">
+                            <label class="flex items-center px-4 py-2 cursor-pointer hover:bg-purple-50">
+                                <input type="checkbox" :value="family.id" x-model="selected" name="scent_families[]" class="w-4 h-4 text-purple-500 border-gray-300 rounded focus:ring-purple-500 mr-3">
+                                <span x-text="family.name" class="text-sm text-gray-700"></span>
+                            </label>
+                        </template>
+                        <div x-show="filteredFamilies.length === 0" class="px-4 py-2 text-gray-400">No results found.</div>
+                    </div>
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Select scent families for this product (searchable)</p>
             </div>
@@ -336,31 +352,53 @@
 </form>
 
 @push('scripts')
-<!-- Select2 for Searchable Select -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- Alpine.js for Searchable Dropdowns -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 <!-- Quill Editor -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <script>
-// Initialize Select2 for Searchable Selects
-$(document).ready(function() {
-    // Highlight Notes Select
-    $('#highlightNotesSelect').select2({
-        placeholder: 'Search and select highlight notes...',
-        allowClear: true,
-        width: '100%'
-    });
-    
-    // Scent Families Select
-    $('#scentFamiliesSelect').select2({
-        placeholder: 'Search and select scent families...',
-        allowClear: true,
-        width: '100%'
-    });
-});
+// Highlight Notes Dropdown (Multiple Selection)
+function highlightNotesDropdown() {
+    return {
+        open: false,
+        search: '',
+        selected: @json(old('highlight_notes', $productData['highlight_notes'] ?? [])),
+        notes: @json($highlightNotes),
+        
+        get filteredNotes() {
+            return this.notes.filter(note =>
+                note.name.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
+        
+        get selectedCount() {
+            return this.selected.length;
+        }
+    };
+}
+
+// Scent Families Dropdown (Multiple Selection)
+function scentFamiliesDropdown() {
+    return {
+        open: false,
+        search: '',
+        selected: @json(old('scent_families', $productData['scent_families'] ?? [])),
+        families: @json($scentFamilies),
+        
+        get filteredFamilies() {
+            return this.families.filter(family =>
+                family.name.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
+        
+        get selectedCount() {
+            return this.selected.length;
+        }
+    };
+}
 
 // Product Tab Editors with Color Option
 let aboutScentQuill = new Quill('#aboutScentEditor', {
