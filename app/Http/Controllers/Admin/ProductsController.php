@@ -1351,7 +1351,7 @@ class ProductsController extends Controller
             // Scent Intensity
             'scent_intensity' => $product->scent_intensity,
             // Scent Families
-            'scent_families' => $product->scentFamilies->pluck('id')->toArray(),
+            'scent_families' => $product->scentFamilies ? $product->scentFamilies->pluck('id')->toArray() : [],
         ]]);
 
         $productData = session('edit_product_data', []);
