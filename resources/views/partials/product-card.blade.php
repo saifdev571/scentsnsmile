@@ -61,6 +61,14 @@
         <span class="text-xs text-gray-500 underline">{{ rand(100, 999) }}</span>
     </div>
 
+    <!-- Inspired By -->
+    @if($product->inspired_by)
+    <div class="mb-2">
+        <p class="text-xs text-gray-500 italic">inspired by</p>
+        <p class="text-sm text-[#e8a598] font-medium">{{ $product->inspired_by }}</p>
+    </div>
+    @endif
+
     <!-- Name & Price -->
     <div class="flex items-end justify-between gap-2">
         @php
