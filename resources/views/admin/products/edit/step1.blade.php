@@ -134,28 +134,43 @@
                         Highlight Notes
                     </span>
                 </label>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    @foreach($highlightNotes as $note)
-                    <label class="relative flex items-center p-3 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all duration-200 group">
-                        <input type="checkbox" name="highlight_notes[]" value="{{ $note->id }}" 
-                            class="w-5 h-5 text-amber-500 border-gray-300 rounded focus:ring-amber-500 mr-3"
-                            {{ in_array($note->id, old('highlight_notes', $productData['highlight_notes'] ?? [])) ? 'checked' : '' }}>
-                        <div class="flex items-center gap-2 flex-1 min-w-0">
-                            @if($note->imagekit_thumbnail_url || $note->imagekit_url)
-                                <img src="{{ $note->imagekit_thumbnail_url ?? $note->imagekit_url }}" alt="{{ $note->name }}" class="w-8 h-8 rounded-lg object-cover flex-shrink-0">
-                            @else
-                                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                                    </svg>
-                                </div>
-                            @endif
-                            <span class="text-sm font-medium text-gray-700 truncate group-hover:text-amber-700">{{ $note->name }}</span>
-                        </div>
-                    </label>
-                    @endforeach
+                <div class="relative">
+                    <select name="highlight_notes[]" id="highlightNotesSelect" multiple
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200">
+                        @foreach($highlightNotes as $note)
+                        <option value="{{ $note->id }}" {{ in_array($note->id, old('highlight_notes', $productData['highlight_notes'] ?? [])) ? 'selected' : '' }}>
+                            {{ $note->name }}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Select highlight notes to display on product page</p>
+                <p class="text-xs text-gray-500 mt-2">Select highlight notes to display on product page (searchable)</p>
+            </div>
+            @endif
+
+            <!-- Scent Families -->
+            @if(isset($scentFamilies) && $scentFamilies->count() > 0)
+            <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-3">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Scent Families
+                    </span>
+                </label>
+                <div class="relative">
+                    <select name="scent_families[]" id="scentFamiliesSelect" multiple
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200">
+                        @foreach($scentFamilies as $family)
+                        <option value="{{ $family->id }}" {{ in_array($family->id, old('scent_families', $productData['scent_families'] ?? [])) ? 'selected' : '' }}>
+                            {{ $family->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Select scent families for this product (searchable)</p>
             </div>
             @endif
 
@@ -321,11 +336,32 @@
 </form>
 
 @push('scripts')
+<!-- Select2 for Searchable Select -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <!-- Quill Editor -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <script>
+// Initialize Select2 for Searchable Selects
+$(document).ready(function() {
+    // Highlight Notes Select
+    $('#highlightNotesSelect').select2({
+        placeholder: 'Search and select highlight notes...',
+        allowClear: true,
+        width: '100%'
+    });
+    
+    // Scent Families Select
+    $('#scentFamiliesSelect').select2({
+        placeholder: 'Search and select scent families...',
+        allowClear: true,
+        width: '100%'
+    });
+});
+
 // Product Tab Editors with Color Option
 let aboutScentQuill = new Quill('#aboutScentEditor', {
     theme: 'snow',

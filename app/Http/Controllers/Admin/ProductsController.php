@@ -578,7 +578,8 @@ class ProductsController extends Controller
     {
         $productData = session('product_data', []);
         $highlightNotes = \App\Models\HighlightNote::where('is_active', true)->orderBy('name')->get();
-        return view('admin.products.create.step1', compact('productData', 'highlightNotes'));
+        $scentFamilies = \App\Models\ScentFamily::where('is_active', true)->orderBy('name')->get();
+        return view('admin.products.create.step1', compact('productData', 'highlightNotes', 'scentFamilies'));
     }
 
     public function processStep1(Request $request)
@@ -611,6 +612,9 @@ class ProductsController extends Controller
                 'highlight_notes.*' => 'exists:highlight_notes,id',
                 // Scent Intensity
                 'scent_intensity' => 'nullable|in:soft,significant,statement',
+                // Scent Families
+                'scent_families' => 'nullable|array',
+                'scent_families.*' => 'exists:scent_families,id',
             ]);
 
             if (empty($validated['slug'])) {
@@ -1087,6 +1091,12 @@ class ProductsController extends Controller
                 $product->highlightNotes()->sync($highlightNotes);
             }
 
+            // Sync scent families
+            $scentFamilies = $productData['scent_families'] ?? [];
+            if (!empty($scentFamilies)) {
+                $product->scentFamilies()->sync($scentFamilies);
+            }
+
             // Handle size variants
             if ($hasVariants) {
                 $sizeIds = json_decode($variantSizes, true) ?? [];
@@ -1340,12 +1350,15 @@ class ProductsController extends Controller
             'highlight_notes' => $product->highlightNotes->pluck('id')->toArray(),
             // Scent Intensity
             'scent_intensity' => $product->scent_intensity,
+            // Scent Families
+            'scent_families' => $product->scentFamilies->pluck('id')->toArray(),
         ]]);
 
         $productData = session('edit_product_data', []);
         $highlightNotes = \App\Models\HighlightNote::where('is_active', true)->orderBy('name')->get();
+        $scentFamilies = \App\Models\ScentFamily::where('is_active', true)->orderBy('name')->get();
 
-        return view('admin.products.edit.step1', compact('product', 'productData', 'highlightNotes'));
+        return view('admin.products.edit.step1', compact('product', 'productData', 'highlightNotes', 'scentFamilies'));
     }
 
     public function processEditStep1(Request $request, Product $product)
@@ -1374,6 +1387,9 @@ class ProductsController extends Controller
             'highlight_notes.*' => 'exists:highlight_notes,id',
             // Scent Intensity
             'scent_intensity' => 'nullable|in:soft,significant,statement',
+            // Scent Families
+            'scent_families' => 'nullable|array',
+            'scent_families.*' => 'exists:scent_families,id',
         ]);
 
         // Clean empty HTML content
@@ -1415,6 +1431,10 @@ class ProductsController extends Controller
         // Sync highlight notes
         $highlightNotes = $validated['highlight_notes'] ?? [];
         $product->highlightNotes()->sync($highlightNotes);
+
+        // Sync scent families
+        $scentFamilies = $validated['scent_families'] ?? [];
+        $product->scentFamilies()->sync($scentFamilies);
 
         $editData = session('edit_product_data', []);
         $editData = array_merge($editData, $validated);
