@@ -13,19 +13,33 @@ Route::get('/', function () {
         ->limit(8)
         ->get();
 
-    $bestSellers = \App\Models\Product::with(['genders', 'tagsList'])
-        ->where('status', 'active')
-        ->where('is_bestseller', true)
-        ->orderBy('created_at', 'desc')
-        ->limit(10)
-        ->get();
+    // Get Bestsellers tag
+    $bestsellersTag = \App\Models\Tag::where('slug', 'bestsellers')->first();
+    $bestSellers = collect();
+    if ($bestsellersTag) {
+        $bestSellers = \App\Models\Product::with(['genders', 'tagsList'])
+            ->where('status', 'active')
+            ->whereHas('tagsList', function($q) use ($bestsellersTag) {
+                $q->where('tags.id', $bestsellersTag->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+    }
 
-    $newArrivals = \App\Models\Product::with(['genders', 'tagsList'])
-        ->where('status', 'active')
-        ->where('is_new', true)
-        ->orderBy('created_at', 'desc')
-        ->limit(10)
-        ->get();
+    // Get New Arrivals tag (check both spellings for compatibility)
+    $newArrivalsTag = \App\Models\Tag::whereIn('slug', ['new-arrivals', 'new-arrivels'])->first();
+    $newArrivals = collect();
+    if ($newArrivalsTag) {
+        $newArrivals = \App\Models\Product::with(['genders', 'tagsList'])
+            ->where('status', 'active')
+            ->whereHas('tagsList', function($q) use ($newArrivalsTag) {
+                $q->where('tags.id', $newArrivalsTag->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+    }
 
     $banners = \App\Models\Banner::active()
         ->orderBy('order', 'asc')
