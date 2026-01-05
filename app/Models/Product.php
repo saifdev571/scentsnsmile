@@ -104,6 +104,11 @@ class Product extends Model
         return $this->belongsToMany(\App\Models\HighlightNote::class, 'product_highlight_note', 'product_id', 'highlight_note_id')->withTimestamps();
     }
 
+    public function scentFamilies()
+    {
+        return $this->belongsToMany(\App\Models\ScentFamily::class, 'product_scent_family', 'product_id', 'scent_family_id')->withTimestamps();
+    }
+
     public function reviews()
     {
         return $this->hasMany(ProductReview::class);
