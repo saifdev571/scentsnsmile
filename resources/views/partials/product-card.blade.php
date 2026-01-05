@@ -22,7 +22,7 @@
         @endif
 
         <!-- Product Image -->
-        <div class="aspect-square rounded-xl overflow-hidden bg-[#f5f5f0] relative"
+        <div class="aspect-square rounded-xl overflow-hidden bg-[#f5f5f0]/50 relative"
              x-data="{ currentImage: 0, images: {{ json_encode($product->images_array ?? []) }} }"
              @mouseenter="if(images.length > 1) currentImage = 1"
              @mouseleave="currentImage = 0">
