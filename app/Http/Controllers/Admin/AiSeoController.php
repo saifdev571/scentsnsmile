@@ -98,10 +98,22 @@ class AiSeoController extends Controller
                     'body' => $errorBody
                 ]);
                 
+                // Use fallback template if API fails
+                Log::info('API failed, using fallback template');
+                $seoData = $this->generateFallbackSeoContent([
+                    'name' => $productName,
+                    'slug' => $productSlug,
+                    'description' => $description,
+                    'short_description' => $shortDescription,
+                    'price' => $price,
+                    'inspired_by' => $inspiredBy
+                ]);
+                
                 return response()->json([
-                    'success' => false,
-                    'message' => 'Gemini API Error: ' . $errorBody
-                ], 500);
+                    'success' => true,
+                    'data' => $seoData,
+                    'message' => 'SEO content generated using template (AI service unavailable)'
+                ]);
             }
 
             $result = $response->json();
@@ -140,11 +152,122 @@ class AiSeoController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while generating SEO content: ' . $e->getMessage()
-            ], 500);
+            // Fallback: Use template-based generation if AI fails
+            Log::info('Using fallback template-based SEO generation');
+            
+            try {
+                // Get product data for fallback
+                $productId = $request->input('product_id');
+                $productData = [];
+                
+                if ($productId) {
+                    $product = \App\Models\Product::find($productId);
+                    if ($product) {
+                        $productData = [
+                            'name' => $product->name,
+                            'slug' => $product->slug,
+                            'description' => $product->description,
+                            'short_description' => $product->short_description,
+                            'price' => $product->price,
+                            'inspired_by' => $product->inspired_by,
+                        ];
+                    }
+                } else {
+                    $productData = session('product_data', []);
+                }
+                
+                $seoData = $this->generateFallbackSeoContent($productData);
+                
+                return response()->json([
+                    'success' => true,
+                    'data' => $seoData,
+                    'message' => 'SEO content generated using template (AI unavailable)'
+                ]);
+                
+            } catch (\Exception $fallbackError) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to generate SEO content: ' . $e->getMessage()
+                ], 500);
+            }
         }
+    }
+
+    /**
+     * Generate SEO content using predefined templates (fallback when AI fails)
+     */
+    private function generateFallbackSeoContent($productData)
+    {
+        $name = $productData['name'] ?? 'Product';
+        $slug = $productData['slug'] ?? \Illuminate\Support\Str::slug($name);
+        $description = $productData['description'] ?? '';
+        $shortDescription = $productData['short_description'] ?? '';
+        $price = $productData['price'] ?? '';
+        $inspiredBy = $productData['inspired_by'] ?? '';
+        
+        // Extract first 100 characters from description for meta
+        $descriptionSnippet = $shortDescription ?: strip_tags($description);
+        $descriptionSnippet = \Illuminate\Support\Str::limit($descriptionSnippet, 150, '');
+        
+        // Generate Meta Title
+        $metaTitle = $name;
+        if ($inspiredBy) {
+            $metaTitle .= " - Inspired by {$inspiredBy}";
+        }
+        $metaTitle .= " | Premium Perfume";
+        
+        // Generate Meta Description
+        $metaDescription = "Buy {$name} perfume online. ";
+        if ($inspiredBy) {
+            $metaDescription .= "Inspired by {$inspiredBy}. ";
+        }
+        if ($descriptionSnippet) {
+            $metaDescription .= $descriptionSnippet . " ";
+        }
+        if ($price) {
+            $metaDescription .= "Price: ₹{$price}. ";
+        }
+        $metaDescription .= "Shop luxury fragrances at Scents N Smile. Free shipping available.";
+        
+        // Generate Focus Keywords
+        $keywords = [$name, 'perfume', 'fragrance', 'luxury scent'];
+        if ($inspiredBy) {
+            $keywords[] = $inspiredBy;
+            $keywords[] = $inspiredBy . ' inspired';
+        }
+        $keywords[] = 'buy perfume online';
+        $keywords[] = 'premium fragrance';
+        $focusKeywords = implode(', ', array_slice($keywords, 0, 7));
+        
+        // Generate Canonical URL
+        $domain = 'https://scentsnsmile.com';
+        $canonicalUrl = $domain . '/product/' . $slug;
+        
+        // Generate OG Title
+        $ogTitle = $name;
+        if ($inspiredBy) {
+            $ogTitle .= " - Inspired by {$inspiredBy}";
+        }
+        
+        // Generate OG Description
+        $ogDescription = "Discover {$name} - ";
+        if ($inspiredBy) {
+            $ogDescription .= "inspired by {$inspiredBy}. ";
+        }
+        $ogDescription .= "A captivating fragrance that defines luxury. ";
+        if ($price) {
+            $ogDescription .= "Available at ₹{$price}. ";
+        }
+        $ogDescription .= "Shop now at Scents N Smile for premium perfumes.";
+        
+        return [
+            'meta_title' => $metaTitle,
+            'meta_description' => $metaDescription,
+            'focus_keywords' => $focusKeywords,
+            'canonical_url' => $canonicalUrl,
+            'og_title' => $ogTitle,
+            'og_description' => $ogDescription
+        ];
     }
 
     private function buildPrompt($productName, $description, $shortDescription, $price, $category, $inspiredBy)
