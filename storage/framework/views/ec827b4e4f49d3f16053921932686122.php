@@ -1,16 +1,16 @@
-@extends('admin.products.edit._layout')
 
-@section('step_title', 'Step 6: SEO Optimization')
-@section('step_description', 'Optimize for search engines and social media')
 
-@section('step_content')
-@php
+<?php $__env->startSection('step_title', 'Step 6: SEO Optimization'); ?>
+<?php $__env->startSection('step_description', 'Optimize for search engines and social media'); ?>
+
+<?php $__env->startSection('step_content'); ?>
+<?php
     $currentStep = 6;
     $prevStepRoute = route('admin.products.edit.step5', $product->id);
-@endphp
+?>
 
-<form id="stepForm" action="{{ route('admin.products.edit.step6.process', $product->id) }}" method="POST">
-    @csrf
+<form id="stepForm" action="<?php echo e(route('admin.products.edit.step6.process', $product->id)); ?>" method="POST">
+    <?php echo csrf_field(); ?>
     
     <div class="bg-white rounded-xl shadow-lg border border-gray-200">
         <div class="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-teal-50">
@@ -42,16 +42,23 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Meta Title <span class="text-gray-500 text-xs">(50-60 characters)</span></label>
                     <input type="text" name="meta_title" maxlength="60" 
-                        value="{{ old('meta_title', $productData['meta_title'] ?? '') }}"
+                        value="<?php echo e(old('meta_title', $productData['meta_title'] ?? '')); ?>"
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="Enter SEO title for search engines">
                     <div class="flex justify-between text-xs text-gray-500 mt-1">
                         <span>Appears in search results and browser tabs</span>
                         <span id="metaTitleCount">0/60</span>
                     </div>
-                    @error('meta_title')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['meta_title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Meta Description -->
@@ -59,40 +66,61 @@
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Meta Description</label>
                     <textarea name="meta_description" rows="3" 
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
-                        placeholder="Brief description that appears in search results">{{ old('meta_description', $productData['meta_description'] ?? '') }}</textarea>
+                        placeholder="Brief description that appears in search results"><?php echo e(old('meta_description', $productData['meta_description'] ?? '')); ?></textarea>
                     <div class="flex justify-between text-xs text-gray-500 mt-1">
                         <span>Shown in search results below the title</span>
                         <span id="metaDescCount">0/160</span>
                     </div>
-                    @error('meta_description')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['meta_description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Focus Keywords -->
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Focus Keywords</label>
                     <input type="text" name="focus_keywords" 
-                        value="{{ old('focus_keywords', $productData['focus_keywords'] ?? '') }}"
+                        value="<?php echo e(old('focus_keywords', $productData['focus_keywords'] ?? '')); ?>"
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="keyword1, keyword2, keyword3">
                     <p class="text-xs text-gray-500 mt-1">Comma-separated keywords you want to rank for</p>
-                    @error('focus_keywords')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['focus_keywords'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Canonical URL -->
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Canonical URL</label>
                     <input type="url" name="canonical_url" 
-                        value="{{ old('canonical_url', $productData['canonical_url'] ?? '') }}"
+                        value="<?php echo e(old('canonical_url', $productData['canonical_url'] ?? '')); ?>"
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="https://example.com/product-url">
                     <p class="text-xs text-gray-500 mt-1">Preferred URL for this product (prevents duplicate content)</p>
-                    @error('canonical_url')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['canonical_url'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
                 
                 <!-- Google Search Preview -->
@@ -131,13 +159,20 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Open Graph Title <span class="text-gray-500 text-xs">(Facebook, LinkedIn)</span></label>
                     <input type="text" name="og_title" maxlength="60" 
-                        value="{{ old('og_title', $productData['og_title'] ?? '') }}"
+                        value="<?php echo e(old('og_title', $productData['og_title'] ?? '')); ?>"
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="Title for social media shares">
                     <p class="text-xs text-gray-500 mt-1">Title shown when shared on Facebook, LinkedIn</p>
-                    @error('og_title')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['og_title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Open Graph Description -->
@@ -145,11 +180,18 @@
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Open Graph Description</label>
                     <textarea name="og_description" rows="3" 
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
-                        placeholder="Description for social media shares">{{ old('og_description', $productData['og_description'] ?? '') }}</textarea>
+                        placeholder="Description for social media shares"><?php echo e(old('og_description', $productData['og_description'] ?? '')); ?></textarea>
                     <p class="text-xs text-gray-500 mt-1">Description shown when shared on social media</p>
-                    @error('og_description')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['og_description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
             </div>
 
@@ -168,7 +210,7 @@
     </div>
 </form>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // AI SEO Generation
@@ -197,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             
             try {
-                const response = await fetch('{{ route("admin.products.generate-seo") }}', {
+                const response = await fetch('<?php echo e(route("admin.products.generate-seo")); ?>', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -205,7 +247,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        product_id: {{ $product->id ?? 'null' }}
+                        product_id: <?php echo e($product->id ?? 'null'); ?>
+
                     })
                 });
                 
@@ -354,5 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateGooglePreview();
 });
 </script>
-@endpush
-@endsection
+<?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.products.edit._layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SCENTS N SMILE\resources\views/admin/products/edit/step6.blade.php ENDPATH**/ ?>

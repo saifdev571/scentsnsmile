@@ -225,6 +225,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/products/create/step-6', [App\Http\Controllers\Admin\ProductsController::class, 'createStep6'])->name('admin.products.create.step6');
         Route::post('/products/create/step-6', [App\Http\Controllers\Admin\ProductsController::class, 'processStep6'])->name('admin.products.create.step6.process');
 
+        // AI SEO Generation
+        Route::post('/products/generate-seo', [App\Http\Controllers\Admin\AiSeoController::class, 'generateSeoContent'])->name('admin.products.generate-seo');
+
         Route::get('/products/create/step-7', [App\Http\Controllers\Admin\ProductsController::class, 'createStep7'])->name('admin.products.create.step7');
         Route::post('/products/create/step-7', [App\Http\Controllers\Admin\ProductsController::class, 'processStep7'])->name('admin.products.create.step7.process');
 

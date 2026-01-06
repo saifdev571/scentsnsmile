@@ -14,14 +14,22 @@
     
     <div class="bg-white rounded-xl shadow-lg border border-gray-200">
         <div class="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-teal-50">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-gradient-to-r from-green-600 to-teal-600 rounded-lg flex items-center justify-center shadow-lg">
-                    <span class="text-white text-xl">🔍</span>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-r from-green-600 to-teal-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <span class="text-white text-xl">🔍</span>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">SEO & Marketing</h2>
+                        <p class="text-gray-600 font-medium">Optimize for search engines & social media</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900">SEO & Marketing</h2>
-                    <p class="text-gray-600 font-medium">Optimize for search engines & social media</p>
-                </div>
+                <button type="button" id="generateWithAI" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-600 text-white rounded-lg font-semibold hover:from-black hover:to-gray-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    Generate with AI
+                </button>
             </div>
         </div>
         
@@ -48,8 +56,8 @@
 
                 <!-- Meta Description -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-800 mb-2">Meta Description <span class="text-gray-500 text-xs">(150-160 characters)</span></label>
-                    <textarea name="meta_description" maxlength="160" rows="3" 
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Meta Description</label>
+                    <textarea name="meta_description" rows="3" 
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="Brief description that appears in search results">{{ old('meta_description', $productData['meta_description'] ?? '') }}</textarea>
                     <div class="flex justify-between text-xs text-gray-500 mt-1">
@@ -135,7 +143,7 @@
                 <!-- Open Graph Description -->
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Open Graph Description</label>
-                    <textarea name="og_description" maxlength="160" rows="3" 
+                    <textarea name="og_description" rows="3" 
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="Description for social media shares">{{ old('og_description', $productData['og_description'] ?? '') }}</textarea>
                     <p class="text-xs text-gray-500 mt-1">Description shown when shared on social media</p>
@@ -162,8 +170,102 @@
 
 @push('scripts')
 <script>
-// Character count for meta fields & Real-time Google Preview
 document.addEventListener('DOMContentLoaded', function() {
+    // AI SEO Generation
+    const generateBtn = document.getElementById('generateWithAI');
+    if (generateBtn) {
+        generateBtn.addEventListener('click', async function() {
+            const button = this;
+            const originalHTML = button.innerHTML;
+            
+            // Get CSRF token from meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
+            if (!csrfToken) {
+                showNotification('CSRF token not found. Please refresh the page.', 'error');
+                return;
+            }
+            
+            // Disable button and show loading
+            button.disabled = true;
+            button.innerHTML = `
+                <svg class="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Generating...
+            `;
+            
+            try {
+                const response = await fetch('{{ route("admin.products.generate-seo") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Fill in the form fields
+                    if (result.data.meta_title) {
+                        document.querySelector('input[name="meta_title"]').value = result.data.meta_title;
+                        document.querySelector('input[name="meta_title"]').dispatchEvent(new Event('input'));
+                    }
+                    
+                    if (result.data.meta_description) {
+                        document.querySelector('textarea[name="meta_description"]').value = result.data.meta_description;
+                        document.querySelector('textarea[name="meta_description"]').dispatchEvent(new Event('input'));
+                    }
+                    
+                    if (result.data.focus_keywords) {
+                        document.querySelector('input[name="focus_keywords"]').value = result.data.focus_keywords;
+                    }
+                    
+                    if (result.data.canonical_url) {
+                        document.querySelector('input[name="canonical_url"]').value = result.data.canonical_url;
+                        document.querySelector('input[name="canonical_url"]').dispatchEvent(new Event('input'));
+                    }
+                    
+                    if (result.data.og_title) {
+                        document.querySelector('input[name="og_title"]').value = result.data.og_title;
+                    }
+                    
+                    if (result.data.og_description) {
+                        document.querySelector('textarea[name="og_description"]').value = result.data.og_description;
+                    }
+                    
+                    // Show success message
+                    showNotification('SEO content generated successfully!', 'success');
+                } else {
+                    showNotification(result.message || 'Failed to generate SEO content', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('An error occurred while generating SEO content', 'error');
+            } finally {
+                // Re-enable button
+                button.disabled = false;
+                button.innerHTML = originalHTML;
+            }
+        });
+    }
+
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white font-medium animate-fade-in-down`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+
+    // Character count for meta fields & Real-time Google Preview
     const metaTitle = document.querySelector('input[name="meta_title"]');
     const metaDescription = document.querySelector('textarea[name="meta_description"]');
     const canonicalUrl = document.querySelector('input[name="canonical_url"]');

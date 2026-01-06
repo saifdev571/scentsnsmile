@@ -232,59 +232,14 @@
 
             <!-- Products Grid -->
             <?php if($bestSellers->count() > 0): ?>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
                 <?php $__currentLoopData = $bestSellers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="group">
-                    <!-- Image Container -->
-                    <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                        <!-- Bestseller Badge -->
-                        <span class="absolute top-2 left-2 z-10 bg-[#d4c4b0] text-gray-800 text-[10px] font-semibold px-2 py-1 rounded">
-                            Bestseller
-                        </span>
-                        
-                        <!-- Product Image Link -->
-                        <a href="<?php echo e(route('product.show', $product->slug)); ?>" class="block w-full h-full">
-                            <?php if($product->image_url): ?>
-                            <img src="<?php echo e($product->image_url); ?>" 
-                                 alt="<?php echo e($product->name); ?>" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                 loading="lazy">
-                            <?php else: ?>
-                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
-                                <span class="text-5xl">🌸</span>
-                            </div>
-                            <?php endif; ?>
-                        </a>
-                        
-                        <!-- Add to Cart Button -->
-                        <div class="absolute bottom-0 left-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                            <button type="button" 
-                                    data-add-to-cart="<?php echo e($product->id); ?>" 
-                                    class="w-full py-2.5 bg-white border border-[#e8a598] text-[#e8a598] rounded-lg font-medium text-xs hover:bg-[#e8a598] hover:text-white transition-colors duration-200 shadow-lg">
-                                ADD TO CART
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Product Info -->
-                    <a href="<?php echo e(route('product.show', $product->slug)); ?>" class="block">
-                        <h3 class="font-semibold text-sm text-gray-900 mb-1 line-clamp-2"><?php echo e($product->name); ?></h3>
-                        <div class="flex items-center gap-2">
-                            <?php if($product->sale_price && $product->sale_price < $product->price): ?>
-                            <span class="text-[#e8a598] font-bold">₹<?php echo e(number_format($product->sale_price, 0)); ?></span>
-                            <span class="text-gray-400 text-xs line-through">₹<?php echo e(number_format($product->price, 0)); ?></span>
-                            <?php else: ?>
-                            <span class="text-gray-900 font-bold">₹<?php echo e(number_format($product->price, 0)); ?></span>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                </div>
+                <?php echo $__env->make('partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
             <?php else: ?>
             <div class="text-center py-12 bg-gray-50 rounded-xl">
                 <p class="text-gray-500">No bestseller products available yet.</p>
-                <p class="text-sm text-gray-400 mt-1">Mark products as "Bestseller" in admin panel to show here.</p>
             </div>
             <?php endif; ?>
         </div>
@@ -305,59 +260,14 @@
 
             <!-- Products Grid -->
             <?php if($newArrivals->count() > 0): ?>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
                 <?php $__currentLoopData = $newArrivals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="group">
-                    <!-- Image Container -->
-                    <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                        <!-- New Badge -->
-                        <span class="absolute top-2 left-2 z-10 bg-[#F27F6E] text-white text-[10px] font-semibold px-2 py-1 rounded">
-                            New
-                        </span>
-                        
-                        <!-- Product Image Link -->
-                        <a href="<?php echo e(route('product.show', $product->slug)); ?>" class="block w-full h-full">
-                            <?php if($product->image_url): ?>
-                            <img src="<?php echo e($product->image_url); ?>" 
-                                 alt="<?php echo e($product->name); ?>" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                 loading="lazy">
-                            <?php else: ?>
-                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50">
-                                <span class="text-5xl">🌸</span>
-                            </div>
-                            <?php endif; ?>
-                        </a>
-                        
-                        <!-- Add to Cart Button -->
-                        <div class="absolute bottom-0 left-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                            <button type="button" 
-                                    data-add-to-cart="<?php echo e($product->id); ?>" 
-                                    class="w-full py-2.5 bg-white border border-[#F27F6E] text-[#F27F6E] rounded-lg font-medium text-xs hover:bg-[#F27F6E] hover:text-white transition-colors duration-200 shadow-lg">
-                                ADD TO CART
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Product Info -->
-                    <a href="<?php echo e(route('product.show', $product->slug)); ?>" class="block">
-                        <h3 class="font-semibold text-sm text-gray-900 mb-1 line-clamp-2"><?php echo e($product->name); ?></h3>
-                        <div class="flex items-center gap-2">
-                            <?php if($product->sale_price && $product->sale_price < $product->price): ?>
-                            <span class="text-[#F27F6E] font-bold">₹<?php echo e(number_format($product->sale_price, 0)); ?></span>
-                            <span class="text-gray-400 text-xs line-through">₹<?php echo e(number_format($product->price, 0)); ?></span>
-                            <?php else: ?>
-                            <span class="text-gray-900 font-bold">₹<?php echo e(number_format($product->price, 0)); ?></span>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                </div>
+                <?php echo $__env->make('partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
             <?php else: ?>
             <div class="text-center py-12 bg-white rounded-xl">
                 <p class="text-gray-500">No new arrival products available yet.</p>
-                <p class="text-sm text-gray-400 mt-1">Mark products as "New" in admin panel to show here.</p>
             </div>
             <?php endif; ?>
         </div>

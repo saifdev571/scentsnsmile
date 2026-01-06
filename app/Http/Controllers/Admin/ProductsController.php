@@ -957,11 +957,11 @@ class ProductsController extends Controller
         try {
             $validated = $request->validate([
                 'meta_title' => 'nullable|string|max:60',
-                'meta_description' => 'nullable|string|max:160',
+                'meta_description' => 'nullable|string',
                 'focus_keywords' => 'nullable|string',
                 'canonical_url' => 'nullable|url',
                 'og_title' => 'nullable|string|max:60',
-                'og_description' => 'nullable|string|max:160',
+                'og_description' => 'nullable|string',
             ]);
 
             $productData = array_merge(session('product_data', []), $validated);
@@ -1658,11 +1658,11 @@ class ProductsController extends Controller
     {
         $validated = $request->validate([
             'meta_title' => 'nullable|string|max:60',
-            'meta_description' => 'nullable|string|max:160',
+            'meta_description' => 'nullable|string',
             'focus_keywords' => 'nullable|string',
             'canonical_url' => 'nullable|url',
             'og_title' => 'nullable|string|max:60',
-            'og_description' => 'nullable|string|max:160',
+            'og_description' => 'nullable|string',
         ]);
 
         $product->update($validated);

@@ -23,7 +23,7 @@
         <?php endif; ?>
 
         <!-- Product Image -->
-        <div class="aspect-square rounded-xl overflow-hidden bg-[#f5f5f0] relative"
+        <div class="aspect-square rounded-xl overflow-hidden bg-[#f5f5f0]/50 relative"
              x-data="{ currentImage: 0, images: <?php echo e(json_encode($product->images_array ?? [])); ?> }"
              @mouseenter="if(images.length > 1) currentImage = 1"
              @mouseleave="currentImage = 0">
@@ -62,6 +62,14 @@
         <div class="flex text-black text-sm">★★★★★</div>
         <span class="text-xs text-gray-500 underline"><?php echo e(rand(100, 999)); ?></span>
     </div>
+
+    <!-- Inspired By -->
+    <?php if($product->inspired_by): ?>
+    <div class="mb-2">
+        <p class="text-xs text-gray-500 italic">inspired by</p>
+        <p class="text-sm text-[#e8a598] font-medium"><?php echo e($product->inspired_by); ?></p>
+    </div>
+    <?php endif; ?>
 
     <!-- Name & Price -->
     <div class="flex items-end justify-between gap-2">

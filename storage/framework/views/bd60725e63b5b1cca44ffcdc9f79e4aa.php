@@ -153,7 +153,7 @@ unset($__errorArgs, $__bag); ?>
 
             <!-- Highlight Notes -->
             <?php if(isset($highlightNotes) && $highlightNotes->count() > 0): ?>
-            <div>
+            <div x-data="highlightNotesDropdown()">
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
@@ -162,28 +162,59 @@ unset($__errorArgs, $__bag); ?>
                         Highlight Notes
                     </span>
                 </label>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    <?php $__currentLoopData = $highlightNotes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $note): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <label class="relative flex items-center p-3 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-all duration-200 group">
-                        <input type="checkbox" name="highlight_notes[]" value="<?php echo e($note->id); ?>" 
-                            class="w-5 h-5 text-amber-500 border-gray-300 rounded focus:ring-amber-500 mr-3"
-                            <?php echo e(in_array($note->id, old('highlight_notes', $productData['highlight_notes'] ?? [])) ? 'checked' : ''); ?>>
-                        <div class="flex items-center gap-2 flex-1 min-w-0">
-                            <?php if($note->imagekit_thumbnail_url || $note->imagekit_url): ?>
-                                <img src="<?php echo e($note->imagekit_thumbnail_url ?? $note->imagekit_url); ?>" alt="<?php echo e($note->name); ?>" class="w-8 h-8 rounded-lg object-cover flex-shrink-0">
-                            <?php else: ?>
-                                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                                    </svg>
-                                </div>
-                            <?php endif; ?>
-                            <span class="text-sm font-medium text-gray-700 truncate group-hover:text-amber-700"><?php echo e($note->name); ?></span>
-                        </div>
-                    </label>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <div class="relative">
+                    <button @click="open = !open" type="button" class="w-full px-4 py-3 text-left border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 hover:border-gray-400 flex justify-between items-center">
+                        <span x-text="selectedCount > 0 ? selectedCount + ' notes selected' : 'Select highlight notes'" class="truncate text-gray-700"></span>
+                        <svg class="w-4 h-4 ml-2 text-gray-500 transition-transform duration-200 flex-shrink-0" :class="{'rotate-180': open}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" class="absolute z-20 mt-2 w-full bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <input type="text" placeholder="Search notes..." x-model="search" class="w-full px-3 py-2 border-b border-gray-200 focus:outline-none focus:ring-1 focus:ring-amber-500">
+                        <template x-for="note in filteredNotes" :key="note.id">
+                            <label class="flex items-center px-4 py-2 cursor-pointer hover:bg-amber-50">
+                                <input type="checkbox" :value="note.id" x-model="selected" name="highlight_notes[]" class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-500 mr-3">
+                                <span x-text="note.name" class="text-sm text-gray-700"></span>
+                            </label>
+                        </template>
+                        <div x-show="filteredNotes.length === 0" class="px-4 py-2 text-gray-400">No results found.</div>
+                    </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Select highlight notes to display on product page</p>
+                <p class="text-xs text-gray-500 mt-2">Select highlight notes to display on product page (searchable)</p>
+            </div>
+            <?php endif; ?>
+
+            <!-- Scent Families -->
+            <?php if(isset($scentFamilies) && $scentFamilies->count() > 0): ?>
+            <div x-data="scentFamiliesDropdown()">
+                <label class="block text-sm font-semibold text-gray-800 mb-3">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Scent Families
+                    </span>
+                </label>
+                <div class="relative">
+                    <button @click="open = !open" type="button" class="w-full px-4 py-3 text-left border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 hover:border-gray-400 flex justify-between items-center">
+                        <span x-text="selectedCount > 0 ? selectedCount + ' families selected' : 'Select scent families'" class="truncate text-gray-700"></span>
+                        <svg class="w-4 h-4 ml-2 text-gray-500 transition-transform duration-200 flex-shrink-0" :class="{'rotate-180': open}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" class="absolute z-20 mt-2 w-full bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <input type="text" placeholder="Search families..." x-model="search" class="w-full px-3 py-2 border-b border-gray-200 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        <template x-for="family in filteredFamilies" :key="family.id">
+                            <label class="flex items-center px-4 py-2 cursor-pointer hover:bg-purple-50">
+                                <input type="checkbox" :value="family.id" x-model="selected" name="scent_families[]" class="w-4 h-4 text-purple-500 border-gray-300 rounded focus:ring-purple-500 mr-3">
+                                <span x-text="family.name" class="text-sm text-gray-700"></span>
+                            </label>
+                        </template>
+                        <div x-show="filteredFamilies.length === 0" class="px-4 py-2 text-gray-400">No results found.</div>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Select scent families for this product (searchable)</p>
             </div>
             <?php endif; ?>
 
@@ -349,11 +380,54 @@ unset($__errorArgs, $__bag); ?>
 </form>
 
 <?php $__env->startPush('scripts'); ?>
+<!-- Alpine.js for Searchable Dropdowns -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 <!-- Quill Editor -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <script>
+// Highlight Notes Dropdown (Multiple Selection)
+function highlightNotesDropdown() {
+    return {
+        open: false,
+        search: '',
+        selected: <?php echo json_encode(old('highlight_notes', $productData['highlight_notes'] ?? []), 512) ?>,
+        notes: <?php echo json_encode($highlightNotes, 15, 512) ?>,
+        
+        get filteredNotes() {
+            return this.notes.filter(note =>
+                note.name.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
+        
+        get selectedCount() {
+            return this.selected.length;
+        }
+    };
+}
+
+// Scent Families Dropdown (Multiple Selection)
+function scentFamiliesDropdown() {
+    return {
+        open: false,
+        search: '',
+        selected: <?php echo json_encode(old('scent_families', $productData['scent_families'] ?? []), 512) ?>,
+        families: <?php echo json_encode($scentFamilies, 15, 512) ?>,
+        
+        get filteredFamilies() {
+            return this.families.filter(family =>
+                family.name.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
+        
+        get selectedCount() {
+            return this.selected.length;
+        }
+    };
+}
+
 // Product Tab Editors with Color Option
 let aboutScentQuill = new Quill('#aboutScentEditor', {
     theme: 'snow',
