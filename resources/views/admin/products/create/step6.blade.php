@@ -40,8 +40,8 @@
                 
                 <!-- Meta Title -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-800 mb-2">Meta Title <span class="text-gray-500 text-xs">(50-60 characters)</span></label>
-                    <input type="text" name="meta_title" maxlength="60" 
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Meta Title</label>
+                    <input type="text" name="meta_title" 
                         value="{{ old('meta_title', $productData['meta_title'] ?? '') }}"
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="Enter SEO title for search engines">

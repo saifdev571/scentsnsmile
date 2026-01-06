@@ -956,7 +956,7 @@ class ProductsController extends Controller
     {
         try {
             $validated = $request->validate([
-                'meta_title' => 'nullable|string|max:60',
+                'meta_title' => 'nullable|string',
                 'meta_description' => 'nullable|string',
                 'focus_keywords' => 'nullable|string',
                 'canonical_url' => 'nullable|url',
@@ -1657,7 +1657,7 @@ class ProductsController extends Controller
     public function processEditStep6(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'meta_title' => 'nullable|string|max:60',
+            'meta_title' => 'nullable|string',
             'meta_description' => 'nullable|string',
             'focus_keywords' => 'nullable|string',
             'canonical_url' => 'nullable|url',
