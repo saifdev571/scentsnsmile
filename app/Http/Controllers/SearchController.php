@@ -25,13 +25,54 @@ class SearchController extends Controller
         $productsQuery = Product::with(['genders', 'tagsList', 'sizes', 'highlightNotes'])
             ->where('status', 'active');
         
-        // Apply search query (text search)
+        // Apply search query (enhanced text search across multiple fields and relationships)
         if ($query) {
             $productsQuery->where(function($q) use ($query) {
+                // Search in product fields
                 $q->where('name', 'like', '%' . $query . '%')
                   ->orWhere('short_description', 'like', '%' . $query . '%')
                   ->orWhere('description', 'like', '%' . $query . '%')
-                  ->orWhere('inspired_by', 'like', '%' . $query . '%');
+                  ->orWhere('inspired_by', 'like', '%' . $query . '%')
+                  ->orWhere('ingredients', 'like', '%' . $query . '%')
+                  
+                  // Search in genders
+                  ->orWhereHas('genders', function($gq) use ($query) {
+                      $gq->where('name', 'like', '%' . $query . '%');
+                  })
+                  
+                  // Search in categories
+                  ->orWhereHas('category', function($cq) use ($query) {
+                      $cq->where('name', 'like', '%' . $query . '%');
+                  })
+                  
+                  // Search in scent families
+                  ->orWhereHas('scentFamilies', function($sq) use ($query) {
+                      $sq->where('name', 'like', '%' . $query . '%')
+                        ->orWhere('description', 'like', '%' . $query . '%');
+                  })
+                  
+                  // Search in highlight notes
+                  ->orWhereHas('highlightNotes', function($hq) use ($query) {
+                      $hq->where('name', 'like', '%' . $query . '%')
+                        ->orWhere('description', 'like', '%' . $query . '%');
+                  })
+                  
+                  // Search in tags
+                  ->orWhereHas('tagsList', function($tq) use ($query) {
+                      $tq->where('name', 'like', '%' . $query . '%')
+                        ->orWhere('description', 'like', '%' . $query . '%');
+                  })
+                  
+                  // Search in collections
+                  ->orWhereHas('collectionsList', function($clq) use ($query) {
+                      $clq->where('name', 'like', '%' . $query . '%')
+                         ->orWhere('description', 'like', '%' . $query . '%');
+                  })
+                  
+                  // Search in brand
+                  ->orWhereHas('brand', function($bq) use ($query) {
+                      $bq->where('name', 'like', '%' . $query . '%');
+                  });
             });
         }
         
@@ -49,7 +90,7 @@ class SearchController extends Controller
         $genderCounts = [];
         $totalCount = 0;
         
-        // Base query for counting
+        // Base query for counting (enhanced search)
         $baseCountQuery = function() use ($query) {
             $q = Product::where('status', 'active');
             
@@ -58,7 +99,29 @@ class SearchController extends Controller
                     $sq->where('name', 'like', '%' . $query . '%')
                       ->orWhere('short_description', 'like', '%' . $query . '%')
                       ->orWhere('description', 'like', '%' . $query . '%')
-                      ->orWhere('inspired_by', 'like', '%' . $query . '%');
+                      ->orWhere('inspired_by', 'like', '%' . $query . '%')
+                      ->orWhere('ingredients', 'like', '%' . $query . '%')
+                      ->orWhereHas('genders', function($gq) use ($query) {
+                          $gq->where('name', 'like', '%' . $query . '%');
+                      })
+                      ->orWhereHas('category', function($cq) use ($query) {
+                          $cq->where('name', 'like', '%' . $query . '%');
+                      })
+                      ->orWhereHas('scentFamilies', function($sfq) use ($query) {
+                          $sfq->where('name', 'like', '%' . $query . '%');
+                      })
+                      ->orWhereHas('highlightNotes', function($hq) use ($query) {
+                          $hq->where('name', 'like', '%' . $query . '%');
+                      })
+                      ->orWhereHas('tagsList', function($tq) use ($query) {
+                          $tq->where('name', 'like', '%' . $query . '%');
+                      })
+                      ->orWhereHas('collectionsList', function($clq) use ($query) {
+                          $clq->where('name', 'like', '%' . $query . '%');
+                      })
+                      ->orWhereHas('brand', function($bq) use ($query) {
+                          $bq->where('name', 'like', '%' . $query . '%');
+                      });
                 });
             }
             

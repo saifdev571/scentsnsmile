@@ -696,13 +696,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Search
     if (searchBtn) {
-        searchBtn.addEventListener('click', function() {
+        searchBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Search button clicked, value:', searchInput.value);
             applyFilters();
         });
     }
     if (searchInput) {
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
+                e.preventDefault();
+                console.log('Enter pressed, value:', this.value);
                 applyFilters();
             }
         });
