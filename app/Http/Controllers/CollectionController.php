@@ -184,13 +184,55 @@ class CollectionController extends Controller
             $query->where('price', '<=', $request->price_max);
         }
 
-        // Search filter
+        // Search filter - Enhanced to search across multiple fields and relationships
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
+                // Search in product fields
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('short_description', 'like', "%{$search}%");
+                  ->orWhere('short_description', 'like', "%{$search}%")
+                  ->orWhere('inspired_by', 'like', "%{$search}%")
+                  ->orWhere('ingredients', 'like', "%{$search}%")
+                  
+                  // Search in genders
+                  ->orWhereHas('genders', function($gq) use ($search) {
+                      $gq->where('name', 'like', "%{$search}%");
+                  })
+                  
+                  // Search in categories
+                  ->orWhereHas('category', function($cq) use ($search) {
+                      $cq->where('name', 'like', "%{$search}%");
+                  })
+                  
+                  // Search in scent families
+                  ->orWhereHas('scentFamilies', function($sq) use ($search) {
+                      $sq->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                  })
+                  
+                  // Search in highlight notes
+                  ->orWhereHas('highlightNotes', function($hq) use ($search) {
+                      $hq->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                  })
+                  
+                  // Search in tags
+                  ->orWhereHas('tagsList', function($tq) use ($search) {
+                      $tq->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                  })
+                  
+                  // Search in collections
+                  ->orWhereHas('collectionsList', function($clq) use ($search) {
+                      $clq->where('name', 'like', "%{$search}%")
+                         ->orWhere('description', 'like', "%{$search}%");
+                  })
+                  
+                  // Search in brand
+                  ->orWhereHas('brand', function($bq) use ($search) {
+                      $bq->where('name', 'like', "%{$search}%");
+                  });
             });
         }
 
