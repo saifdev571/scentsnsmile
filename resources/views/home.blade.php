@@ -224,17 +224,25 @@
                 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
                     Our <span class="text-[#e8a598]">Best Sellers</span>
                 </h2>
-                <a href="{{ route('collections') }}" class="text-sm text-[#e8a598] hover:underline font-medium">
-                    View All →
-                </a>
             </div>
 
             <!-- Products Grid -->
             @if($bestSellers->count() > 0)
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6 mb-8">
                 @foreach($bestSellers as $product)
                 @include('partials.product-card', ['product' => $product])
                 @endforeach
+            </div>
+            
+            <!-- View All Products Button -->
+            <div class="flex justify-center mt-8">
+                <a href="{{ route('collections.show', 'bestsellers') }}" 
+                   class="inline-flex items-center gap-2 px-8 py-4 bg-[#F27F6E] text-white rounded-full font-semibold hover:bg-[#e06b5a] transition-all duration-200 shadow-lg hover:shadow-xl">
+                    <span>View All Products</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
             </div>
             @else
             <div class="text-center py-12 bg-gray-50 rounded-xl">

@@ -6,40 +6,32 @@ use Illuminate\Http\Request;
 
 // Homepage
 Route::get('/', function () {
+    // Get Featured Products using is_featured column
     $products = \App\Models\Product::with(['tagsList', 'category'])
         ->where('status', 'active')
+        ->where('is_featured', true)
         ->where('show_in_homepage', true)
         ->orderBy('created_at', 'desc')
         ->limit(8)
         ->get();
 
-    // Get Bestsellers tag
-    $bestsellersTag = \App\Models\Tag::where('slug', 'bestsellers')->first();
-    $bestSellers = collect();
-    if ($bestsellersTag) {
-        $bestSellers = \App\Models\Product::with(['genders', 'tagsList'])
-            ->where('status', 'active')
-            ->whereHas('tagsList', function($q) use ($bestsellersTag) {
-                $q->where('tags.id', $bestsellersTag->id);
-            })
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get();
-    }
+    // Get Bestsellers using is_bestseller column
+    $bestSellers = \App\Models\Product::with(['genders', 'tagsList'])
+        ->where('status', 'active')
+        ->where('is_bestseller', true)
+        ->where('show_in_homepage', true)
+        ->orderBy('created_at', 'desc')
+        ->limit(12)
+        ->get();
 
-    // Get New Arrivals tag (check both spellings for compatibility)
-    $newArrivalsTag = \App\Models\Tag::whereIn('slug', ['new-arrivals', 'new-arrivels'])->first();
-    $newArrivals = collect();
-    if ($newArrivalsTag) {
-        $newArrivals = \App\Models\Product::with(['genders', 'tagsList'])
-            ->where('status', 'active')
-            ->whereHas('tagsList', function($q) use ($newArrivalsTag) {
-                $q->where('tags.id', $newArrivalsTag->id);
-            })
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get();
-    }
+    // Get New Arrivals using is_new column
+    $newArrivals = \App\Models\Product::with(['genders', 'tagsList'])
+        ->where('status', 'active')
+        ->where('is_new', true)
+        ->where('show_in_homepage', true)
+        ->orderBy('created_at', 'desc')
+        ->limit(10)
+        ->get();
 
     $banners = \App\Models\Banner::active()
         ->orderBy('order', 'asc')

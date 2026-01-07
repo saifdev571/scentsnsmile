@@ -403,36 +403,48 @@
             </div>
 
             <!-- Products Grid -->
-            <div id="productsGrid">
             <?php if($products->count() > 0): ?>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
-                <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php echo $__env->make('partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
-
-            <?php if($products->hasPages()): ?>
-            <div class="mt-12 flex justify-center">
-                <?php echo e($products->links()); ?>
-
-            </div>
-            <?php endif; ?>
-
-            <?php else: ?>
-            <div class="text-center py-20">
-                <div class="w-24 h-24 mx-auto mb-6 bg-[#F4ECDD] rounded-full flex items-center justify-center">
-                    <svg class="w-12 h-12 text-[#F27F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                    </svg>
+            <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
+                <div id="productsContainer" class="contents">
+                    <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php echo $__env->make('partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">No Products Found</h3>
-                <p class="text-gray-500 mb-6">No products in "<?php echo e($item->name); ?>" at the moment.</p>
-                <a href="<?php echo e(route('collections.show', 'all')); ?>" class="inline-flex items-center px-8 py-3 bg-[#F27F6E] text-white rounded-full font-medium hover:bg-[#e06b5a] transition-colors">
-                    Browse All Perfumes
-                </a>
+            </div>
+            <?php else: ?>
+            <div id="productsGrid">
+                <div id="productsContainer">
+                    <div class="text-center py-20">
+                        <div class="w-24 h-24 mx-auto mb-6 bg-[#F4ECDD] rounded-full flex items-center justify-center">
+                            <svg class="w-12 h-12 text-[#F27F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">No Products Found</h3>
+                        <p class="text-gray-500 mb-6">No products in "<?php echo e($item->name); ?>" at the moment.</p>
+                        <a href="<?php echo e(route('collections.show', 'all')); ?>" class="inline-flex items-center px-8 py-3 bg-[#F27F6E] text-white rounded-full font-medium hover:bg-[#e06b5a] transition-colors">
+                            Browse All Perfumes
+                        </a>
+                    </div>
+                </div>
             </div>
             <?php endif; ?>
+            
+            <!-- Load More Button (Outside productsGrid so it doesn't get replaced) -->
+            <!-- Debug: Total=<?php echo e($products->total()); ?>, Count=<?php echo e($products->count()); ?>, HasMore=<?php echo e($products->hasMorePages() ? 'Yes' : 'No'); ?>, CurrentPage=<?php echo e($products->currentPage()); ?>, LastPage=<?php echo e($products->lastPage()); ?> -->
+            <?php if($products->hasMorePages()): ?>
+            <div id="loadMoreContainer" class="mt-12 flex justify-center">
+                <button id="loadMoreBtn" 
+                        data-next-page="<?php echo e($products->currentPage() + 1); ?>"
+                        data-last-page="<?php echo e($products->lastPage()); ?>"
+                        class="px-8 py-4 bg-gradient-to-r from-gray-900 to-gray-700 text-white rounded-full font-semibold hover:from-black hover:to-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2">
+                    <span>Load More Products</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
             </div>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -798,7 +810,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const filters = getFilterValues();
         
         // Show loading state
-        productsGrid.innerHTML = '<div class="col-span-full flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F27F6E]"></div></div>';
+        const productsGrid = document.getElementById('productsGrid');
+        if (productsGrid) {
+            productsGrid.innerHTML = '<div class="flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F27F6E]"></div></div>';
+        }
 
         // Build form data
         const formData = new FormData();
@@ -824,17 +839,188 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                productsGrid.innerHTML = data.html;
+                // Recreate the grid structure
+                if (productsGrid) {
+                    if (data.total > 0) {
+                        // Has products - create grid with contents wrapper
+                        productsGrid.innerHTML = `
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
+                                <div id="productsContainer" class="contents">
+                                    ${data.html}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // No products - simple container
+                        productsGrid.innerHTML = `
+                            <div id="productsContainer">
+                                ${data.html}
+                            </div>
+                        `;
+                    }
+                }
                 productCount.textContent = data.total + ' Products';
+                
+                // Update or create Load More button
+                let loadMoreContainer = document.getElementById('loadMoreContainer');
+                
+                if (data.current_page < data.last_page) {
+                    // Has more pages - show/create button
+                    if (!loadMoreContainer) {
+                        // Create container and button
+                        loadMoreContainer = document.createElement('div');
+                        loadMoreContainer.id = 'loadMoreContainer';
+                        loadMoreContainer.className = 'mt-12 flex justify-center';
+                        productsGrid.parentElement.appendChild(loadMoreContainer);
+                    }
+                    
+                    loadMoreContainer.innerHTML = `
+                        <button id="loadMoreBtn" 
+                                data-next-page="${data.current_page + 1}"
+                                data-last-page="${data.last_page}"
+                                data-filters='${JSON.stringify(filters)}'
+                                class="px-8 py-4 bg-gradient-to-r from-gray-900 to-gray-700 text-white rounded-full font-semibold hover:from-black hover:to-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2">
+                            <span>Load More Products</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                    `;
+                    
+                    // Re-attach event listener
+                    attachLoadMoreListener();
+                } else {
+                    // No more pages - remove button
+                    if (loadMoreContainer) {
+                        loadMoreContainer.remove();
+                    }
+                }
             } else {
-                productsGrid.innerHTML = '<div class="col-span-full text-center py-20 text-red-500">Error loading products</div>';
+                if (productsGrid) {
+                    productsGrid.innerHTML = '<div class="text-center py-20 text-red-500">Error loading products</div>';
+                }
             }
         })
         .catch(error => {
             console.error('Filter error:', error);
-            productsGrid.innerHTML = '<div class="col-span-full text-center py-20 text-red-500">Error loading products</div>';
+            if (productsGrid) {
+                productsGrid.innerHTML = '<div class="text-center py-20 text-red-500">Error loading products</div>';
+            }
         });
     }
+    
+    // Attach Load More event listener (defined globally so it can be reused)
+    window.attachLoadMoreListener = function() {
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', async function() {
+                const button = this;
+                const nextPage = parseInt(button.getAttribute('data-next-page'));
+                const lastPage = parseInt(button.getAttribute('data-last-page'));
+                const filtersJson = button.getAttribute('data-filters');
+                const filters = filtersJson ? JSON.parse(filtersJson) : null;
+                
+                const container = document.getElementById('productsContainer');
+                if (!container) {
+                    console.error('Products container not found');
+                    return;
+                }
+                
+                // Disable button and show loading
+                button.disabled = true;
+                const originalHTML = button.innerHTML;
+                button.innerHTML = `
+                    <svg class="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Loading...</span>
+                `;
+                
+                try {
+                    let response;
+                    
+                    if (filters) {
+                        // Load more with filters
+                        const formData = new FormData();
+                        filters.genders.forEach(g => formData.append('genders[]', g));
+                        filters.tags.forEach(t => formData.append('tags[]', t));
+                        filters.scent_families.forEach(s => formData.append('scent_families[]', s));
+                        filters.collections.forEach(c => formData.append('collections[]', c));
+                        filters.highlight_notes.forEach(h => formData.append('highlight_notes[]', h));
+                        formData.append('price_min', filters.price_min);
+                        formData.append('price_max', filters.price_max);
+                        formData.append('sort', filters.sort);
+                        formData.append('search', filters.search);
+                        formData.append('page', nextPage);
+                        
+                        response = await fetch('<?php echo e(route("collections.filter")); ?>', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'Accept': 'application/json'
+                            },
+                            body: formData
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            // Append new products
+                            container.insertAdjacentHTML('beforeend', data.html);
+                            
+                            // Update button
+                            if (data.current_page >= data.last_page) {
+                                button.parentElement.remove();
+                            } else {
+                                button.setAttribute('data-next-page', data.current_page + 1);
+                                button.disabled = false;
+                                button.innerHTML = originalHTML;
+                            }
+                        } else {
+                            throw new Error('Failed to load products');
+                        }
+                    } else {
+                        // Load more without filters (normal pagination)
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('page', nextPage);
+                        
+                        response = await fetch(url.toString());
+                        const html = await response.text();
+                        
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newProductsContainer = doc.querySelector('#productsContainer');
+                        
+                        if (newProductsContainer) {
+                            const newProducts = Array.from(newProductsContainer.children);
+                            newProducts.forEach(product => {
+                                container.appendChild(product.cloneNode(true));
+                            });
+                            
+                            // Update button
+                            if (nextPage >= lastPage) {
+                                button.parentElement.remove();
+                            } else {
+                                button.setAttribute('data-next-page', nextPage + 1);
+                                button.disabled = false;
+                                button.innerHTML = originalHTML;
+                            }
+                        } else {
+                            throw new Error('No products found');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading more products:', error);
+                    button.disabled = false;
+                    button.innerHTML = originalHTML;
+                    alert('Failed to load more products. Please try again.');
+                }
+            });
+        }
+    };
+
+    // Initialize Load More on page load
+    attachLoadMoreListener();
 
     // Clear all filters
     window.clearAllFilters = function() {

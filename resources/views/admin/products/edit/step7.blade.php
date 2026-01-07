@@ -74,29 +74,78 @@
                 </div>
             </div>
 
-            <!-- Tags -->
+            <!-- Product Attributes -->
             <div class="space-y-4">
-                <h3 class="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">🏷️ Tags</h3>
+                <h3 class="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">⭐ Product Attributes</h3>
                 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-800 mb-3">Select Tags</label>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                        @foreach($tags as $tag)
-                        <label class="flex items-center space-x-2 p-3 border-2 border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all duration-200">
-                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" 
-                                {{ in_array($tag->id, old('tags', $productData['tags'] ?? [])) ? 'checked' : '' }}
-                                class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
-                            <div class="flex-1">
-                                <div class="font-medium text-gray-900">{{ $tag->name }}</div>
-                                @if($tag->description)
-                                <div class="text-xs text-gray-500">{{ Str::limit($tag->description, 30) }}</div>
-                                @endif
-                            </div>
-                        </label>
-                        @endforeach
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">💡 Select relevant tags to help customers find your product</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Is Bestseller -->
+                    <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:bg-orange-50 hover:border-orange-300 cursor-pointer transition-all duration-200">
+                        <input type="checkbox" name="is_bestseller" value="1" 
+                            {{ old('is_bestseller', $productData['is_bestseller'] ?? $product->is_bestseller ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-orange-600 border-gray-300 rounded focus:ring-2 focus:ring-orange-500">
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900">🔥 Bestseller</div>
+                            <div class="text-xs text-gray-500">Mark as bestselling product</div>
+                        </div>
+                    </label>
+
+                    <!-- Is New -->
+                    <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-300 cursor-pointer transition-all duration-200">
+                        <input type="checkbox" name="is_new" value="1" 
+                            {{ old('is_new', $productData['is_new'] ?? $product->is_new ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-green-600 border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900">✨ New Arrival</div>
+                            <div class="text-xs text-gray-500">Mark as new product</div>
+                        </div>
+                    </label>
+
+                    <!-- Is Featured -->
+                    <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:bg-purple-50 hover:border-purple-300 cursor-pointer transition-all duration-200">
+                        <input type="checkbox" name="is_featured" value="1" 
+                            {{ old('is_featured', $productData['is_featured'] ?? $product->is_featured ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900">⭐ Featured</div>
+                            <div class="text-xs text-gray-500">Highlight this product</div>
+                        </div>
+                    </label>
+
+                    <!-- Is Trending -->
+                    <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:bg-pink-50 hover:border-pink-300 cursor-pointer transition-all duration-200">
+                        <input type="checkbox" name="is_trending" value="1" 
+                            {{ old('is_trending', $productData['is_trending'] ?? $product->is_trending ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-pink-600 border-gray-300 rounded focus:ring-2 focus:ring-pink-500">
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900">📈 Trending</div>
+                            <div class="text-xs text-gray-500">Mark as trending product</div>
+                        </div>
+                    </label>
+
+                    <!-- Is Top Sale -->
+                    <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-300 cursor-pointer transition-all duration-200">
+                        <input type="checkbox" name="is_topsale" value="1" 
+                            {{ old('is_topsale', $productData['is_topsale'] ?? $product->is_topsale ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-red-600 border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900">💰 Top Sale</div>
+                            <div class="text-xs text-gray-500">Mark as top selling product</div>
+                        </div>
+                    </label>
+
+                    <!-- Show in Homepage -->
+                    <label class="flex items-center space-x-3 p-4 border-2 border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all duration-200">
+                        <input type="checkbox" name="show_in_homepage" value="1" 
+                            {{ old('show_in_homepage', $productData['show_in_homepage'] ?? $product->show_in_homepage ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900">🏠 Show on Homepage</div>
+                            <div class="text-xs text-gray-500">Display on homepage</div>
+                        </div>
+                    </label>
                 </div>
+                <p class="text-xs text-gray-500 mt-2">💡 Select attributes to categorize and promote your product</p>
             </div>
 
             <!-- Final Action Buttons -->

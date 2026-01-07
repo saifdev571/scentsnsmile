@@ -37,7 +37,7 @@ class CollectionController extends Controller
             $type = 'all';
             $products = Product::where('status', 'active')
                 ->orderBy('created_at', 'desc')
-                ->paginate(16);
+                ->paginate(12);
                 
             return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
         }
@@ -50,10 +50,12 @@ class CollectionController extends Controller
                 'id' => 0
             ];
             $type = 'special';
+            
+            // Use is_bestseller column
             $products = Product::where('status', 'active')
                 ->where('is_bestseller', true)
                 ->orderBy('created_at', 'desc')
-                ->paginate(16);
+                ->paginate(12);
                 
             return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
         }
@@ -66,10 +68,12 @@ class CollectionController extends Controller
                 'id' => 0
             ];
             $type = 'special';
+            
+            // Use is_new column
             $products = Product::where('status', 'active')
                 ->where('is_new', true)
                 ->orderBy('created_at', 'desc')
-                ->paginate(16);
+                ->paginate(12);
                 
             return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
         }
@@ -79,7 +83,7 @@ class CollectionController extends Controller
         if ($gender) {
             $item = $gender;
             $type = 'gender';
-            $products = $gender->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(16);
+            $products = $gender->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
             return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
         }
 
@@ -88,7 +92,7 @@ class CollectionController extends Controller
         if ($tag) {
             $item = $tag;
             $type = 'tag';
-            $products = $tag->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(16);
+            $products = $tag->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
             return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
         }
 
@@ -97,7 +101,7 @@ class CollectionController extends Controller
         if ($collection) {
             $item = $collection;
             $type = 'collection';
-            $products = $collection->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(16);
+            $products = $collection->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
             return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
         }
 
@@ -110,7 +114,7 @@ class CollectionController extends Controller
         $type = 'all';
         $products = Product::where('status', 'active')
             ->orderBy('created_at', 'desc')
-            ->paginate(16);
+            ->paginate(12);
             
         return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
     }
@@ -209,7 +213,7 @@ class CollectionController extends Controller
                 $query->orderBy('created_at', 'desc');
         }
 
-        $products = $query->paginate(16);
+        $products = $query->paginate(12);
 
         // Return HTML for products grid
         $html = view('partials.products-grid', compact('products'))->render();

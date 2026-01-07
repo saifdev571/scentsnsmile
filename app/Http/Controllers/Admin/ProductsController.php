@@ -1007,12 +1007,7 @@ class ProductsController extends Controller
             return redirect()->route('admin.products.create.step1')->with('error', 'Please complete previous steps first.');
         }
         
-        $tags = \App\Models\Tag::where('is_active', true)
-                   ->orderBy('usage_count', 'desc')
-                   ->orderBy('name')
-                   ->get();
-        
-        return view('admin.products.create.step7', compact('productData', 'tags'));
+        return view('admin.products.create.step7', compact('productData'));
     }
 
     public function processStep7(Request $request)
@@ -1021,9 +1016,21 @@ class ProductsController extends Controller
             $validated = $request->validate([
                 'status' => 'required|in:active,inactive,draft',
                 'visibility' => 'required|in:visible,hidden,catalog,search',
-                'tags' => 'nullable|array',
-                'tags.*' => 'exists:tags,id',
+                'is_bestseller' => 'nullable|boolean',
+                'is_new' => 'nullable|boolean',
+                'is_featured' => 'nullable|boolean',
+                'is_trending' => 'nullable|boolean',
+                'is_topsale' => 'nullable|boolean',
+                'show_in_homepage' => 'nullable|boolean',
             ]);
+
+        // Convert checkbox values to boolean
+        $validated['is_bestseller'] = $request->has('is_bestseller');
+        $validated['is_new'] = $request->has('is_new');
+        $validated['is_featured'] = $request->has('is_featured');
+        $validated['is_trending'] = $request->has('is_trending');
+        $validated['is_topsale'] = $request->has('is_topsale');
+        $validated['show_in_homepage'] = $request->has('show_in_homepage');
 
         $productData = array_merge(session('product_data', []), $validated);
 
@@ -1679,19 +1686,9 @@ class ProductsController extends Controller
     {
         $editData = session('edit_product_data', []);
 
-        $tags = \App\Models\Tag::where('is_active', true)
-                   ->orderBy('usage_count', 'desc')
-                   ->orderBy('name')
-                   ->get();
-
-        // Get existing product tags
-        $product->load('tagsList');
-        $existingTagIds = $product->tagsList->pluck('id')->toArray();
-
         $editData = array_merge($editData, [
             'status' => $product->status,
             'visibility' => $product->visibility ?? 'visible',
-            'tags' => $existingTagIds,
             'is_featured' => $product->is_featured,
             'is_new' => $product->is_new,
             'is_trending' => $product->is_trending,
@@ -1706,7 +1703,7 @@ class ProductsController extends Controller
 
         $productData = $editData;
 
-        return view('admin.products.edit.step7', compact('product', 'productData', 'tags'));
+        return view('admin.products.edit.step7', compact('product', 'productData'));
     }
 
     public function processEditStep7(Request $request, Product $product)
@@ -1715,8 +1712,6 @@ class ProductsController extends Controller
             $validated = $request->validate([
                 'status' => 'required|in:active,inactive,draft',
                 'visibility' => 'required|in:visible,hidden,catalog,search',
-                'tags' => 'nullable|array',
-                'tags.*' => 'exists:tags,id',
                 'is_featured' => 'nullable|boolean',
                 'is_new' => 'nullable|boolean',
                 'is_trending' => 'nullable|boolean',
@@ -1742,13 +1737,6 @@ class ProductsController extends Controller
             $allData['is_limited_edition'] = $request->has('is_limited_edition');
 
             $product->update($allData);
-
-            if (isset($allData['tags'])) {
-                $product->tagsList()->sync($allData['tags'] ?? []);
-            }
-            if (isset($allData['collections'])) {
-                $product->collectionsList()->sync($allData['collections'] ?? []);
-            }
 
             session()->forget('edit_product_data');
 
