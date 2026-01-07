@@ -86,6 +86,19 @@ class SearchController extends Controller
         // Get products
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(12);
         
+        // Handle AJAX request for load more
+        if ($request->ajax()) {
+            $html = '';
+            foreach ($products as $product) {
+                $html .= view('partials.product-card', compact('product'))->render();
+            }
+            
+            return response()->json([
+                'html' => $html,
+                'hasMorePages' => $products->hasMorePages()
+            ]);
+        }
+        
         // Get counts per gender for filter tabs
         $genderCounts = [];
         $totalCount = 0;
@@ -193,6 +206,19 @@ class SearchController extends Controller
         
         // Get products
         $products = $productsQuery->orderBy('created_at', 'desc')->paginate(12);
+        
+        // Handle AJAX request for load more
+        if ($request->ajax()) {
+            $html = '';
+            foreach ($products as $product) {
+                $html .= view('partials.product-card', compact('product'))->render();
+            }
+            
+            return response()->json([
+                'html' => $html,
+                'hasMorePages' => $products->hasMorePages()
+            ]);
+        }
         
         // Get counts per gender
         $genderCounts = [];

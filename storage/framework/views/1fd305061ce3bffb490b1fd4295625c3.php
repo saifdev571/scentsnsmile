@@ -1,39 +1,40 @@
-@extends('layouts.app')
 
-@section('title', 'Scents N Smile - Holiday Sale')
 
-@section('content')
+<?php $__env->startSection('title', 'Scents N Smile - Holiday Sale'); ?>
+
+<?php $__env->startSection('content'); ?>
     <!-- Hero Slider Section -->
     <section class="relative h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden bg-gray-900">
         <div class="slider-container relative w-full h-full">
-            @forelse($banners as $index => $banner)
-                <!-- Slide {{ $index + 1 }} -->
-                <div class="slide {{ $index === 0 ? 'active' : 'opacity-0' }} absolute inset-0 transition-opacity duration-1000">
-                    <img src="{{ $banner->image }}"
-                        alt="{{ $banner->title }}" 
+            <?php $__empty_1 = true; $__currentLoopData = $banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <!-- Slide <?php echo e($index + 1); ?> -->
+                <div class="slide <?php echo e($index === 0 ? 'active' : 'opacity-0'); ?> absolute inset-0 transition-opacity duration-1000">
+                    <img src="<?php echo e($banner->image); ?>"
+                        alt="<?php echo e($banner->title); ?>" 
                         class="w-full h-full object-cover" 
-                        loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+                        loading="<?php echo e($index === 0 ? 'eager' : 'lazy'); ?>">
                     
-                    @if($banner->title || $banner->subtitle || $banner->button_text)
+                    <?php if($banner->title || $banner->subtitle || $banner->button_text): ?>
                         <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
                             <div class="text-center text-white px-4 max-w-4xl">
-                                @if($banner->title)
-                                    <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">{{ $banner->title }}</h2>
-                                @endif
-                                @if($banner->subtitle)
-                                    <p class="text-lg sm:text-xl md:text-2xl mb-6">{{ $banner->subtitle }}</p>
-                                @endif
-                                @if($banner->button_text && $banner->link)
-                                    <a href="{{ $banner->link }}" 
+                                <?php if($banner->title): ?>
+                                    <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4"><?php echo e($banner->title); ?></h2>
+                                <?php endif; ?>
+                                <?php if($banner->subtitle): ?>
+                                    <p class="text-lg sm:text-xl md:text-2xl mb-6"><?php echo e($banner->subtitle); ?></p>
+                                <?php endif; ?>
+                                <?php if($banner->button_text && $banner->link): ?>
+                                    <a href="<?php echo e($banner->link); ?>" 
                                        class="inline-block bg-white text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-all">
-                                        {{ $banner->button_text }}
+                                        <?php echo e($banner->button_text); ?>
+
                                     </a>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <!-- Default Slide 1 -->
                 <div class="slide active absolute inset-0 transition-opacity duration-1000">
                     <img src="https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg?auto=compress&cs=tinysrgb&w=1920"
@@ -57,9 +58,9 @@
                     <img src="https://images.pexels.com/photos/3059609/pexels-photo-3059609.jpeg?auto=compress&cs=tinysrgb&w=1920"
                         alt="Premium Perfume" class="w-full h-full object-cover" loading="lazy">
                 </div>
-            @endforelse
+            <?php endif; ?>
 
-            @if($banners->count() > 1)
+            <?php if($banners->count() > 1): ?>
                 <!-- Navigation Arrows -->
                 <button onclick="changeSlide(-1)" class="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-90 text-gray-800 p-2 sm:p-3 lg:p-4 rounded-full transition-all duration-300 hover:scale-110 z-10 shadow-lg">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,11 +75,11 @@
 
                 <!-- Dots Navigation -->
                 <div class="absolute bottom-4 sm:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-10">
-                    @foreach($banners as $index => $banner)
-                        <button onclick="goToSlide({{ $index }})" class="dot w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-all duration-300 hover:scale-125"></button>
-                    @endforeach
+                    <?php $__currentLoopData = $banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <button onclick="goToSlide(<?php echo e($index); ?>)" class="dot w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition-all duration-300 hover:scale-125"></button>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
     </section>
 
@@ -153,33 +154,33 @@
 
     <!-- Category Section -->
     <section class="bg-white px-2 sm:px-4">
-        <div class="flex flex-col gap-2 md:grid md:grid-cols-{{ count($genders ?? []) > 0 ? min(count($genders), 3) : 3 }}">
-            @forelse($genders ?? [] as $gender)
-            <a href="{{ route('collections.show', $gender->slug) }}" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
-                @if($gender->hasMainImage())
-                    <img src="{{ $gender->getMainImageUrl() }}" 
-                         alt="{{ $gender->name }} Perfumes" 
+        <div class="flex flex-col gap-2 md:grid md:grid-cols-<?php echo e(count($genders ?? []) > 0 ? min(count($genders), 3) : 3); ?>">
+            <?php $__empty_1 = true; $__currentLoopData = $genders ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gender): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <a href="<?php echo e(route('collections.show', $gender->slug)); ?>" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
+                <?php if($gender->hasMainImage()): ?>
+                    <img src="<?php echo e($gender->getMainImageUrl()); ?>" 
+                         alt="<?php echo e($gender->name); ?> Perfumes" 
                          class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
                          loading="lazy">
-                @else
+                <?php else: ?>
                     <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-pink-200 to-purple-300 flex items-center justify-center">
                         <svg class="w-20 h-20 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                     </div>
-                @endif
+                <?php endif; ?>
                 <!-- Title at top-left -->
                 <div class="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-6 md:left-6 z-10">
-                    <h3 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wide drop-shadow-lg">{{ $gender->name }}</h3>
+                    <h3 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wide drop-shadow-lg"><?php echo e($gender->name); ?></h3>
                 </div>
                 <!-- Shop button at bottom-left -->
                 <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 md:bottom-6 md:left-6 z-10">
-                    <span class="bg-white text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg hover:bg-gray-100 transition-colors">Shop {{ $gender->name }}</span>
+                    <span class="bg-white text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg hover:bg-gray-100 transition-colors">Shop <?php echo e($gender->name); ?></span>
                 </div>
             </a>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <!-- Fallback static content if no genders -->
-            <a href="{{ route('collections.show', 'women') }}" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
+            <a href="<?php echo e(route('collections.show', 'women')); ?>" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
                 <img src="https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?auto=compress&cs=tinysrgb&w=800" 
                      alt="Women Perfumes" 
                      class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out">
@@ -190,7 +191,7 @@
                     <span class="bg-white text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg hover:bg-gray-100 transition-colors">Shop Women</span>
                 </div>
             </a>
-            <a href="{{ route('collections.show', 'men') }}" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
+            <a href="<?php echo e(route('collections.show', 'men')); ?>" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
                 <img src="https://images.pexels.com/photos/3059609/pexels-photo-3059609.jpeg?auto=compress&cs=tinysrgb&w=800" 
                      alt="Men Perfumes" 
                      class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out">
@@ -201,7 +202,7 @@
                     <span class="bg-white text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg hover:bg-gray-100 transition-colors">Shop Men</span>
                 </div>
             </a>
-            <a href="{{ route('collections.show', 'unisex') }}" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
+            <a href="<?php echo e(route('collections.show', 'unisex')); ?>" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
                 <img src="https://images.pexels.com/photos/1961795/pexels-photo-1961795.jpeg?auto=compress&cs=tinysrgb&w=800" 
                      alt="Unisex Perfumes" 
                      class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out">
@@ -212,7 +213,7 @@
                     <span class="bg-white text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg hover:bg-gray-100 transition-colors">Shop Unisex</span>
                 </div>
             </a>
-            @endforelse
+            <?php endif; ?>
         </div>
     </section>
 
@@ -227,16 +228,16 @@
             </div>
 
             <!-- Products Grid -->
-            @if($bestSellers->count() > 0)
+            <?php if($bestSellers->count() > 0): ?>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
-                @foreach($bestSellers as $product)
-                @include('partials.product-card', ['product' => $product])
-                @endforeach
+                <?php $__currentLoopData = $bestSellers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php echo $__env->make('partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
             
             <!-- View All Products Button -->
             <div class="flex justify-center mt-8">
-                <a href="{{ route('collections.show', 'bestsellers') }}" 
+                <a href="<?php echo e(route('collections.show', 'bestsellers')); ?>" 
                    class="inline-flex items-center gap-2 px-8 py-4 bg-[#F27F6E] text-white rounded-full font-semibold hover:bg-[#e06b5a] transition-all duration-200 shadow-lg hover:shadow-xl">
                     <span>View All Products</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,11 +245,11 @@
                     </svg>
                 </a>
             </div>
-            @else
+            <?php else: ?>
             <div class="text-center py-12 bg-gray-50 rounded-xl">
                 <p class="text-gray-500">No bestseller products available yet.</p>
             </div>
-            @endif
+            <?php endif; ?>
         </div>
     </section>
 
@@ -260,23 +261,23 @@
                 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
                     New <span class="text-[#F27F6E]">Arrivals</span>
                 </h2>
-                <a href="{{ route('collections') }}" class="text-sm text-[#F27F6E] hover:underline font-medium">
+                <a href="<?php echo e(route('collections')); ?>" class="text-sm text-[#F27F6E] hover:underline font-medium">
                     View All →
                 </a>
             </div>
 
             <!-- Products Grid -->
-            @if($newArrivals->count() > 0)
+            <?php if($newArrivals->count() > 0): ?>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-                @foreach($newArrivals as $product)
-                @include('partials.product-card', ['product' => $product])
-                @endforeach
+                <?php $__currentLoopData = $newArrivals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php echo $__env->make('partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
-            @else
+            <?php else: ?>
             <div class="text-center py-12 bg-white rounded-xl">
                 <p class="text-gray-500">No new arrival products available yet.</p>
             </div>
-            @endif
+            <?php endif; ?>
         </div>
     </section>
 
@@ -287,24 +288,24 @@
                 <!-- Testimonials Slider -->
                 <div class="overflow-hidden">
                     <div id="testimonialsTrack" class="flex gap-4 sm:gap-6 transition-transform duration-500 ease-out">
-                        @forelse($testimonials as $testimonial)
-                            <!-- Testimonial {{ $loop->iteration }} -->
+                        <?php $__empty_1 = true; $__currentLoopData = $testimonials; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $testimonial): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <!-- Testimonial <?php echo e($loop->iteration); ?> -->
                             <div class="flex-shrink-0 w-[280px] sm:w-[320px] bg-black text-white rounded-2xl p-6 border-2 border-red-500">
                                 <div class="flex gap-1 mb-4">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= $testimonial->rating)
+                                    <?php for($i = 1; $i <= 5; $i++): ?>
+                                        <?php if($i <= $testimonial->rating): ?>
                                             <span class="text-yellow-400">★</span>
-                                        @else
+                                        <?php else: ?>
                                             <span class="text-gray-500">★</span>
-                                        @endif
-                                    @endfor
+                                        <?php endif; ?>
+                                    <?php endfor; ?>
                                 </div>
-                                <p class="text-sm leading-relaxed">{{ $testimonial->review_text }}</p>
-                                @if($testimonial->customer_name)
-                                    <p class="text-xs text-gray-400 mt-4 font-semibold">- {{ $testimonial->customer_name }}</p>
-                                @endif
+                                <p class="text-sm leading-relaxed"><?php echo e($testimonial->review_text); ?></p>
+                                <?php if($testimonial->customer_name): ?>
+                                    <p class="text-xs text-gray-400 mt-4 font-semibold">- <?php echo e($testimonial->customer_name); ?></p>
+                                <?php endif; ?>
                             </div>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <!-- Default Testimonial 1 -->
                             <div class="flex-shrink-0 w-[280px] sm:w-[320px] bg-black text-white rounded-2xl p-6 border-2 border-red-500">
                                 <div class="flex gap-1 mb-4">
@@ -364,7 +365,7 @@
                                 </div>
                                 <p class="text-sm leading-relaxed">These perfumes are absolutely divine! The scent projection is amazing and I always get asked what I'm wearing. Highly recommend!</p>
                             </div>
-                        @endforelse
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -562,62 +563,63 @@
             <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">Featured Perfumes</h2>
             
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                @forelse($products as $product)
+                <?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <div class="group">
                         <div class="relative overflow-hidden rounded-lg mb-2 sm:mb-4 aspect-square bg-gray-100">
-                            <a href="{{ route('product.show', $product->slug) }}" class="block w-full h-full">
-                                @if($product->image_url)
-                                    <img src="{{ $product->image_url }}" 
-                                         alt="{{ $product->name }}" 
+                            <a href="<?php echo e(route('product.show', $product->slug)); ?>" class="block w-full h-full">
+                                <?php if($product->image_url): ?>
+                                    <img src="<?php echo e($product->image_url); ?>" 
+                                         alt="<?php echo e($product->name); ?>" 
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                @else
+                                <?php else: ?>
                                     <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-pink-100">
                                         <span class="text-6xl">🌸</span>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </a>
                             <!-- Add to Cart Button (shows on hover) - OUTSIDE the link -->
                             <div class="absolute bottom-0 left-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-20">
-                                <button type="button" data-add-to-cart="{{ $product->id }}" class="w-full py-2 bg-white/95 border border-[#e8a598] text-[#e8a598] rounded-lg font-medium text-xs hover:bg-[#e8a598] hover:text-white transition-colors duration-200">
+                                <button type="button" data-add-to-cart="<?php echo e($product->id); ?>" class="w-full py-2 bg-white/95 border border-[#e8a598] text-[#e8a598] rounded-lg font-medium text-xs hover:bg-[#e8a598] hover:text-white transition-colors duration-200">
                                     ADD TO CART
                                 </button>
                             </div>
                         </div>
                         
-                        <a href="{{ route('product.show', $product->slug) }}" class="block">
-                            @if($product->tagsList && $product->tagsList->count() > 0)
+                        <a href="<?php echo e(route('product.show', $product->slug)); ?>" class="block">
+                            <?php if($product->tagsList && $product->tagsList->count() > 0): ?>
                                 <div class="flex gap-1 sm:gap-2 mb-1 sm:mb-2 flex-wrap">
-                                    @foreach($product->tagsList as $tag)
+                                    <?php $__currentLoopData = $product->tagsList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <span class="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 rounded-full text-gray-700">
-                                            {{ $tag->name }}
+                                            <?php echo e($tag->name); ?>
+
                                         </span>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                             
-                            <h3 class="text-sm sm:text-base lg:text-lg font-semibold mb-1 sm:mb-2 text-gray-900 line-clamp-2">{{ $product->name }}</h3>
+                            <h3 class="text-sm sm:text-base lg:text-lg font-semibold mb-1 sm:mb-2 text-gray-900 line-clamp-2"><?php echo e($product->name); ?></h3>
                             
                             <div class="flex items-center gap-1 sm:gap-2 flex-wrap">
-                                @if($product->sale_price && $product->sale_price < $product->price)
-                                    <span class="text-base sm:text-lg lg:text-xl font-bold text-black">₹{{ number_format($product->sale_price, 2) }}</span>
-                                    <span class="text-xs sm:text-sm text-gray-500 line-through">₹{{ number_format($product->price, 2) }}</span>
-                                @else
-                                    <span class="text-base sm:text-lg lg:text-xl font-bold text-black">₹{{ number_format($product->price, 2) }}</span>
-                                @endif
+                                <?php if($product->sale_price && $product->sale_price < $product->price): ?>
+                                    <span class="text-base sm:text-lg lg:text-xl font-bold text-black">₹<?php echo e(number_format($product->sale_price, 2)); ?></span>
+                                    <span class="text-xs sm:text-sm text-gray-500 line-through">₹<?php echo e(number_format($product->price, 2)); ?></span>
+                                <?php else: ?>
+                                    <span class="text-base sm:text-lg lg:text-xl font-bold text-black">₹<?php echo e(number_format($product->price, 2)); ?></span>
+                                <?php endif; ?>
                             </div>
                         </a>
                     </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-full text-center py-8 sm:py-12">
                         <p class="text-sm sm:text-base text-gray-500">No products available at the moment.</p>
                     </div>
-                @endforelse
+                <?php endif; ?>
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     // Event delegation for Add to Cart buttons
     document.addEventListener('click', function(e) {
@@ -632,4 +634,6 @@
         }
     }, true);
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SCENTS N SMILE\resources\views/home.blade.php ENDPATH**/ ?>

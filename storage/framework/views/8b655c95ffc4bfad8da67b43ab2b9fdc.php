@@ -5,7 +5,7 @@
 <?php $__env->startSection('content'); ?>
 <!-- Search Page -->
 <section class="pt-20 pb-8 bg-white min-h-screen">
-    <div class="max-w-6xl mx-auto px-4">
+    <div class="w-full px-4">
         <!-- Back Button -->
         <a href="<?php echo e(route('home')); ?>" class="inline-flex items-center gap-1.5 text-gray-600 hover:text-gray-900 mb-4 text-xs">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,22 +95,31 @@
 
         <!-- Products Grid -->
         <?php if($products->count() > 0): ?>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div id="productsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <?php echo $__env->make('partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
 
-        <!-- Pagination -->
-        <div class="mt-8">
-            <?php if($noteSlug): ?>
-            <?php echo e($products->appends(['gender' => $genderFilter])->links()); ?>
-
-            <?php else: ?>
-            <?php echo e($products->appends(['q' => $query, 'gender' => $genderFilter])->links()); ?>
-
-            <?php endif; ?>
+        <!-- Load More Button -->
+        <?php if($products->hasMorePages()): ?>
+        <div class="text-center mt-8">
+            <button 
+                id="loadMoreBtn"
+                onclick="loadMoreProducts()"
+                class="inline-flex items-center gap-2 px-8 py-3 bg-[#e8a598] hover:bg-[#d99588] text-white font-medium rounded-full transition-all duration-200 hover:shadow-lg"
+            >
+                <span id="loadMoreText">Load More Products</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div id="loadingSpinner" class="hidden">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#e8a598]"></div>
+                <p class="text-gray-600 mt-2">Loading...</p>
+            </div>
         </div>
+        <?php endif; ?>
         <?php else: ?>
         <!-- No Results -->
         <div class="text-center py-16">
@@ -134,6 +143,58 @@
         <?php endif; ?>
     </div>
 </section>
+
+<script>
+let currentPage = 1;
+const query = "<?php echo e($query); ?>";
+const genderFilter = "<?php echo e($genderFilter); ?>";
+const noteSlug = "<?php echo e($noteSlug ?? ''); ?>";
+
+function loadMoreProducts() {
+    currentPage++;
+    
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const productsGrid = document.getElementById('productsGrid');
+    
+    // Show loading state
+    loadMoreBtn.classList.add('hidden');
+    loadingSpinner.classList.remove('hidden');
+    
+    // Build URL based on whether it's a note search or regular search
+    let url;
+    if (noteSlug) {
+        url = `/scent-notes/${noteSlug}?page=${currentPage}&gender=${genderFilter}`;
+    } else {
+        url = `/search?q=${encodeURIComponent(query)}&gender=${genderFilter}&page=${currentPage}`;
+    }
+    
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Append new products
+        productsGrid.insertAdjacentHTML('beforeend', data.html);
+        
+        // Hide loading spinner
+        loadingSpinner.classList.add('hidden');
+        
+        // Show or hide load more button based on whether there are more pages
+        if (data.hasMorePages) {
+            loadMoreBtn.classList.remove('hidden');
+        }
+    })
+    .catch(error => {
+        console.error('Error loading products:', error);
+        loadingSpinner.classList.add('hidden');
+        loadMoreBtn.classList.remove('hidden');
+        alert('Error loading products. Please try again.');
+    });
+}
+</script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SCENTS N SMILE\resources\views/search.blade.php ENDPATH**/ ?>

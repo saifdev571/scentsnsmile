@@ -1,5 +1,5 @@
 <!-- Product Card -->
-<a href="{{ route('product.show', $product->slug) }}" class="group block">
+<a href="{{ route('product.show', $product->slug) }}" class="group block bg-gradient-to-br from-gray-50 to-gray-100/80 rounded-2xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200/60 hover:border-gray-300">
     <div class="relative mb-3">
         <!-- Badges -->
         @if($product->genders->count() > 0)
@@ -22,7 +22,7 @@
         @endif
 
         <!-- Product Image -->
-        <div class="aspect-square rounded-xl overflow-hidden bg-[#f5f5f0]/50 relative"
+        <div class="aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-[#faf8f5] to-[#f0ebe3] relative shadow-sm"
              x-data="{ currentImage: 0, images: {{ json_encode($product->images_array ?? []) }} }"
              @mouseenter="if(images.length > 1) currentImage = 1"
              @mouseleave="currentImage = 0">
@@ -57,8 +57,20 @@
 
     <!-- Rating -->
     <div class="flex items-center gap-1.5 mb-2">
-        <div class="flex text-black text-sm">★★★★★</div>
-        <span class="text-xs text-gray-500 underline">{{ rand(100, 999) }}</span>
+        @php
+            $avgRating = round($product->average_rating);
+            $reviewCount = $product->reviews_count;
+        @endphp
+        <div class="flex text-sm">
+            @for($i = 1; $i <= 5; $i++)
+                <span class="{{ $i <= $avgRating ? 'text-black' : 'text-gray-300' }}">★</span>
+            @endfor
+        </div>
+        @if($reviewCount > 0)
+        <span class="text-xs text-gray-500 underline">({{ $reviewCount }})</span>
+        @else
+        <span class="text-xs text-gray-400">No reviews</span>
+        @endif
     </div>
 
     <!-- Inspired By -->
