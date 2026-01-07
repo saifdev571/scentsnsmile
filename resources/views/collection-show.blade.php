@@ -404,8 +404,8 @@
 
             <!-- Products Grid -->
             @if($products->count() > 0)
-            <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
-                <div id="productsContainer" class="contents">
+            <div id="productsGrid">
+                <div id="productsContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
                     @foreach($products as $product)
                     @include('partials.product-card', ['product' => $product])
                     @endforeach
@@ -852,12 +852,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Recreate the grid structure
                 if (productsGrid) {
                     if (data.total > 0) {
-                        // Has products - create grid with contents wrapper
+                        // Has products - create grid directly
                         productsGrid.innerHTML = `
-                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
-                                <div id="productsContainer" class="contents">
-                                    ${data.html}
-                                </div>
+                            <div id="productsContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
+                                ${data.html}
                             </div>
                         `;
                     } else {
