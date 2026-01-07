@@ -96,7 +96,14 @@ class BundleController extends Controller
      */
     public function preBuilt()
     {
-        // Sample bundle data - you can fetch from database later
+        // Get all products marked as bundle products
+        $bundleProducts = \App\Models\Product::with(['genders', 'tagsList', 'sizes'])
+            ->where('status', 'active')
+            ->where('is_bundle_product', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Sample bundle data for display (you can create a bundles table later)
         $bundles = [
             [
                 'id' => 1,
@@ -140,6 +147,6 @@ class BundleController extends Controller
             ],
         ];
 
-        return view('bundles.prebuilt', compact('bundles'));
+        return view('bundles.prebuilt', compact('bundles', 'bundleProducts'));
     }
 }

@@ -1022,6 +1022,7 @@ class ProductsController extends Controller
                 'is_trending' => 'nullable|boolean',
                 'is_topsale' => 'nullable|boolean',
                 'show_in_homepage' => 'nullable|boolean',
+                'is_bundle_product' => 'nullable|boolean',
             ]);
 
         // Convert checkbox values to boolean
@@ -1031,6 +1032,7 @@ class ProductsController extends Controller
         $validated['is_trending'] = $request->has('is_trending');
         $validated['is_topsale'] = $request->has('is_topsale');
         $validated['show_in_homepage'] = $request->has('show_in_homepage');
+        $validated['is_bundle_product'] = $request->has('is_bundle_product');
 
         $productData = array_merge(session('product_data', []), $validated);
 
@@ -1698,6 +1700,7 @@ class ProductsController extends Controller
             'show_in_homepage' => $product->show_in_homepage,
             'is_exclusive' => $product->is_exclusive,
             'is_limited_edition' => $product->is_limited_edition,
+            'is_bundle_product' => $product->is_bundle_product ?? false,
         ]);
         session(['edit_product_data' => $editData]);
 
@@ -1721,6 +1724,7 @@ class ProductsController extends Controller
                 'show_in_homepage' => 'nullable|boolean',
                 'is_exclusive' => 'nullable|boolean',
                 'is_limited_edition' => 'nullable|boolean',
+                'is_bundle_product' => 'nullable|boolean',
             ]);
 
             $editData = session('edit_product_data', []);
@@ -1735,6 +1739,7 @@ class ProductsController extends Controller
             $allData['show_in_homepage'] = $request->has('show_in_homepage');
             $allData['is_exclusive'] = $request->has('is_exclusive');
             $allData['is_limited_edition'] = $request->has('is_limited_edition');
+            $allData['is_bundle_product'] = $request->has('is_bundle_product');
 
             $product->update($allData);
 

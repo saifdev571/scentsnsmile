@@ -11,6 +11,7 @@ Route::get('/', function () {
         ->where('status', 'active')
         ->where('is_featured', true)
         ->where('show_in_homepage', true)
+        ->where('is_bundle_product', false) // Exclude bundle products
         ->orderBy('created_at', 'desc')
         ->limit(8)
         ->get();
@@ -20,6 +21,7 @@ Route::get('/', function () {
         ->where('status', 'active')
         ->where('is_bestseller', true)
         ->where('show_in_homepage', true)
+        ->where('is_bundle_product', false) // Exclude bundle products
         ->orderBy('created_at', 'desc')
         ->limit(12)
         ->get();
@@ -29,6 +31,7 @@ Route::get('/', function () {
         ->where('status', 'active')
         ->where('is_new', true)
         ->where('show_in_homepage', true)
+        ->where('is_bundle_product', false) // Exclude bundle products
         ->orderBy('created_at', 'desc')
         ->limit(10)
         ->get();
@@ -196,6 +199,9 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['admin.auth'])->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+
+        // Cache Management
+        Route::post('/cache/clear', [App\Http\Controllers\Admin\DashboardController::class, 'clearCache'])->name('admin.cache.clear');
 
         Route::get('/products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name('admin.products');
 

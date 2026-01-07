@@ -144,6 +144,17 @@
                             <div class="text-xs text-gray-500">Display on homepage</div>
                         </div>
                     </label>
+
+                    <!-- Bundle Product Only -->
+                    <label class="flex items-center space-x-3 p-4 border-2 border-purple-200 rounded-lg hover:bg-purple-50 hover:border-purple-300 cursor-pointer transition-all duration-200">
+                        <input type="checkbox" name="is_bundle_product" value="1" 
+                            {{ old('is_bundle_product', $productData['is_bundle_product'] ?? $product->is_bundle_product ?? false) ? 'checked' : '' }}
+                            class="h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-900">📦 Bundle Product Only</div>
+                            <div class="text-xs text-gray-500">Only visible in pre-built bundles page</div>
+                        </div>
+                    </label>
                 </div>
                 <p class="text-xs text-gray-500 mt-2">💡 Select attributes to categorize and promote your product</p>
             </div>

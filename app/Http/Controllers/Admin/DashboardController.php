@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -75,5 +76,20 @@ class DashboardController extends Controller
             'chartData',
             'months'
         ));
+    }
+
+    public function clearCache()
+    {
+        try {
+            // Clear all caches
+            Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+            Artisan::call('route:clear');
+            Artisan::call('view:clear');
+
+            return redirect()->back()->with('success', 'Cache cleared successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to clear cache: ' . $e->getMessage());
+        }
     }
 }

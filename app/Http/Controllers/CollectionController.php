@@ -36,6 +36,7 @@ class CollectionController extends Controller
             ];
             $type = 'all';
             $products = Product::where('status', 'active')
+                ->where('is_bundle_product', false) // Exclude bundle products
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
                 
@@ -54,6 +55,7 @@ class CollectionController extends Controller
             // Use is_bestseller column
             $products = Product::where('status', 'active')
                 ->where('is_bestseller', true)
+                ->where('is_bundle_product', false) // Exclude bundle products
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
                 
@@ -72,6 +74,7 @@ class CollectionController extends Controller
             // Use is_new column
             $products = Product::where('status', 'active')
                 ->where('is_new', true)
+                ->where('is_bundle_product', false) // Exclude bundle products
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
                 
@@ -124,7 +127,8 @@ class CollectionController extends Controller
      */
     public function filterProducts(Request $request)
     {
-        $query = Product::where('status', 'active');
+        $query = Product::where('status', 'active')
+            ->where('is_bundle_product', false); // Exclude bundle products
 
         // Gender filter
         if ($request->has('genders') && !empty($request->genders)) {

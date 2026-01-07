@@ -540,6 +540,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Collection Page');
+    
     const filterSidebar = document.getElementById('filterSidebar');
     const filterOverlay = document.getElementById('filterOverlay');
     const sortFilterBtn = document.getElementById('sortFilterBtn');
@@ -550,6 +552,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const sortSelect = document.getElementById('sortSelect');
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
+    
+    console.log('Search elements found:', {
+        searchInput: !!searchInput,
+        searchBtn: !!searchBtn,
+        productsGrid: !!productsGrid
+    });
     
     // Price slider elements
     const priceMin = document.getElementById('priceMin');
@@ -821,12 +829,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Apply filters via AJAX
     function applyFilters() {
+        console.log('applyFilters called');
         const filters = getFilterValues();
+        console.log('Filters:', filters);
         
         // Show loading state
         const productsGrid = document.getElementById('productsGrid');
         if (productsGrid) {
             productsGrid.innerHTML = '<div class="flex justify-center py-20"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F27F6E]"></div></div>';
+        } else {
+            console.error('productsGrid element not found');
+            return;
         }
 
         // Build form data
@@ -915,9 +928,11 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Filter error:', error);
+            console.error('Error details:', error.message, error.stack);
             if (productsGrid) {
-                productsGrid.innerHTML = '<div class="text-center py-20 text-red-500">Error loading products</div>';
+                productsGrid.innerHTML = '<div class="text-center py-20 text-red-500">Error loading products: ' + error.message + '</div>';
             }
+            alert('Error loading products. Check console for details.');
         });
     }
     
