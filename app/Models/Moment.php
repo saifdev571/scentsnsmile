@@ -13,7 +13,6 @@ class Moment extends Model
     protected $fillable = [
         'name',
         'slug',
-        'image',
         'imagekit_file_id',
         'imagekit_url',
         'imagekit_thumbnail_url',
