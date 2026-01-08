@@ -42,7 +42,6 @@ class PromotionalCardController extends Controller
             'button_link' => 'nullable|string|max:255',
             'position' => 'required|integer|min:0',
             'text_color' => 'required|in:dark,light',
-            'background_color' => 'nullable|string|max:7',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -99,7 +98,6 @@ class PromotionalCardController extends Controller
             'button_link' => 'nullable|string|max:255',
             'position' => 'required|integer|min:0',
             'text_color' => 'required|in:dark,light',
-            'background_color' => 'nullable|string|max:7',
             'is_active' => 'nullable|boolean',
         ]);
 

@@ -136,13 +136,7 @@
                                 <option value="light" {{ old('text_color', $promotionalCard->text_color) == 'light' ? 'selected' : '' }}>Light (White)</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Background Color (Hex)</label>
-                            <input type="text" name="background_color"
-                                value="{{ old('background_color', $promotionalCard->background_color) }}"
-                                placeholder="#ffffff"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                        </div>
+
                         <div class="flex items-center pt-6">
                             <label class="flex items-center cursor-pointer">
                                 <input type="checkbox" name="is_active" value="1" {{ old('is_active', $promotionalCard->is_active) ? 'checked' : '' }}
