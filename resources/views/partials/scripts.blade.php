@@ -1,13 +1,45 @@
 <script>
-    // Mobile Menu Toggle
+    // Mobile Menu Toggle - Opens Categories Sidebar
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
     
-    if (mobileMenuBtn && mobileMenu) {
+    if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            openCategoriesSidebar();
         });
     }
+
+    // Categories Sidebar Functions
+    window.openCategoriesSidebar = function() {
+        const sidebar = document.getElementById('categoriesSidebar');
+        const panel = document.getElementById('categoriesPanel');
+        if (sidebar && panel) {
+            sidebar.classList.remove('hidden');
+            setTimeout(() => {
+                panel.classList.remove('-translate-x-full');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    window.closeCategoriesSidebar = function() {
+        const sidebar = document.getElementById('categoriesSidebar');
+        const panel = document.getElementById('categoriesPanel');
+        if (sidebar && panel) {
+            panel.classList.add('-translate-x-full');
+            setTimeout(() => {
+                sidebar.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    }
+
+    // Close categories sidebar on Escape key
+    document.addEventListener('keydown', (e) => {
+        const sidebar = document.getElementById('categoriesSidebar');
+        if (e.key === 'Escape' && sidebar && !sidebar.classList.contains('hidden')) {
+            closeCategoriesSidebar();
+        }
+    });
 
     // Search Modal Toggle with Animation
     const searchBtn = document.getElementById('searchBtn');

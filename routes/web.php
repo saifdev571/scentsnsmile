@@ -168,6 +168,9 @@ Route::post('/collections/filter', [App\Http\Controllers\CollectionController::c
 // Categories Page
 Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
 
+// Scent Families Page
+Route::get('/scent-families', [App\Http\Controllers\ScentFamiliesController::class, 'index'])->name('scent-families');
+
 
 // User Authentication Routes
 Route::get('/login', [App\Http\Controllers\UserAuthController::class, 'showLogin'])->name('user.login');

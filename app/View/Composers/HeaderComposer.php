@@ -6,6 +6,7 @@ use App\Models\Gender;
 use App\Models\Tag;
 use App\Models\Collection;
 use App\Models\HighlightNote;
+use App\Models\Category;
 use Illuminate\View\View;
 
 class HeaderComposer
@@ -33,11 +34,18 @@ class HeaderComposer
             ->limit(12)
             ->get();
 
+        $categories = Category::where('is_active', true)
+            ->whereNull('parent_id')
+            ->orderBy('sort_order', 'asc')
+            ->limit(8)
+            ->get();
+
         $view->with([
             'genders' => $genders,
             'featuredTags' => $featuredTags,
             'featuredCollections' => $featuredCollections,
-            'highlightNotes' => $highlightNotes
+            'highlightNotes' => $highlightNotes,
+            'categories' => $categories
         ]);
     }
 }

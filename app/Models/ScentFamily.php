@@ -76,4 +76,25 @@ class ScentFamily extends Model
     {
         return !empty($this->imagekit_file_id) && !empty($this->imagekit_url);
     }
+
+    public function getColorCodeAttribute()
+    {
+        // Map common scent family slugs to colors
+        $colors = [
+            'fresh' => '#dcfce7', // Green-100/200
+            'floral' => '#fce7f3', // Pink-100
+            'woody' => '#f3e8ff', // Purple-100 (or woody brown if preferred, e.g. #fae8d2)
+            'oriental' => '#ffedd5', // Orange-100
+            'amber' => '#ffedd5',
+            'spicy' => '#fee2e2', // Red-100
+            'fruity' => '#ffidfd', // Pinkish
+            'gourmand' => '#fef3c7', // Yellow-100
+            'aquatic' => '#e0f2fe', // Blue-100
+            'citrus' => '#fef9c3', // Yellow-100
+            'musk' => '#f3f4f6', // Gray-100
+            'aromatic' => '#ecfccb', // Lime-100
+        ];
+
+        return $colors[$this->slug] ?? '#f3f4f6'; // Default gray
+    }
 }

@@ -219,39 +219,7 @@
         </div>
     </section>
 
-    <!-- Moments Section - Full Width -->
-    <?php if(isset($moments) && count($moments) > 0): ?>
-    <section class="bg-white">
-        <div class="flex flex-col gap-2 md:grid md:grid-cols-<?php echo e(min(count($moments), 4)); ?>">
-            <?php $__currentLoopData = $moments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $moment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <a href="<?php echo e(route('collections.show', $moment->slug)); ?>" class="relative group cursor-pointer overflow-hidden aspect-[3/4] md:aspect-[3/4] block">
-                <?php if($moment->imagekit_url): ?>
-                    <img src="<?php echo e($moment->imagekit_url); ?>" 
-                         alt="<?php echo e($moment->name); ?> Perfumes" 
-                         class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
-                         loading="lazy">
-                <?php else: ?>
-                    <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-200 via-purple-200 to-pink-300 flex items-center justify-center">
-                        <svg class="w-20 h-20 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-                <?php endif; ?>
-                <!-- Gradient overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                <!-- Title at top-left -->
-                <div class="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-6 md:left-6 z-10">
-                    <h3 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-wide drop-shadow-lg"><?php echo e($moment->name); ?></h3>
-                </div>
-                <!-- Shop button at bottom-left -->
-                <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 md:bottom-6 md:left-6 z-10">
-                    <span class="bg-white text-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wide shadow-lg hover:bg-gray-100 transition-colors">Shop <?php echo e($moment->name); ?></span>
-                </div>
-            </a>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </div>
-    </section>
-    <?php endif; ?>
+
 
     <!-- Best Sellers Section -->
     <section class="py-12 sm:py-16 bg-white">
@@ -672,14 +640,14 @@
                             <!-- Moment Item -->
                             <a href="<?php echo e(route('collections.show', $moment->slug)); ?>" 
                                class="flex-shrink-0 flex flex-col items-center justify-center w-24 sm:w-28 md:w-32 lg:w-36 group cursor-pointer">
-                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110 rounded-full overflow-hidden shadow-lg">
                                     <?php if($moment->hasImageKitImage()): ?>
                                         <img src="<?php echo e($moment->getOptimizedImageUrl(200, 200, 90)); ?>" 
                                              alt="<?php echo e($moment->name); ?>" 
-                                             class="w-full h-full object-contain"
+                                             class="w-full h-full object-cover"
                                              loading="lazy">
                                     <?php else: ?>
-                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center">
+                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
                                             <span class="text-3xl sm:text-4xl">🎉</span>
                                         </div>
                                     <?php endif; ?>
@@ -695,14 +663,14 @@
                         <?php $__currentLoopData = $moments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $moment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <a href="<?php echo e(route('collections.show', $moment->slug)); ?>" 
                                class="flex-shrink-0 flex flex-col items-center justify-center w-24 sm:w-28 md:w-32 lg:w-36 group cursor-pointer">
-                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110 rounded-full overflow-hidden shadow-lg">
                                     <?php if($moment->hasImageKitImage()): ?>
                                         <img src="<?php echo e($moment->getOptimizedImageUrl(200, 200, 90)); ?>" 
                                              alt="<?php echo e($moment->name); ?>" 
-                                             class="w-full h-full object-contain"
+                                             class="w-full h-full object-cover"
                                              loading="lazy">
                                     <?php else: ?>
-                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center">
+                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
                                             <span class="text-3xl sm:text-4xl">🎉</span>
                                         </div>
                                     <?php endif; ?>

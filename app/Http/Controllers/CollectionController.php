@@ -9,6 +9,7 @@ use App\Models\ScentFamily;
 use App\Models\Product;
 use App\Models\HighlightNote;
 use App\Models\Moment;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller
@@ -89,6 +90,18 @@ class CollectionController extends Controller
             $item = $gender;
             $type = 'gender';
             $products = $gender->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+        }
+
+        // Try Category
+        $category = Category::where('slug', $slug)->where('is_active', true)->first();
+        if ($category) {
+            $item = $category;
+            $type = 'category';
+            $products = Product::where('status', 'active')
+                ->where('category_id', $category->id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(12);
             return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
         }
 
