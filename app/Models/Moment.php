@@ -12,8 +12,7 @@ class Moment extends Model
 
     protected $fillable = [
         'name',
-        'slug', 
-        'description',
+        'slug',
         'image',
         'imagekit_file_id',
         'imagekit_url',
@@ -27,10 +26,7 @@ class Moment extends Model
         'is_active',
         'is_featured',
         'show_in_navbar',
-        'show_in_homepage',
-        'meta_title',
-        'meta_description', 
-        'meta_keywords'
+        'show_in_homepage'
     ];
 
     protected $casts = [

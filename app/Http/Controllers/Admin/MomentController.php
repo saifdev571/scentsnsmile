@@ -70,16 +70,12 @@ class MomentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:moments,name,NULL,id,deleted_at,NULL',
             'slug' => 'nullable|string|max:255|unique:moments,slug,NULL,id,deleted_at,NULL',
-            'description' => 'nullable|string',
             'sort_order' => 'required|integer|min:0',
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'show_in_navbar' => 'nullable|boolean',
             'show_in_homepage' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:255',
-            'meta_keywords' => 'nullable|string|max:255'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         if (empty($validated['slug'])) {
@@ -195,16 +191,12 @@ class MomentController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:moments,name,' . $moment->id . ',id,deleted_at,NULL',
             'slug' => 'nullable|string|max:255|unique:moments,slug,' . $moment->id . ',id,deleted_at,NULL',
-            'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'sort_order' => 'required|integer|min:0',
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'show_in_navbar' => 'nullable|boolean',
-            'show_in_homepage' => 'nullable|boolean',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:255',
-            'meta_keywords' => 'nullable|string|max:255'
+            'show_in_homepage' => 'nullable|boolean'
         ]);
 
         if (empty($validated['slug'])) {
