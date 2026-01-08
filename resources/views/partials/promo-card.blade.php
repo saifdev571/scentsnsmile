@@ -1,8 +1,9 @@
 @props(['card'])
 
 <div
-    class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden group shadow-md hover:shadow-xl transition-all duration-300">
-    <a href="{{ $card->button_link ?? '#' }}" class="block w-full h-full">
+    class="group block bg-gradient-to-br from-gray-50 to-gray-100/80 rounded-2xl p-3 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200/60 hover:border-gray-300 h-full">
+    <a href="{{ $card->button_link ?? '#' }}"
+        class="block w-full h-full relative rounded-xl overflow-hidden aspect-[3/4]">
         {{-- Media --}}
         <div class="absolute inset-0">
             @if($card->type === 'video')
