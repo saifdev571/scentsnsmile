@@ -716,6 +716,25 @@
             document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
             document.getElementById('cancelModalBtn')?.addEventListener('click', closeModal);
             document.getElementById('modalOverlay')?.addEventListener('click', closeModal);
+            
+            // Edit button click handler
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const data = {
+                        id: this.dataset.id,
+                        name: this.dataset.name,
+                        slug: this.dataset.slug,
+                        description: this.dataset.description,
+                        sortOrder: this.dataset.sortOrder,
+                        isActive: this.dataset.isActive === 'true',
+                        isFeatured: this.dataset.isFeatured === 'true',
+                        showInNavbar: this.dataset.showInNavbar === 'true',
+                        showInHomepage: this.dataset.showInHomepage === 'true',
+                        imageUrl: this.dataset.imageUrl
+                    };
+                    openEditModal(data);
+                });
+            });
         });
         
         // Auto-generate slug from name
