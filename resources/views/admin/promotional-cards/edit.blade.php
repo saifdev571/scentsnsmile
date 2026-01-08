@@ -31,16 +31,16 @@
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                 </div>
 
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Type -->
+                    <!-- Action Type -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Media Type *</label>
-                        <select name="type" id="mediaType"
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Action Type *</label>
+                        <select name="action_type" id="actionType"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                            <option value="image" {{ old('type', $promotionalCard->type) == 'image' ? 'selected' : '' }}>Image
-                            </option>
-                            <option value="video" {{ old('type', $promotionalCard->type) == 'video' ? 'selected' : '' }}>Video
-                            </option>
+                            <option value="link" {{ old('action_type', $promotionalCard->action_type ?? 'link') == 'link' ? 'selected' : '' }}>Direct Link</option>
+                            <option value="modal" {{ old('action_type', $promotionalCard->action_type ?? 'link') == 'modal' ? 'selected' : '' }}>Open Modal</option>
                         </select>
                     </div>
 
@@ -123,6 +123,49 @@
                     </div>
                 </div>
 
+                <!-- Modal Configuration -->
+                <div id="modalConfigSection" class="space-y-4 {{ old('action_type', $promotionalCard->action_type ?? 'link') == 'modal' ? '' : 'hidden' }}">
+                    <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Modal Configuration</h3>
+
+                    @if($promotionalCard->modal_image_url)
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Current Modal Image</label>
+                            <img src="{{ $promotionalCard->modal_image_url }}" class="h-32 rounded-lg border border-gray-300">
+                        </div>
+                    @endif
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Upload Modal Image</label>
+                        <input type="file" name="modal_image_file" accept="image/*" class="w-full">
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Modal Title</label>
+                            <input type="text" name="modal_title" value="{{ old('modal_title', $promotionalCard->modal_title) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Modal Description (HTML Supported)</label>
+                            <textarea name="modal_description" rows="5"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">{{ old('modal_description', $promotionalCard->modal_description) }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Modal Button Text</label>
+                            <input type="text" name="modal_button_text" value="{{ old('modal_button_text', $promotionalCard->modal_button_text) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Modal Button Link</label>
+                            <input type="text" name="modal_button_link" value="{{ old('modal_button_link', $promotionalCard->modal_button_link) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Styling -->
                 <div class="space-y-4">
                     <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Styling</h3>
@@ -158,6 +201,7 @@
     </div>
 
     <script>
+        // Media Type Toggle
         document.getElementById('mediaType').addEventListener('change', function () {
             const type = this.value;
             if (type === 'image') {
@@ -166,6 +210,17 @@
             } else {
                 document.getElementById('imageUploadSection').classList.add('hidden');
                 document.getElementById('videoUploadSection').classList.remove('hidden');
+            }
+        });
+
+        // Action Type Toggle
+        document.getElementById('actionType').addEventListener('change', function () {
+            const type = this.value;
+            const modalSection = document.getElementById('modalConfigSection');
+            if (type === 'modal') {
+                modalSection.classList.remove('hidden');
+            } else {
+                modalSection.classList.add('hidden');
             }
         });
     </script>

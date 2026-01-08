@@ -31,117 +31,156 @@
                         placeholder="e.g. Summer Sale Promo">
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Type -->
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Media Type *</label>
-                        <select name="type" id="mediaType"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                            <option value="image" {{ old('type') == 'image' ? 'selected' : '' }}>Image</option>
-                            <option value="video" {{ old('type') == 'video' ? 'selected' : '' }}>Video</option>
-                        </select>
-                    </div>
-
-                    <!-- Position -->
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Grid Position (0-based Index) *</label>
-                        <input type="number" name="position" value="{{ old('position', 0) }}" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                            placeholder="e.g. 4 for 5th position">
-                        <p class="text-xs text-gray-500 mt-1">0 = 1st Item, 4 = 5th Item (Start of 2nd Row on Desktop)</p>
-                    </div>
-                </div>
-
-                <!-- Media Uploads -->
-                <div class="p-6 bg-gray-50 rounded-xl border border-gray-200">
-                    <div id="imageUploadSection" class="{{ old('type') == 'video' ? 'hidden' : '' }}">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Upload Image *</label>
-                        <input type="file" name="image_file" accept="image/*" class="w-full">
-                        <p class="text-xs text-gray-500 mt-1">Recommended: Vertical Aspect Ratio (3:4) for best fit.</p>
-                    </div>
-
-                    <div id="videoUploadSection" class="{{ old('type') == 'video' ? '' : 'hidden' }}">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Upload Video *</label>
-                        <input type="file" name="video_file" accept="video/mp4,video/quicktime" class="w-full mb-4">
-
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Video Thumbnail/Poster (Optional)</label>
-                        <input type="file" name="thumbnail_file" accept="image/*" class="w-full">
-                    </div>
-                </div>
-
-                <!-- Content -->
-                <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Card Content</h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Title</label>
-                            <input type="text" name="title" value="{{ old('title') }}"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Subtitle</label>
-                            <input type="text" name="subtitle" value="{{ old('subtitle') }}"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
-                        <textarea name="description" rows="3"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">{{ old('description') }}</textarea>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Button Text</label>
-                            <input type="text" name="button_text" value="{{ old('button_text') }}"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Button Link</label>
-                            <input type="text" name="button_link" value="{{ old('button_link') }}"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Styling -->
-                <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Styling</h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Text Color</label>
-                            <select name="text_color"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                                <option value="dark" {{ old('text_color') == 'dark' ? 'selected' : '' }}>Dark (Black)</option>
-                                <option value="light" {{ old('text_color') == 'light' ? 'selected' : '' }}>Light (White)
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="flex items-center pt-6">
-                            <label class="flex items-center cursor-pointer">
-                                <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}
-                                    class="form-checkbox h-5 w-5 text-purple-600">
-                                <span class="ml-2 text-gray-700 font-bold">Active</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-end pt-6">
-                    <button type="submit"
-                        class="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-700 shadow-lg transform hover:scale-105 transition-all">
-                        Create Card
-                    </button>
-                </div>
-            </form>
         </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Action Type -->
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Action Type *</label>
+                <select name="action_type" id="actionType"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    <option value="link" {{ old('action_type') == 'link' ? 'selected' : '' }}>Direct Link</option>
+                    <option value="modal" {{ old('action_type') == 'modal' ? 'selected' : '' }}>Open Modal</option>
+                </select>
+            </div>
+
+            <!-- Position -->
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Grid Position (0-based Index) *</label>
+                <input type="number" name="position" value="{{ old('position', 0) }}" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                    placeholder="e.g. 4 for 5th position">
+                <p class="text-xs text-gray-500 mt-1">0 = 1st Item, 4 = 5th Item (Start of 2nd Row on Desktop)</p>
+            </div>
+        </div>
+
+        <!-- Media Uploads -->
+        <div class="p-6 bg-gray-50 rounded-xl border border-gray-200">
+            <div id="imageUploadSection" class="{{ old('type') == 'video' ? 'hidden' : '' }}">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Upload Image *</label>
+                <input type="file" name="image_file" accept="image/*" class="w-full">
+                <p class="text-xs text-gray-500 mt-1">Recommended: Vertical Aspect Ratio (3:4) for best fit.</p>
+            </div>
+
+            <div id="videoUploadSection" class="{{ old('type') == 'video' ? '' : 'hidden' }}">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Upload Video *</label>
+                <input type="file" name="video_file" accept="video/mp4,video/quicktime" class="w-full mb-4">
+
+                <label class="block text-sm font-bold text-gray-700 mb-2">Video Thumbnail/Poster (Optional)</label>
+                <input type="file" name="thumbnail_file" accept="image/*" class="w-full">
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Card Content</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Title</label>
+                    <input type="text" name="title" value="{{ old('title') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Subtitle</label>
+                    <input type="text" name="subtitle" value="{{ old('subtitle') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
+                <textarea name="description" rows="3"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">{{ old('description') }}</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Button Text</label>
+                    <input type="text" name="button_text" value="{{ old('button_text') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Button Link</label>
+                    <input type="text" name="button_link" value="{{ old('button_link') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Configuration -->
+        <div id="modalConfigSection" class="space-y-4 {{ old('action_type') == 'modal' ? '' : 'hidden' }}">
+            <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Modal Configuration</h3>
+
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Modal Image</label>
+                <input type="file" name="modal_image_file" accept="image/*" class="w-full">
+            </div>
+
+            <div class="grid grid-cols-1 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Modal Title</label>
+                    <input type="text" name="modal_title" value="{{ old('modal_title') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Modal Description (HTML Supported)</label>
+                    <textarea name="modal_description" rows="5"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">{{ old('modal_description') }}</textarea>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Modal Button Text</label>
+                    <input type="text" name="modal_button_text" value="{{ old('modal_button_text') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Modal Button Link</label>
+                    <input type="text" name="modal_button_link" value="{{ old('modal_button_link') }}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Styling -->
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Styling</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Text Color</label>
+                    <select name="text_color"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="dark" {{ old('text_color') == 'dark' ? 'selected' : '' }}>Dark (Black)</option>
+                        <option value="light" {{ old('text_color') == 'light' ? 'selected' : '' }}>Light (White)
+                        </option>
+                    </select>
+                </div>
+
+                <div class="flex items-center pt-6">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}
+                            class="form-checkbox h-5 w-5 text-purple-600">
+                        <span class="ml-2 text-gray-700 font-bold">Active</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end pt-6">
+            <button type="submit"
+                class="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-700 shadow-lg transform hover:scale-105 transition-all">
+                Create Card
+            </button>
+        </div>
+        </form>
+    </div>
     </div>
 
     <script>
+        // Media Type Toggle
         document.getElementById('mediaType').addEventListener('change', function () {
             const type = this.value;
             if (type === 'image') {
@@ -150,6 +189,17 @@
             } else {
                 document.getElementById('imageUploadSection').classList.add('hidden');
                 document.getElementById('videoUploadSection').classList.remove('hidden');
+            }
+        });
+
+        // Action Type Toggle
+        document.getElementById('actionType').addEventListener('change', function () {
+            const type = this.value;
+            const modalSection = document.getElementById('modalConfigSection');
+            if (type === 'modal') {
+                modalSection.classList.remove('hidden');
+            } else {
+                modalSection.classList.add('hidden');
             }
         });
     </script>

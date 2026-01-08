@@ -35,17 +35,23 @@ class PromotionalCardController extends Controller
             'image_file' => 'required_if:type,image|image|max:10240', // Max 10MB
             'video_file' => 'required_if:type,video|mimetypes:video/mp4,video/quicktime|max:51200', // Max 50MB
             'thumbnail_file' => 'required_if:type,video|image|max:5120',
+            'action_type' => 'required|in:link,modal',
             'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'button_text' => 'nullable|string|max:50',
             'button_link' => 'nullable|string|max:255',
+            'modal_title' => 'nullable|string|max:255',
+            'modal_description' => 'nullable|string',
+            'modal_image_file' => 'nullable|image|max:10240',
+            'modal_button_text' => 'nullable|string|max:50',
+            'modal_button_link' => 'nullable|string|max:255',
             'position' => 'required|integer|min:0',
             'text_color' => 'required|in:dark,light',
             'is_active' => 'nullable|boolean',
         ]);
 
-        $data = $request->except(['image_file', 'video_file', 'thumbnail_file']);
+        $data = $request->except(['image_file', 'video_file', 'thumbnail_file', 'modal_image_file']);
         $data['is_active'] = $request->has('is_active');
 
         // Handle Media Upload
@@ -55,10 +61,6 @@ class PromotionalCardController extends Controller
                 $data['media_url'] = $upload['url'];
             }
         } elseif ($request->hasFile('video_file') && $validated['type'] === 'video') {
-            // Use raw upload for video (or product image upload if it skips optimization which we might want for video? No, ImageKitService uploadProductImage converts to base64 image data)
-            // We need a method to upload raw files or specific video support.
-            // Looking at ImageKitService, `uploadRawImage` uploads without compression. `uploadProductImage` does base64 encoding.
-            // I'll use `uploadRawImage` for video.
             $upload = $this->imageKit->uploadRawImage($request->file('video_file'), 'promos-video');
             if ($upload) {
                 $data['media_url'] = $upload['url'];
@@ -70,6 +72,14 @@ class PromotionalCardController extends Controller
             $upload = $this->imageKit->uploadProductImage($request->file('thumbnail_file'), 'promos-thumb');
             if ($upload) {
                 $data['thumbnail_url'] = $upload['url'];
+            }
+        }
+
+        // Handle Modal Image
+        if ($request->hasFile('modal_image_file')) {
+            $upload = $this->imageKit->uploadProductImage($request->file('modal_image_file'), 'promos-modal');
+            if ($upload) {
+                $data['modal_image_url'] = $upload['url'];
             }
         }
 
@@ -91,17 +101,23 @@ class PromotionalCardController extends Controller
             'image_file' => 'nullable|image|max:10240',
             'video_file' => 'nullable|mimetypes:video/mp4,video/quicktime|max:51200',
             'thumbnail_file' => 'nullable|image|max:5120',
+            'action_type' => 'required|in:link,modal',
             'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'button_text' => 'nullable|string|max:50',
             'button_link' => 'nullable|string|max:255',
+            'modal_title' => 'nullable|string|max:255',
+            'modal_description' => 'nullable|string',
+            'modal_image_file' => 'nullable|image|max:10240',
+            'modal_button_text' => 'nullable|string|max:50',
+            'modal_button_link' => 'nullable|string|max:255',
             'position' => 'required|integer|min:0',
             'text_color' => 'required|in:dark,light',
             'is_active' => 'nullable|boolean',
         ]);
 
-        $data = $request->except(['image_file', 'video_file', 'thumbnail_file']);
+        $data = $request->except(['image_file', 'video_file', 'thumbnail_file', 'modal_image_file']);
         $data['is_active'] = $request->has('is_active');
 
         // Handle Media Update
@@ -121,6 +137,14 @@ class PromotionalCardController extends Controller
             $upload = $this->imageKit->uploadProductImage($request->file('thumbnail_file'), 'promos-thumb');
             if ($upload) {
                 $data['thumbnail_url'] = $upload['url'];
+            }
+        }
+
+        // Handle Modal Image
+        if ($request->hasFile('modal_image_file')) {
+            $upload = $this->imageKit->uploadProductImage($request->file('modal_image_file'), 'promos-modal');
+            if ($upload) {
+                $data['modal_image_url'] = $upload['url'];
             }
         }
 
