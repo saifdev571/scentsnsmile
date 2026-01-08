@@ -1,24 +1,24 @@
-@extends('layouts.app')
 
-@section('title', $product->name . ' - Scents N Smile')
 
-@section('content')
+<?php $__env->startSection('title', $product->name . ' - Scents N Smile'); ?>
+
+<?php $__env->startSection('content'); ?>
     <!-- Breadcrumb -->
     <section class="pt-24 md:pt-28 pb-4 bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <nav class="flex items-center gap-2 text-sm text-gray-600">
-                <a href="{{ route('home') }}" class="hover:text-gray-900 flex items-center gap-1">
+                <a href="<?php echo e(route('home')); ?>" class="hover:text-gray-900 flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                     Shop All
                 </a>
-                @if($product->category)
+                <?php if($product->category): ?>
                     <span>/</span>
-                    <a href="#" class="hover:text-gray-900">{{ $product->category->name }}</a>
-                @endif
+                    <a href="#" class="hover:text-gray-900"><?php echo e($product->category->name); ?></a>
+                <?php endif; ?>
                 <span>/</span>
-                <span class="text-gray-900 font-medium uppercase">{{ $product->name }}</span>
+                <span class="text-gray-900 font-medium uppercase"><?php echo e($product->name); ?></span>
             </nav>
         </div>
     </section>
@@ -31,51 +31,51 @@
                 <div class="flex gap-4 w-full lg:col-span-7">
                     <!-- Thumbnail Column -->
                     <div class="flex flex-col gap-3 w-20 md:w-24 flex-shrink-0">
-                        @php
+                        <?php
                             $allImages = $product->images_array ?? [];
-                        @endphp
-                        @foreach($allImages as $index => $image)
-                            <button onclick="changeMainImage('{{ $image }}', this)"
-                                class="thumbnail-btn border-2 {{ $index === 0 ? 'border-black' : 'border-gray-300' }} rounded-lg overflow-hidden hover:border-black transition-all duration-200">
-                                <img src="{{ $image }}" alt="Thumbnail {{ $index + 1 }}"
+                        ?>
+                        <?php $__currentLoopData = $allImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <button onclick="changeMainImage('<?php echo e($image); ?>', this)"
+                                class="thumbnail-btn border-2 <?php echo e($index === 0 ? 'border-black' : 'border-gray-300'); ?> rounded-lg overflow-hidden hover:border-black transition-all duration-200">
+                                <img src="<?php echo e($image); ?>" alt="Thumbnail <?php echo e($index + 1); ?>"
                                     class="w-full aspect-square object-cover">
                             </button>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
 
                     <!-- Main Image -->
                     <div class="flex-1 min-w-0 relative">
                         <!-- Badges - Left Side -->
                         <div class="absolute top-4 left-4 z-10 flex gap-2">
-                            @if($product->genders && $product->genders->count() > 0)
+                            <?php if($product->genders && $product->genders->count() > 0): ?>
                                 <span
-                                    class="bg-white text-red-500 px-3 py-1 rounded-full text-xs font-bold border-2 border-red-500 shadow-sm">{{ $product->genders->first()->name }}</span>
-                            @endif
+                                    class="bg-white text-red-500 px-3 py-1 rounded-full text-xs font-bold border-2 border-red-500 shadow-sm"><?php echo e($product->genders->first()->name); ?></span>
+                            <?php endif; ?>
                         </div>
 
                         <!-- Sale Badge - Right Side -->
-                        @if($product->sale_price && $product->sale_price < $product->price)
-                            @php
+                        <?php if($product->sale_price && $product->sale_price < $product->price): ?>
+                            <?php
                                 $discount = round((($product->price - $product->sale_price) / $product->price) * 100);
-                            @endphp
+                            ?>
                             <div class="absolute top-4 right-4 z-10">
                                 <div
                                     class="bg-black text-white rounded-full w-16 h-16 flex flex-col items-center justify-center shadow-lg">
                                     <span class="text-[8px] font-bold uppercase leading-none">SALE</span>
-                                    <span class="text-xl font-black leading-none">{{ $discount }}%</span>
+                                    <span class="text-xl font-black leading-none"><?php echo e($discount); ?>%</span>
                                     <span class="text-[8px] font-bold uppercase leading-none">OFF</span>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <div class="bg-[#f5f5f0] rounded-2xl overflow-hidden aspect-square relative w-full">
                             <img id="mainProductImage"
-                                src="{{ $product->image_url ?? 'https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg?auto=compress&cs=tinysrgb&w=800' }}"
-                                alt="{{ $product->name }}"
+                                src="<?php echo e($product->image_url ?? 'https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg?auto=compress&cs=tinysrgb&w=800'); ?>"
+                                alt="<?php echo e($product->name); ?>"
                                 class="w-full h-full object-cover transition-opacity duration-300">
 
                             <!-- Navigation Arrows -->
-                            @if(count($allImages) > 1)
+                            <?php if(count($allImages) > 1): ?>
                                 <div class="absolute right-4 bottom-4 flex gap-2">
                                     <button onclick="previousProductImage()"
                                         class="w-12 h-12 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full flex items-center justify-center shadow-lg transition-all duration-200">
@@ -92,7 +92,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -101,81 +101,82 @@
                 <div class="space-y-4 lg:col-span-5">
                     <!-- Product Title -->
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-black uppercase mb-2 leading-tight">{{ $product->name }}</h1>
+                        <h1 class="text-2xl md:text-3xl font-black uppercase mb-2 leading-tight"><?php echo e($product->name); ?></h1>
 
                         <!-- Inspired By -->
-                        @if($product->inspired_by)
+                        <?php if($product->inspired_by): ?>
                             <div class="mb-3">
                                 <p class="text-xs text-gray-500 italic">inspired by</p>
-                                <p class="text-base text-[#e8a598] font-semibold">{{ $product->inspired_by }}</p>
+                                <p class="text-base text-[#e8a598] font-semibold"><?php echo e($product->inspired_by); ?></p>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <!-- Rating -->
                         <div class="flex items-center gap-2 mb-2">
-                            @php
+                            <?php
                                 $avgRating = round($product->average_rating);
                                 $reviewCount = $product->reviews_count;
-                            @endphp
+                            ?>
                             <div class="flex items-center text-sm">
-                                @for($i = 1; $i <= 5; $i++)
-                                    <span class="{{ $i <= $avgRating ? 'text-black' : 'text-gray-300' }}">★</span>
-                                @endfor
+                                <?php for($i = 1; $i <= 5; $i++): ?>
+                                    <span class="<?php echo e($i <= $avgRating ? 'text-black' : 'text-gray-300'); ?>">★</span>
+                                <?php endfor; ?>
                             </div>
-                            @if($reviewCount > 0)
+                            <?php if($reviewCount > 0): ?>
                                 <span
-                                    class="text-sm text-gray-600 underline hover:text-gray-900 cursor-pointer">({{ $reviewCount }}
+                                    class="text-sm text-gray-600 underline hover:text-gray-900 cursor-pointer">(<?php echo e($reviewCount); ?>
+
                                     reviews)</span>
-                            @else
+                            <?php else: ?>
                                 <span class="text-sm text-gray-400">No reviews yet</span>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
                         <!-- Product Type / Scent Note -->
-                        @if($product->scent_note || $product->short_description)
+                        <?php if($product->scent_note || $product->short_description): ?>
                             <div class="text-sm text-gray-700 mb-3 leading-relaxed">
-                                {!! strip_tags($product->scent_note ?? $product->short_description) !!}</div>
-                        @endif
+                                <?php echo strip_tags($product->scent_note ?? $product->short_description); ?></div>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Brand Info -->
-                    @if($product->brand)
+                    <?php if($product->brand): ?>
                         <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                             <p class="text-sm">
                                 <span class="font-bold text-gray-900">Brand:</span> <span
-                                    class="text-gray-700">{{ $product->brand->name }}</span>
+                                    class="text-gray-700"><?php echo e($product->brand->name); ?></span>
                             </p>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- Sizes -->
-                    @if($product->sizes && $product->sizes->count() > 0)
+                    <?php if($product->sizes && $product->sizes->count() > 0): ?>
                         <div>
                             <p class="text-sm font-bold mb-2 text-gray-900">Available Sizes:</p>
                             <div class="flex flex-wrap gap-2">
-                                @foreach($product->sizes as $size)
+                                <?php $__currentLoopData = $product->sizes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $size): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <span
-                                        class="border border-gray-300 px-3 py-1.5 rounded-lg text-sm font-medium hover:border-black hover:bg-gray-50 cursor-pointer transition-all duration-200">{{ $size->name }}</span>
-                                @endforeach
+                                        class="border border-gray-300 px-3 py-1.5 rounded-lg text-sm font-medium hover:border-black hover:bg-gray-50 cursor-pointer transition-all duration-200"><?php echo e($size->name); ?></span>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- Scent Intensity Scale -->
-                    @if($product->scent_intensity)
+                    <?php if($product->scent_intensity): ?>
                         <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                             <div class="flex items-center gap-2">
                                 <span class="text-sm text-gray-700 font-medium">Scent Intensity:</span>
                                 <span
-                                    class="text-sm font-bold text-[#e8a598] capitalize">{{ ucfirst($product->scent_intensity) }}</span>
-                                @php
+                                    class="text-sm font-bold text-[#e8a598] capitalize"><?php echo e(ucfirst($product->scent_intensity)); ?></span>
+                                <?php
                                     $dots = $product->scent_intensity === 'soft' ? 1 : ($product->scent_intensity === 'significant' ? 2 : 3);
-                                @endphp
+                                ?>
                                 <div class="flex items-center gap-1">
-                                    @for($i = 1; $i <= 3; $i++)
+                                    <?php for($i = 1; $i <= 3; $i++): ?>
                                         <span
-                                            class="w-2 h-2 rounded-full {{ $i <= $dots ? 'bg-[#e8a598]' : 'bg-gray-300' }}"></span>
-                                    @endfor
+                                            class="w-2 h-2 rounded-full <?php echo e($i <= $dots ? 'bg-[#e8a598]' : 'bg-gray-300'); ?>"></span>
+                                    <?php endfor; ?>
                                 </div>
                                 <button onclick="openScentIntensityModal()"
                                     class="w-5 h-5 rounded-full bg-gray-400 text-white flex items-center justify-center text-xs hover:bg-gray-500 transition-all duration-200">
@@ -183,27 +184,27 @@
                                 </button>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <!-- Price & Add to Cart -->
                     <div class="border-t border-gray-200 pt-4">
                         <div class="flex items-center justify-between mb-3">
                             <div>
                                 <div class="flex items-center gap-2">
-                                    @if($product->sale_price && $product->sale_price < $product->price)
+                                    <?php if($product->sale_price && $product->sale_price < $product->price): ?>
                                         <span
-                                            class="text-3xl font-black text-[#e8a598]">₹{{ number_format($product->sale_price, 2) }}</span>
+                                            class="text-3xl font-black text-[#e8a598]">₹<?php echo e(number_format($product->sale_price, 2)); ?></span>
                                         <span
-                                            class="text-xl text-gray-400 line-through">₹{{ number_format($product->price, 2) }}</span>
-                                    @else
+                                            class="text-xl text-gray-400 line-through">₹<?php echo e(number_format($product->price, 2)); ?></span>
+                                    <?php else: ?>
                                         <span
-                                            class="text-3xl font-black text-[#e8a598]">₹{{ number_format($product->price, 2) }}</span>
-                                    @endif
+                                            class="text-3xl font-black text-[#e8a598]">₹<?php echo e(number_format($product->price, 2)); ?></span>
+                                    <?php endif; ?>
                                 </div>
-                                @if($product->sale_price && $product->sale_price < $product->price)
+                                <?php if($product->sale_price && $product->sale_price < $product->price): ?>
                                     <p class="text-xs text-green-600 font-medium mt-0.5">Save
-                                        ₹{{ number_format($product->price - $product->sale_price, 2) }}</p>
-                                @endif
+                                        ₹<?php echo e(number_format($product->price - $product->sale_price, 2)); ?></p>
+                                <?php endif; ?>
                             </div>
                             <button
                                 class="w-9 h-9 border-2 border-gray-300 rounded-full flex items-center justify-center hover:border-red-500 hover:text-red-500 hover:bg-red-50 transition-all duration-200">
@@ -215,7 +216,7 @@
                         </div>
 
                         <!-- Stock Status -->
-                        @if($product->stock_status === 'in_stock' || $product->stock > 0)
+                        <?php if($product->stock_status === 'in_stock' || $product->stock > 0): ?>
                             <p class="text-sm text-green-600 font-medium mb-3 flex items-center gap-1.5">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -224,7 +225,7 @@
                                 </svg>
                                 In Stock
                             </p>
-                        @else
+                        <?php else: ?>
                             <p class="text-sm text-red-600 font-medium mb-3 flex items-center gap-1.5">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -233,9 +234,9 @@
                                 </svg>
                                 Out of Stock
                             </p>
-                        @endif
+                        <?php endif; ?>
 
-                        <button onclick="addToCart({{ $product->id }})"
+                        <button onclick="addToCart(<?php echo e($product->id); ?>)"
                             class="w-full bg-[#e8a598] hover:bg-[#d4948a] text-white font-bold py-3 rounded-full text-base transition-all duration-200 hover:shadow-lg mb-4">
                             ADD TO CART
                         </button>
@@ -298,7 +299,7 @@
                             <div class="flex-1 overflow-hidden">
                                 <div class="flex gap-3 transition-transform duration-300" id="tabSlider"
                                     style="transform: translateX(0);">
-                                    @php
+                                    <?php
                                         $tabIndex = 0;
                                         $firstTab = null;
                                         if ($product->about_scent)
@@ -309,9 +310,9 @@
                                             $firstTab = 'ingredientsDetails';
                                         elseif ($product->shipping_info)
                                             $firstTab = 'shippingReturns';
-                                    @endphp
+                                    ?>
 
-                                    @if($product->about_scent)
+                                    <?php if($product->about_scent): ?>
                                         <button onclick="toggleProductTab('aboutScent')" id="aboutScentProductTab"
                                             class="product-tab flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
                                             <span>About</span>
@@ -321,9 +322,9 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if($product->fragrance_notes || ($product->highlightNotes && $product->highlightNotes->count() > 0))
+                                    <?php if($product->fragrance_notes || ($product->highlightNotes && $product->highlightNotes->count() > 0)): ?>
                                         <button onclick="toggleProductTab('fragranceNotes')" id="fragranceNotesProductTab"
                                             class="product-tab tab-active flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
                                             <span>Notes</span>
@@ -334,9 +335,9 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if($product->ingredients_details)
+                                    <?php if($product->ingredients_details): ?>
                                         <button onclick="toggleProductTab('ingredientsDetails')"
                                             id="ingredientsDetailsProductTab"
                                             class="product-tab flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
@@ -347,9 +348,9 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if($product->shipping_info)
+                                    <?php if($product->shipping_info): ?>
                                         <button onclick="toggleProductTab('shippingReturns')" id="shippingReturnsProductTab"
                                             class="product-tab flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
                                             <span>Shipping + Returns</span>
@@ -359,9 +360,9 @@
                                                     d="M9 5l7 7-7 7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if($product->why_love_it)
+                                    <?php if($product->why_love_it): ?>
                                         <button onclick="toggleProductTab('whyLove')" id="whyLoveProductTab"
                                             class="product-tab flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
                                             <span>Why You'll Love It</span>
@@ -371,9 +372,9 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if($product->what_makes_clean)
+                                    <?php if($product->what_makes_clean): ?>
                                         <button onclick="toggleProductTab('whatClean')" id="whatCleanProductTab"
                                             class="product-tab flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
                                             <span>What Makes It Clean</span>
@@ -383,9 +384,9 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if($product->disclaimer)
+                                    <?php if($product->disclaimer): ?>
                                         <button onclick="toggleProductTab('disclaimer')" id="disclaimerProductTab"
                                             class="product-tab flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
                                             <span>Disclaimer</span>
@@ -395,9 +396,9 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
 
-                                    @if($product->ask_question)
+                                    <?php if($product->ask_question): ?>
                                         <button onclick="toggleProductTab('askQuestion')" id="askQuestionProductTab"
                                             class="product-tab flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 bg-white text-gray-700 hover:border-gray-400 transition-all duration-200 flex-shrink-0">
                                             <span>Ask a Question</span>
@@ -407,7 +408,7 @@
                                                     d="M19 9l-7 7-7-7" />
                                             </svg>
                                         </button>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
@@ -426,120 +427,128 @@
 
                         <!-- Tab Content Box (Scrollable) -->
                         <div class="relative mt-3">
-                            @if($product->about_scent)
+                            <?php if($product->about_scent): ?>
                                 <div id="aboutScentProductContent" class="product-tab-content hidden" data-tab="aboutScent">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-3 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
-                                            {!! $product->about_scent !!}
+                                            <?php echo $product->about_scent; ?>
+
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->fragrance_notes || ($product->highlightNotes && $product->highlightNotes->count() > 0))
+                            <?php if($product->fragrance_notes || ($product->highlightNotes && $product->highlightNotes->count() > 0)): ?>
                                 <div id="fragranceNotesProductContent" class="product-tab-content" data-tab="fragranceNotes">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-4 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
                                             <!-- Highlight Notes -->
-                                            @if($product->highlightNotes && $product->highlightNotes->count() > 0)
+                                            <?php if($product->highlightNotes && $product->highlightNotes->count() > 0): ?>
                                                 <div class="mb-4">
                                                     <h4 class="font-bold text-gray-900 mb-3">Highlight Notes</h4>
                                                     <div class="flex flex-wrap gap-2 not-prose">
-                                                        @foreach($product->highlightNotes as $note)
+                                                        <?php $__currentLoopData = $product->highlightNotes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $note): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                             <div
                                                                 class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full border border-gray-200 shadow-sm">
-                                                                @if($note->imagekit_thumbnail_url || $note->imagekit_url)
-                                                                    <img src="{{ $note->imagekit_thumbnail_url ?? $note->imagekit_url }}"
-                                                                        alt="{{ $note->name }}" class="w-5 h-5 object-contain">
-                                                                @endif
-                                                                <span class="text-xs font-medium text-gray-700">{{ $note->name }}</span>
+                                                                <?php if($note->imagekit_thumbnail_url || $note->imagekit_url): ?>
+                                                                    <img src="<?php echo e($note->imagekit_thumbnail_url ?? $note->imagekit_url); ?>"
+                                                                        alt="<?php echo e($note->name); ?>" class="w-5 h-5 object-contain">
+                                                                <?php endif; ?>
+                                                                <span class="text-xs font-medium text-gray-700"><?php echo e($note->name); ?></span>
                                                             </div>
-                                                        @endforeach
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
 
-                                            @if($product->fragrance_notes)
+                                            <?php if($product->fragrance_notes): ?>
                                                 <div>
                                                     <h4 class="font-bold text-gray-900 mb-2">Fragrance Notes</h4>
-                                                    {!! $product->fragrance_notes !!}
+                                                    <?php echo $product->fragrance_notes; ?>
+
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->ingredients_details)
+                            <?php if($product->ingredients_details): ?>
                                 <div id="ingredientsDetailsProductContent" class="product-tab-content hidden"
                                     data-tab="ingredientsDetails">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-4 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
                                             <h4 class="font-bold text-gray-900 mb-2">Ingredients</h4>
-                                            {!! $product->ingredients_details !!}
+                                            <?php echo $product->ingredients_details; ?>
+
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->shipping_info)
+                            <?php if($product->shipping_info): ?>
                                 <div id="shippingReturnsProductContent" class="product-tab-content hidden"
                                     data-tab="shippingReturns">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-4 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
-                                            {!! $product->shipping_info !!}
+                                            <?php echo $product->shipping_info; ?>
+
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->why_love_it)
+                            <?php if($product->why_love_it): ?>
                                 <div id="whyLoveProductContent" class="product-tab-content hidden" data-tab="whyLove">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-4 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
-                                            {!! $product->why_love_it !!}
+                                            <?php echo $product->why_love_it; ?>
+
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->what_makes_clean)
+                            <?php if($product->what_makes_clean): ?>
                                 <div id="whatCleanProductContent" class="product-tab-content hidden" data-tab="whatClean">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-4 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
-                                            {!! $product->what_makes_clean !!}
+                                            <?php echo $product->what_makes_clean; ?>
+
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->disclaimer)
+                            <?php if($product->disclaimer): ?>
                                 <div id="disclaimerProductContent" class="product-tab-content hidden" data-tab="disclaimer">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-4 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
-                                            {!! $product->disclaimer !!}
+                                            <?php echo $product->disclaimer; ?>
+
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->ask_question)
+                            <?php if($product->ask_question): ?>
                                 <div id="askQuestionProductContent" class="product-tab-content hidden" data-tab="askQuestion">
                                     <div
                                         class="border border-gray-200 rounded-xl bg-gray-50 p-4 max-h-48 overflow-y-auto custom-scrollbar">
                                         <div class="text-sm text-gray-700 leading-relaxed prose prose-sm max-w-none">
-                                            {!! $product->ask_question !!}
+                                            <?php echo $product->ask_question; ?>
+
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -548,37 +557,37 @@
     </section>
 
     <!-- Related Products -->
-    @if($relatedProducts->count() > 0)
+    <?php if($relatedProducts->count() > 0): ?>
         <section class="py-12 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4">
                 <h2 class="text-2xl font-bold mb-6">You May Also Like</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @foreach($relatedProducts as $related)
-                        <a href="{{ route('product.show', $related->slug) }}" class="group">
+                    <?php $__currentLoopData = $relatedProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $related): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('product.show', $related->slug)); ?>" class="group">
                             <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
                                 <div class="aspect-square bg-[#f5f5f0] relative overflow-hidden">
-                                    <img src="{{ $related->image_url }}" alt="{{ $related->name }}"
+                                    <img src="<?php echo e($related->image_url); ?>" alt="<?php echo e($related->name); ?>"
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 </div>
                                 <div class="p-3">
-                                    <h3 class="font-bold text-sm uppercase truncate">{{ $related->name }}</h3>
+                                    <h3 class="font-bold text-sm uppercase truncate"><?php echo e($related->name); ?></h3>
                                     <div class="flex items-center gap-2 mt-1">
-                                        @if($related->sale_price && $related->sale_price < $related->price)
-                                            <span class="text-[#e8a598] font-bold">₹{{ number_format($related->sale_price, 2) }}</span>
+                                        <?php if($related->sale_price && $related->sale_price < $related->price): ?>
+                                            <span class="text-[#e8a598] font-bold">₹<?php echo e(number_format($related->sale_price, 2)); ?></span>
                                             <span
-                                                class="text-gray-400 text-sm line-through">₹{{ number_format($related->price, 2) }}</span>
-                                        @else
-                                            <span class="text-[#e8a598] font-bold">₹{{ number_format($related->price, 2) }}</span>
-                                        @endif
+                                                class="text-gray-400 text-sm line-through">₹<?php echo e(number_format($related->price, 2)); ?></span>
+                                        <?php else: ?>
+                                            <span class="text-[#e8a598] font-bold">₹<?php echo e(number_format($related->price, 2)); ?></span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
                         </a>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </section>
-    @endif
+    <?php endif; ?>
 
     <!-- Reviews Section - Flipkart Style -->
     <section class="py-12 bg-gray-50">
@@ -812,12 +821,12 @@
         </div>
     </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         // Product Images Array
-        var productImages = @json($product->images_array ?? []);
+        var productImages = <?php echo json_encode($product->images_array ?? [], 15, 512) ?>;
         var currentProductImageIndex = 0;
         var activeTab = 'notesIngredients'; // Default open tab
         var tabSlidePosition = 0;
@@ -1011,7 +1020,7 @@
         // PRODUCT REVIEWS JAVASCRIPT
         // ============================================
 
-        const productId = {{ $product->id }};
+        const productId = <?php echo e($product->id); ?>;
         let currentPage = 1;
         let currentRatingFilter = '';
         let currentSort = 'recent';
@@ -1737,4 +1746,5 @@
             background: #6b7280;
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SCENTS N SMILE\resources\views/product/show.blade.php ENDPATH**/ ?>
