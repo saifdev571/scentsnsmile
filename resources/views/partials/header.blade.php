@@ -216,42 +216,6 @@
                                         </div>
                                         <span class="text-sm font-medium text-gray-800">Scent Families</span>
                                     </a>
-
-                                    @forelse($featuredCollections ?? [] as $collection)
-                                        <a href="{{ route('collections.show', $collection->slug) }}"
-                                            class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                            @if($collection->imagekit_url)
-                                                <img src="{{ $collection->imagekit_thumbnail_url ?? $collection->imagekit_url }}"
-                                                    alt="{{ $collection->name }}" class="w-10 h-10 rounded-lg object-cover"
-                                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                                <div
-                                                    class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 items-center justify-center hidden">
-                                                    <span
-                                                        class="text-xs font-bold text-purple-600">{{ substr($collection->name, 0, 1) }}</span>
-                                                </div>
-                                            @else
-                                                <div
-                                                    class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                                                    <span
-                                                        class="text-xs font-bold text-purple-600">{{ substr($collection->name, 0, 1) }}</span>
-                                                </div>
-                                            @endif
-                                            <span class="text-sm font-medium text-gray-800">{{ $collection->name }}</span>
-                                        </a>
-                                    @empty
-                                        <a href="#"
-                                            class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                            <img src="https://via.placeholder.com/60" alt="Scent Families"
-                                                class="w-10 h-10 rounded-lg object-cover">
-                                            <span class="text-sm font-medium text-gray-800">Scent Families</span>
-                                        </a>
-                                        <a href="#"
-                                            class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                            <img src="https://via.placeholder.com/60" alt="Layering Perfumes"
-                                                class="w-10 h-10 rounded-lg object-cover">
-                                            <span class="text-sm font-medium text-gray-800">Layering Perfumes</span>
-                                        </a>
-                                    @endforelse
                                 </div>
                             </div>
                         </div>

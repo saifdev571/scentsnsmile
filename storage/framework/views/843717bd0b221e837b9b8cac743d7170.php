@@ -218,42 +218,6 @@
                                         </div>
                                         <span class="text-sm font-medium text-gray-800">Scent Families</span>
                                     </a>
-
-                                    <?php $__empty_1 = true; $__currentLoopData = $featuredCollections ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $collection): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                        <a href="<?php echo e(route('collections.show', $collection->slug)); ?>"
-                                            class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                            <?php if($collection->imagekit_url): ?>
-                                                <img src="<?php echo e($collection->imagekit_thumbnail_url ?? $collection->imagekit_url); ?>"
-                                                    alt="<?php echo e($collection->name); ?>" class="w-10 h-10 rounded-lg object-cover"
-                                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                                <div
-                                                    class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 items-center justify-center hidden">
-                                                    <span
-                                                        class="text-xs font-bold text-purple-600"><?php echo e(substr($collection->name, 0, 1)); ?></span>
-                                                </div>
-                                            <?php else: ?>
-                                                <div
-                                                    class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                                                    <span
-                                                        class="text-xs font-bold text-purple-600"><?php echo e(substr($collection->name, 0, 1)); ?></span>
-                                                </div>
-                                            <?php endif; ?>
-                                            <span class="text-sm font-medium text-gray-800"><?php echo e($collection->name); ?></span>
-                                        </a>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                        <a href="#"
-                                            class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                            <img src="https://via.placeholder.com/60" alt="Scent Families"
-                                                class="w-10 h-10 rounded-lg object-cover">
-                                            <span class="text-sm font-medium text-gray-800">Scent Families</span>
-                                        </a>
-                                        <a href="#"
-                                            class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                            <img src="https://via.placeholder.com/60" alt="Layering Perfumes"
-                                                class="w-10 h-10 rounded-lg object-cover">
-                                            <span class="text-sm font-medium text-gray-800">Layering Perfumes</span>
-                                        </a>
-                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
