@@ -47,29 +47,8 @@
                                 {{-- Custom Scrollbar Container --}}
                                 <div class="flex overflow-x-auto gap-4 pb-8 snap-x snap-mandatory hide-scroll-bar">
                                     @foreach($activeFamily->products as $product)
-                                        <div class="flex-none w-64 snap-center bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                                            {{-- Image --}}
-                                            <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
-                                                @if($product->imagekit_url)
-                                                    <img src="{{ $product->imagekit_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                                @else
-                                                     <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-50">No Image</div>
-                                                @endif
-                                                
-                                                {{-- Quick Add/Action Overlay --}}
-                                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                                    <a href="{{ route('product.show', $product->slug) }}" class="bg-white text-black font-bold py-2 px-6 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                                        VIEW
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            {{-- Details --}}
-                                            <div class="p-4 text-center">
-                                                <h3 class="font-bold text-gray-900 uppercase tracking-wide text-sm mb-1 truncate">{{ $product->name }}</h3>
-                                                <p class="text-xs text-gray-500 mb-2">Inspired by {{ $product->brand->name ?? 'Designer Scent' }}</p>
-                                                <div class="font-black text-lg">₹{{ number_format($product->price ?? 0, 0) }}</div>
-                                            </div>
+                                        <div class="flex-none w-72 snap-center">
+                                            @include('partials.product-card', ['product' => $product])
                                         </div>
                                     @endforeach
                                 </div>
