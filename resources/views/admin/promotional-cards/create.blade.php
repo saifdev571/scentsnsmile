@@ -128,7 +128,7 @@
                         </div>
                         <div class="flex items-center pt-6">
                             <label class="flex items-center cursor-pointer">
-                                <input type="checkbox" name="is_active" {{ old('is_active', true) ? 'checked' : '' }}
+                                <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}
                                     class="form-checkbox h-5 w-5 text-purple-600">
                                 <span class="ml-2 text-gray-700 font-bold">Active</span>
                             </label>
