@@ -579,7 +579,8 @@ class ProductsController extends Controller
         $productData = session('product_data', []);
         $highlightNotes = \App\Models\HighlightNote::where('is_active', true)->orderBy('name')->get();
         $scentFamilies = \App\Models\ScentFamily::where('is_active', true)->orderBy('name')->get();
-        return view('admin.products.create.step1', compact('productData', 'highlightNotes', 'scentFamilies'));
+        $moments = \App\Models\Moment::where('is_active', true)->orderBy('sort_order')->get();
+        return view('admin.products.create.step1', compact('productData', 'highlightNotes', 'scentFamilies', 'moments'));
     }
 
     public function processStep1(Request $request)
@@ -592,6 +593,7 @@ class ProductsController extends Controller
                 'inspired_by' => 'nullable|string|max:255',
                 'retail_price' => 'nullable|numeric|min:0',
                 'retail_price_color' => 'nullable|string|max:20',
+                'moment_id' => 'nullable|exists:moments,id',
                 'about' => 'nullable|string',
                 'notes' => 'nullable|string',
                 'ingredients' => 'nullable|string',
@@ -1361,13 +1363,16 @@ class ProductsController extends Controller
             'scent_intensity' => $product->scent_intensity,
             // Scent Families
             'scent_families' => $product->scentFamilies ? $product->scentFamilies->pluck('id')->toArray() : [],
+            // Moment
+            'moment_id' => $product->moment_id,
         ]]);
 
         $productData = session('edit_product_data', []);
         $highlightNotes = \App\Models\HighlightNote::where('is_active', true)->orderBy('name')->get();
         $scentFamilies = \App\Models\ScentFamily::where('is_active', true)->orderBy('name')->get();
+        $moments = \App\Models\Moment::where('is_active', true)->orderBy('sort_order')->get();
 
-        return view('admin.products.edit.step1', compact('product', 'productData', 'highlightNotes', 'scentFamilies'));
+        return view('admin.products.edit.step1', compact('product', 'productData', 'highlightNotes', 'scentFamilies', 'moments'));
     }
 
     public function processEditStep1(Request $request, Product $product)
@@ -1378,6 +1383,7 @@ class ProductsController extends Controller
             'inspired_by' => 'nullable|string|max:255',
             'retail_price' => 'nullable|numeric|min:0',
             'retail_price_color' => 'nullable|string|max:20',
+            'moment_id' => 'nullable|exists:moments,id',
             'about' => 'nullable|string',
             'notes' => 'nullable|string',
             'ingredients' => 'nullable|string',

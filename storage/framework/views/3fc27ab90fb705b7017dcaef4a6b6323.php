@@ -1,16 +1,16 @@
-@extends('admin.products.edit._layout')
 
-@section('step_title', 'Step 1: Basic Information')
-@section('step_description', 'Update essential product details')
 
-@section('step_content')
-@php
+<?php $__env->startSection('step_title', 'Step 1: Basic Information'); ?>
+<?php $__env->startSection('step_description', 'Enter essential product details'); ?>
+
+<?php $__env->startSection('step_content'); ?>
+<?php
     $currentStep = 1;
     $prevStepRoute = null;
-@endphp
+?>
 
-<form id="stepForm" action="{{ route('admin.products.edit.step1.process', $product->id) }}" method="POST">
-    @csrf
+<form id="stepForm" action="<?php echo e(route('admin.products.create.step1.process')); ?>" method="POST">
+    <?php echo csrf_field(); ?>
     
     <div class="bg-white rounded-xl shadow-lg border border-gray-200">
         <div class="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -20,7 +20,7 @@
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-gray-900">Basic Information</h2>
-                    <p class="text-gray-600 font-medium">Update essential product details</p>
+                    <p class="text-gray-600 font-medium">Enter essential product details</p>
                 </div>
             </div>
         </div>
@@ -32,26 +32,40 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">Product Name <span class="text-red-500">*</span></label>
                     <input type="text" name="name" id="productName" required 
-                        value="{{ old('name', $productData['name'] ?? '') }}"
+                        value="<?php echo e(old('name', $productData['name'] ?? '')); ?>"
                         class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
                         placeholder="Enter product name"
                         oninput="updateSlug()">
-                    @error('name')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- URL Slug -->
                 <div>
                     <label class="block text-sm font-semibold text-gray-800 mb-2">URL Slug <span class="text-blue-500 text-xs">(Auto-generated)</span></label>
                     <input type="text" name="slug" id="productSlug" readonly
-                        value="{{ old('slug', $productData['slug'] ?? '') }}"
+                        value="<?php echo e(old('slug', $productData['slug'] ?? '')); ?>"
                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed"
                         placeholder="will-be-generated-from-name">
                     <p class="text-xs text-blue-500 mt-1">✨ Automatically generated from product name</p>
-                    @error('slug')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['slug'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
             </div>
 
@@ -72,12 +86,19 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Inspired By <span class="text-gray-500 text-xs">(Optional)</span></label>
                         <input type="text" name="inspired_by" id="inspiredBy"
-                            value="{{ old('inspired_by', $productData['inspired_by'] ?? '') }}"
+                            value="<?php echo e(old('inspired_by', $productData['inspired_by'] ?? '')); ?>"
                             class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 hover:border-gray-400"
                             placeholder="e.g., MFK's Baccarat Rouge 540">
-                        @error('inspired_by')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['inspired_by'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Retail Price -->
@@ -86,13 +107,20 @@
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">RS.</span>
                             <input type="number" name="retail_price" id="retailPrice" step="0.01" min="0"
-                                value="{{ old('retail_price', $productData['retail_price'] ?? '') }}"
+                                value="<?php echo e(old('retail_price', $productData['retail_price'] ?? '')); ?>"
                                 class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 hover:border-gray-400"
                                 placeholder="27400">
                         </div>
-                        @error('retail_price')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                        <?php $__errorArgs = ['retail_price'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Retail Price Color -->
@@ -100,10 +128,10 @@
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Price Text Color</label>
                         <div class="flex items-center gap-3">
                             <input type="color" name="retail_price_color" id="retailPriceColor"
-                                value="{{ old('retail_price_color', $productData['retail_price_color'] ?? '#B8860B') }}"
+                                value="<?php echo e(old('retail_price_color', $productData['retail_price_color'] ?? '#B8860B')); ?>"
                                 class="w-14 h-12 border-2 border-gray-300 rounded-lg cursor-pointer">
                             <input type="text" id="retailPriceColorText"
-                                value="{{ old('retail_price_color', $productData['retail_price_color'] ?? '#B8860B') }}"
+                                value="<?php echo e(old('retail_price_color', $productData['retail_price_color'] ?? '#B8860B')); ?>"
                                 class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 uppercase"
                                 placeholder="#B8860B"
                                 maxlength="7">
@@ -117,14 +145,14 @@
                     <p class="text-xs text-gray-500 mb-2">Preview:</p>
                     <div>
                         <p class="text-sm text-gray-600">Inspired by</p>
-                        <p class="text-lg font-bold text-gray-900" id="previewInspiredBy">{{ $productData['inspired_by'] ?? "MFK's Baccarat Rouge 540" }}</p>
-                        <p class="text-sm font-medium" id="previewRetailPrice" style="color: {{ $productData['retail_price_color'] ?? '#B8860B' }};">(RETAIL PRICE: RS. {{ number_format($productData['retail_price'] ?? 27400) }})</p>
+                        <p class="text-lg font-bold text-gray-900" id="previewInspiredBy">MFK's Baccarat Rouge 540</p>
+                        <p class="text-sm font-medium" id="previewRetailPrice" style="color: #B8860B;">(RETAIL PRICE: RS. 27,400)</p>
                     </div>
                 </div>
             </div>
 
             <!-- Highlight Notes -->
-            @if(isset($highlightNotes) && $highlightNotes->count() > 0)
+            <?php if(isset($highlightNotes) && $highlightNotes->count() > 0): ?>
             <div x-data="highlightNotesDropdown()">
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
@@ -154,10 +182,10 @@
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Select highlight notes to display on product page (searchable)</p>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Scent Families -->
-            @if(isset($scentFamilies) && $scentFamilies->count() > 0)
+            <?php if(isset($scentFamilies) && $scentFamilies->count() > 0): ?>
             <div x-data="scentFamiliesDropdown()">
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
@@ -188,7 +216,7 @@
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Select scent families for this product (searchable)</p>
             </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Scent Intensity Scale -->
             <div>
@@ -205,7 +233,7 @@
                     <label class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
                         <input type="radio" name="scent_intensity" value="soft" 
                             class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
-                            {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'soft' ? 'checked' : '' }}>
+                            <?php echo e(old('scent_intensity', $productData['scent_intensity'] ?? '') === 'soft' ? 'checked' : ''); ?>>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center flex-shrink-0">
                                 <span class="text-2xl">🌸</span>
@@ -222,7 +250,7 @@
                     <label class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
                         <input type="radio" name="scent_intensity" value="significant" 
                             class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
-                            {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'significant' ? 'checked' : '' }}>
+                            <?php echo e(old('scent_intensity', $productData['scent_intensity'] ?? '') === 'significant' ? 'checked' : ''); ?>>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center flex-shrink-0">
                                 <span class="text-2xl">🌺</span>
@@ -239,7 +267,7 @@
                     <label class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
                         <input type="radio" name="scent_intensity" value="statement" 
                             class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
-                            {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'statement' ? 'checked' : '' }}>
+                            <?php echo e(old('scent_intensity', $productData['scent_intensity'] ?? '') === 'statement' ? 'checked' : ''); ?>>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-100 to-red-100 flex items-center justify-center flex-shrink-0">
                                 <span class="text-2xl">🌹</span>
@@ -253,30 +281,6 @@
                     </label>
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Select the intensity level that best describes this fragrance</p>
-            </div>
-
-            <!-- Moment Selection -->
-            <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-3">
-                    <span class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                        </svg>
-                        Moment
-                        <span class="text-gray-500 text-xs font-normal">(Optional)</span>
-                    </span>
-                </label>
-                <select name="moment_id" 
-                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200">
-                    <option value="">Select a moment...</option>
-                    @foreach($moments as $moment)
-                        <option value="{{ $moment->id }}" 
-                            {{ old('moment_id', $productData['moment_id'] ?? '') == $moment->id ? 'selected' : '' }}>
-                            {{ $moment->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <p class="text-xs text-gray-500 mt-2">Choose the occasion or moment this fragrance is perfect for</p>
             </div>
 
             <!-- Product Tab Content Header -->
@@ -298,7 +302,7 @@
                 <div class="quill-editor-wrapper" id="aboutScentSection">
                     <div id="aboutScentEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="about_scent" id="aboutScentHidden" class="hidden">{{ old('about_scent', $productData['about_scent'] ?? '') }}</textarea>
+                <textarea name="about_scent" id="aboutScentHidden" class="hidden"><?php echo e(old('about_scent', $productData['about_scent'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">Describe the scent profile and character</p>
             </div>
 
@@ -308,7 +312,7 @@
                 <div class="quill-editor-wrapper" id="fragranceNotesSection">
                     <div id="fragranceNotesEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="fragrance_notes" id="fragranceNotesHidden" class="hidden">{{ old('fragrance_notes', $productData['fragrance_notes'] ?? '') }}</textarea>
+                <textarea name="fragrance_notes" id="fragranceNotesHidden" class="hidden"><?php echo e(old('fragrance_notes', $productData['fragrance_notes'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">Top, middle, and base notes</p>
             </div>
 
@@ -318,7 +322,7 @@
                 <div class="quill-editor-wrapper" id="whyLoveSection">
                     <div id="whyLoveEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="why_love_it" id="whyLoveHidden" class="hidden">{{ old('why_love_it', $productData['why_love_it'] ?? '') }}</textarea>
+                <textarea name="why_love_it" id="whyLoveHidden" class="hidden"><?php echo e(old('why_love_it', $productData['why_love_it'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">Key selling points and benefits</p>
             </div>
 
@@ -328,7 +332,7 @@
                 <div class="quill-editor-wrapper" id="whatCleanSection">
                     <div id="whatCleanEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="what_makes_clean" id="whatCleanHidden" class="hidden">{{ old('what_makes_clean', $productData['what_makes_clean'] ?? '') }}</textarea>
+                <textarea name="what_makes_clean" id="whatCleanHidden" class="hidden"><?php echo e(old('what_makes_clean', $productData['what_makes_clean'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">Clean beauty and sustainability info</p>
             </div>
 
@@ -338,7 +342,7 @@
                 <div class="quill-editor-wrapper" id="ingredientsDetailsSection">
                     <div id="ingredientsDetailsEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="ingredients_details" id="ingredientsDetailsHidden" class="hidden">{{ old('ingredients_details', $productData['ingredients_details'] ?? '') }}</textarea>
+                <textarea name="ingredients_details" id="ingredientsDetailsHidden" class="hidden"><?php echo e(old('ingredients_details', $productData['ingredients_details'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">Full ingredients list and product details</p>
             </div>
 
@@ -348,7 +352,7 @@
                 <div class="quill-editor-wrapper" id="shippingInfoSection">
                     <div id="shippingInfoEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="shipping_info" id="shippingInfoHidden" class="hidden">{{ old('shipping_info', $productData['shipping_info'] ?? '') }}</textarea>
+                <textarea name="shipping_info" id="shippingInfoHidden" class="hidden"><?php echo e(old('shipping_info', $productData['shipping_info'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">Shipping times, costs, and policies</p>
             </div>
 
@@ -358,7 +362,7 @@
                 <div class="quill-editor-wrapper" id="disclaimerSection">
                     <div id="disclaimerEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="disclaimer" id="disclaimerHidden" class="hidden">{{ old('disclaimer', $productData['disclaimer'] ?? '') }}</textarea>
+                <textarea name="disclaimer" id="disclaimerHidden" class="hidden"><?php echo e(old('disclaimer', $productData['disclaimer'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">Legal disclaimers and warnings</p>
             </div>
 
@@ -368,14 +372,14 @@
                 <div class="quill-editor-wrapper" id="askQuestionSection">
                     <div id="askQuestionEditor" style="height: 200px;"></div>
                 </div>
-                <textarea name="ask_question" id="askQuestionHidden" class="hidden">{{ old('ask_question', $productData['ask_question'] ?? '') }}</textarea>
+                <textarea name="ask_question" id="askQuestionHidden" class="hidden"><?php echo e(old('ask_question', $productData['ask_question'] ?? '')); ?></textarea>
                 <p class="text-xs text-gray-500 mt-1">FAQ or contact information for questions</p>
             </div>
         </div>
     </div>
 </form>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <!-- Alpine.js for Searchable Dropdowns -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
@@ -389,8 +393,8 @@ function highlightNotesDropdown() {
     return {
         open: false,
         search: '',
-        selected: @json(old('highlight_notes', $productData['highlight_notes'] ?? [])),
-        notes: @json($highlightNotes),
+        selected: <?php echo json_encode(old('highlight_notes', $productData['highlight_notes'] ?? []), 512) ?>,
+        notes: <?php echo json_encode($highlightNotes, 15, 512) ?>,
         
         get filteredNotes() {
             return this.notes.filter(note =>
@@ -409,8 +413,8 @@ function scentFamiliesDropdown() {
     return {
         open: false,
         search: '',
-        selected: @json(old('scent_families', $productData['scent_families'] ?? [])),
-        families: @json($scentFamilies),
+        selected: <?php echo json_encode(old('scent_families', $productData['scent_families'] ?? []), 512) ?>,
+        families: <?php echo json_encode($scentFamilies, 15, 512) ?>,
         
         get filteredFamilies() {
             return this.families.filter(family =>
@@ -608,13 +612,15 @@ function updateSlug() {
     const name = document.getElementById('productName').value;
     const slug = name
         .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-+|-+$/g, '')
+        .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except letters, numbers, spaces, hyphens
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-') // Replace multiple hyphens with single
+        .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
         .trim();
     
     document.getElementById('productSlug').value = slug || 'product-slug';
+    
+    // Store product name and slug in session storage for SKU generation and SEO preview
     sessionStorage.setItem('productName', name);
     sessionStorage.setItem('productSlug', slug || 'product-slug');
 }
@@ -682,7 +688,7 @@ function updateInspiredByPreview() {
 
 // Form submission handler
 document.getElementById('stepForm').addEventListener('submit', function(e) {
-    // Product Tab Content
+    // Update hidden fields before submission - Product Tab Content
     document.getElementById('aboutScentHidden').value = aboutScentQuill.root.innerHTML;
     document.getElementById('fragranceNotesHidden').value = fragranceNotesQuill.root.innerHTML;
     document.getElementById('whyLoveHidden').value = whyLoveQuill.root.innerHTML;
@@ -693,5 +699,6 @@ document.getElementById('stepForm').addEventListener('submit', function(e) {
     document.getElementById('askQuestionHidden').value = askQuestionQuill.root.innerHTML;
 });
 </script>
-@endpush
-@endsection
+<?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.products.create._layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\SCENTS N SMILE\resources\views/admin/products/create/step1.blade.php ENDPATH**/ ?>

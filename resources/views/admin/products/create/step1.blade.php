@@ -255,6 +255,30 @@
                 <p class="text-xs text-gray-500 mt-2">Select the intensity level that best describes this fragrance</p>
             </div>
 
+            <!-- Moment Selection -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-800 mb-3">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                        </svg>
+                        Moment
+                        <span class="text-gray-500 text-xs font-normal">(Optional)</span>
+                    </span>
+                </label>
+                <select name="moment_id" 
+                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200">
+                    <option value="">Select a moment...</option>
+                    @foreach($moments as $moment)
+                        <option value="{{ $moment->id }}" 
+                            {{ old('moment_id', $productData['moment_id'] ?? '') == $moment->id ? 'selected' : '' }}>
+                            {{ $moment->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="text-xs text-gray-500 mt-2">Choose the occasion or moment this fragrance is perfect for</p>
+            </div>
+
             <!-- Product Tab Content Header -->
             <div class="border-t border-gray-200 pt-6">
                 <div class="flex items-center space-x-3 mb-6">
