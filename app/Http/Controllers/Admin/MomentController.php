@@ -167,11 +167,16 @@ class MomentController extends Controller
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to create moment. Error: ' . $e->getMessage()
+                    'message' => 'Failed to create moment. Error: ' . $e->getMessage(),
+                    'debug' => [
+                        'error' => $e->getMessage(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine()
+                    ]
                 ], 500);
             }
 
-            return back()->withInput()->withErrors(['error' => 'Failed to create moment. Please try again.']);
+            return back()->withInput()->withErrors(['error' => 'Failed to create moment. Error: ' . $e->getMessage()]);
         }
     }
 
@@ -293,7 +298,7 @@ class MomentController extends Controller
                 ], 500);
             }
 
-            return back()->withInput()->withErrors(['error' => 'Failed to update moment. Please try again.']);
+            return back()->withInput()->withErrors(['error' => 'Failed to update moment. Error: ' . $e->getMessage()]);
         }
     }
 
