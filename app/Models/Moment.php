@@ -55,7 +55,7 @@ class Moment extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'moment_id', 'id');
+        return $this->belongsToMany(Product::class, 'product_moment')->withTimestamps();
     }
 
     public function scopeActive($query)

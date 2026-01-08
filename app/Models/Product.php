@@ -9,7 +9,7 @@ class Product extends Model
 {
     protected $fillable = [
         'name', 'inspired_by', 'retail_price', 'retail_price_color', 'scent_note', 'scent_intensity', 'slug', 'sku', 'description', 'short_description', 'additional_information', 'ingredients', 'price', 'sale_price',
-        'stock', 'stock_status', 'brand_id', 'category_id', 'moment_id', 'images',
+        'stock', 'stock_status', 'brand_id', 'category_id', 'images',
         'status', 'visibility', 'featured', 'is_featured', 'is_new', 'is_trending', 'is_bestseller', 
         'is_topsale', 'is_sale', 'is_discounted', 'show_in_homepage', 'is_exclusive', 'is_limited_edition', 'is_bundle_product',
         'meta_title', 'meta_description', 'meta_keywords', 'focus_keywords', 'canonical_url', 
@@ -79,9 +79,9 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id', 'id');
     }
 
-    public function moment()
+    public function moments()
     {
-        return $this->belongsTo(Moment::class);
+        return $this->belongsToMany(Moment::class, 'product_moment')->withTimestamps();
     }
 
     public function sizes()

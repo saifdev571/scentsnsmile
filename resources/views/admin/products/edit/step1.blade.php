@@ -255,29 +255,39 @@
                 <p class="text-xs text-gray-500 mt-2">Select the intensity level that best describes this fragrance</p>
             </div>
 
-            <!-- Moment Selection -->
-            <div>
+            <!-- Moments Selection (Multiple) -->
+            @if(isset($moments) && $moments->count() > 0)
+            <div x-data="momentsDropdown()">
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
                         </svg>
-                        Moment
+                        Moments
                         <span class="text-gray-500 text-xs font-normal">(Optional)</span>
                     </span>
                 </label>
-                <select name="moment_id" 
-                    class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200">
-                    <option value="">Select a moment...</option>
-                    @foreach($moments as $moment)
-                        <option value="{{ $moment->id }}" 
-                            {{ old('moment_id', $productData['moment_id'] ?? '') == $moment->id ? 'selected' : '' }}>
-                            {{ $moment->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <p class="text-xs text-gray-500 mt-2">Choose the occasion or moment this fragrance is perfect for</p>
+                <div class="relative">
+                    <button @click="open = !open" type="button" class="w-full px-4 py-3 text-left border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 hover:border-gray-400 flex justify-between items-center">
+                        <span x-text="selectedCount > 0 ? selectedCount + ' moments selected' : 'Select moments...'" class="truncate text-gray-700"></span>
+                        <svg class="w-4 h-4 ml-2 text-gray-500 transition-transform duration-200 flex-shrink-0" :class="{'rotate-180': open}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.away="open = false" class="absolute z-20 mt-2 w-full bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <input type="text" placeholder="Search moments..." x-model="search" class="w-full px-3 py-2 border-b border-gray-200 focus:outline-none focus:ring-1 focus:ring-pink-500">
+                        <template x-for="moment in filteredMoments" :key="moment.id">
+                            <label class="flex items-center px-4 py-2 cursor-pointer hover:bg-pink-50">
+                                <input type="checkbox" :value="moment.id" x-model="selected" name="moments[]" class="w-4 h-4 text-pink-500 border-gray-300 rounded focus:ring-pink-500 mr-3">
+                                <span x-text="moment.name" class="text-sm text-gray-700"></span>
+                            </label>
+                        </template>
+                        <div x-show="filteredMoments.length === 0" class="px-4 py-2 text-gray-400">No results found.</div>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Select moments/occasions this fragrance is perfect for (searchable, multiple selection)</p>
             </div>
+            @endif
 
             <!-- Product Tab Content Header -->
             <div class="border-t border-gray-200 pt-6">
@@ -384,6 +394,26 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 <script>
+// Moments Dropdown (Multiple Selection)
+function momentsDropdown() {
+    return {
+        open: false,
+        search: '',
+        selected: @json(old('moments', $productData['moments'] ?? [])),
+        moments: @json($moments),
+        
+        get filteredMoments() {
+            return this.moments.filter(moment =>
+                moment.name.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
+        
+        get selectedCount() {
+            return this.selected.length;
+        }
+    };
+}
+
 // Highlight Notes Dropdown (Multiple Selection)
 function highlightNotesDropdown() {
     return {

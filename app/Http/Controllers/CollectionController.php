@@ -155,7 +155,9 @@ class CollectionController extends Controller
         if ($request->has('moments') && !empty($request->moments)) {
             $momentIds = array_filter($request->moments);
             if (!empty($momentIds)) {
-                $query->whereIn('moment_id', $momentIds);
+                $query->whereHas('moments', function($q) use ($momentIds) {
+                    $q->whereIn('moments.id', $momentIds);
+                });
             }
         }
 
@@ -224,7 +226,7 @@ class CollectionController extends Controller
                   })
                   
                   // Search in moments
-                  ->orWhereHas('moment', function($mq) use ($search) {
+                  ->orWhereHas('moments', function($mq) use ($search) {
                       $mq->where('name', 'like', "%{$search}%");
                   })
                   

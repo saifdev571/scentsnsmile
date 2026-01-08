@@ -593,7 +593,8 @@ class ProductsController extends Controller
                 'inspired_by' => 'nullable|string|max:255',
                 'retail_price' => 'nullable|numeric|min:0',
                 'retail_price_color' => 'nullable|string|max:20',
-                'moment_id' => 'nullable|exists:moments,id',
+                'moments' => 'nullable|array',
+                'moments.*' => 'exists:moments,id',
                 'about' => 'nullable|string',
                 'notes' => 'nullable|string',
                 'ingredients' => 'nullable|string',
@@ -1363,8 +1364,8 @@ class ProductsController extends Controller
             'scent_intensity' => $product->scent_intensity,
             // Scent Families
             'scent_families' => $product->scentFamilies ? $product->scentFamilies->pluck('id')->toArray() : [],
-            // Moment
-            'moment_id' => $product->moment_id,
+            // Moments
+            'moments' => $product->moments ? $product->moments->pluck('id')->toArray() : [],
         ]]);
 
         $productData = session('edit_product_data', []);
@@ -1383,7 +1384,8 @@ class ProductsController extends Controller
             'inspired_by' => 'nullable|string|max:255',
             'retail_price' => 'nullable|numeric|min:0',
             'retail_price_color' => 'nullable|string|max:20',
-            'moment_id' => 'nullable|exists:moments,id',
+            'moments' => 'nullable|array',
+            'moments.*' => 'exists:moments,id',
             'about' => 'nullable|string',
             'notes' => 'nullable|string',
             'ingredients' => 'nullable|string',
@@ -1450,6 +1452,10 @@ class ProductsController extends Controller
         // Sync scent families
         $scentFamilies = $validated['scent_families'] ?? [];
         $product->scentFamilies()->sync($scentFamilies);
+
+        // Sync moments
+        $moments = $validated['moments'] ?? [];
+        $product->moments()->sync($moments);
 
         $editData = session('edit_product_data', []);
         $editData = array_merge($editData, $validated);
