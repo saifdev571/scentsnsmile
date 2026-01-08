@@ -85,7 +85,7 @@
     <!-- Make Every Moment Special Section -->
     @if($moments->count() > 0)
     <section class="py-8 sm:py-12 bg-gradient-to-b from-pink-50 to-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="mx-auto px-4">
             <!-- Heading -->
             <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-center mb-8 sm:mb-12" style="color: #8B1538;">
                 MAKE EVERY MOMENT SPECIAL
@@ -327,16 +327,12 @@
         </div>
     </section>
 
-    <!-- Moments Section -->
+    <!-- Moments Section - Full Width -->
     @if(isset($moments) && count($moments) > 0)
-    <section class="bg-white px-2 sm:px-4 py-8">
-        <div class="px-4 sm:px-6 lg:px-8 mb-6">
-            <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mb-2">Shop by Moments</h2>
-            <p class="text-gray-600">Find the perfect fragrance for every occasion</p>
-        </div>
+    <section class="bg-white">
         <div class="flex flex-col gap-2 md:grid md:grid-cols-{{ min(count($moments), 4) }}">
             @foreach($moments as $moment)
-            <a href="{{ route('collections.show', $moment->slug) }}" class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[3/4] md:aspect-[3/4] block">
+            <a href="{{ route('collections.show', $moment->slug) }}" class="relative group cursor-pointer overflow-hidden aspect-[3/4] md:aspect-[3/4] block">
                 @if($moment->imagekit_url)
                     <img src="{{ $moment->imagekit_url }}" 
                          alt="{{ $moment->name }} Perfumes" 
