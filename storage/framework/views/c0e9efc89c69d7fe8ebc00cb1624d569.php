@@ -6,14 +6,7 @@
             <div class="sm:col-span-2 lg:col-span-1">
                 <!-- Logo -->
                 <div class="mb-6">
-                    <?php if(isset($settings['site_logo']) && $settings['site_logo']): ?>
-                        <img src="<?php echo e($settings['site_logo']); ?>" alt="<?php echo e($settings['business_name'] ?? 'Scents N Smile'); ?>" class="h-10 w-auto">
-                    <?php else: ?>
-                        <h2 class="text-2xl font-black text-gray-900 tracking-tight">
-                            <?php echo e($settings['business_name'] ?? 'Scents N Smile'); ?>
-
-                        </h2>
-                    <?php endif; ?>
+                    <img src="<?php echo e(asset('images/logo-transparent.png')); ?>" alt="<?php echo e($settings['business_name'] ?? 'Scents N Smile'); ?>" class="h-12 w-auto">
                 </div>
                 <p class="text-sm text-gray-600 mb-6 leading-relaxed">
                     Discover your signature scent. Premium fragrances crafted with love, designed to make you smile.

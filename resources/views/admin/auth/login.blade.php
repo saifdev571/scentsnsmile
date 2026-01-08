@@ -82,12 +82,8 @@
                 <div class="relative z-10">
                     <!-- Logo -->
                     <div class="flex items-center space-x-3 mb-8">
-                        <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                            </svg>
-                        </div>
-                        <span class="text-2xl font-bold">{{ config('app.name', 'Fashion Store') }} Admin</span>
+                        <img src="{{ asset('images/logo-transparent.png') }}" alt="{{ config('app.name', 'Scents N Smile') }}" class="h-12 w-auto">
+                        <span class="text-2xl font-bold">Admin</span>
                     </div>
                     
                     <!-- Welcome Text -->
@@ -136,12 +132,8 @@
             <div class="p-12 lg:p-16 flex flex-col justify-center">
                 <!-- Mobile Logo -->
                 <div class="lg:hidden flex items-center space-x-3 mb-8">
-                    <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold text-gray-800">{{ config('app.name', 'Fashion Store') }} Admin</span>
+                    <img src="{{ asset('images/logo-transparent.png') }}" alt="{{ config('app.name', 'Scents N Smile') }}" class="h-10 w-auto">
+                    <span class="text-xl font-bold text-gray-800">Admin</span>
                 </div>
 
                 <div class="mb-10">

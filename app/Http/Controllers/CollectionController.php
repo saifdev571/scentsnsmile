@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Models\ScentFamily;
 use App\Models\Product;
 use App\Models\HighlightNote;
+use App\Models\Moment;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller
@@ -26,6 +27,7 @@ class CollectionController extends Controller
         $scentFamilies = ScentFamily::where('is_active', true)->orderBy('name')->get();
         $collections = Collection::where('is_active', true)->orderBy('sort_order')->get();
         $highlightNotes = HighlightNote::where('is_active', true)->orderBy('name')->get();
+        $moments = Moment::where('is_active', true)->orderBy('sort_order')->get();
 
         // Handle "all" - show all products
         if ($slug === 'all') {
@@ -40,7 +42,7 @@ class CollectionController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
                 
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
         }
 
         // Handle "bestsellers" or "best-sellers" - show bestseller products
@@ -59,7 +61,7 @@ class CollectionController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
                 
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
         }
 
         // Handle "new-arrivals" - show new products
@@ -78,7 +80,7 @@ class CollectionController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
                 
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
         }
 
         // Try to find in Gender first
@@ -87,7 +89,16 @@ class CollectionController extends Controller
             $item = $gender;
             $type = 'gender';
             $products = $gender->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+        }
+
+        // Try Moment
+        $moment = Moment::where('slug', $slug)->where('is_active', true)->first();
+        if ($moment) {
+            $item = $moment;
+            $type = 'moment';
+            $products = $moment->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
         }
 
         // Try Tag
@@ -96,7 +107,7 @@ class CollectionController extends Controller
             $item = $tag;
             $type = 'tag';
             $products = $tag->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
         }
 
         // Try Collection
@@ -105,7 +116,7 @@ class CollectionController extends Controller
             $item = $collection;
             $type = 'collection';
             $products = $collection->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
         }
 
         // If nothing found, show all products
@@ -119,7 +130,7 @@ class CollectionController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(12);
             
-        return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'slug'));
+        return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
     }
 
     /**
@@ -137,6 +148,14 @@ class CollectionController extends Controller
                 $query->whereHas('genders', function($q) use ($genderIds) {
                     $q->whereIn('genders.id', $genderIds);
                 });
+            }
+        }
+
+        // Moments filter
+        if ($request->has('moments') && !empty($request->moments)) {
+            $momentIds = array_filter($request->moments);
+            if (!empty($momentIds)) {
+                $query->whereIn('moment_id', $momentIds);
             }
         }
 
@@ -202,6 +221,11 @@ class CollectionController extends Controller
                   // Search in genders
                   ->orWhereHas('genders', function($gq) use ($search) {
                       $gq->where('name', 'like', "%{$search}%");
+                  })
+                  
+                  // Search in moments
+                  ->orWhereHas('moment', function($mq) use ($search) {
+                      $mq->where('name', 'like', "%{$search}%");
                   })
                   
                   // Search in categories

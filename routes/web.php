@@ -48,7 +48,12 @@ Route::get('/', function () {
         ->orderBy('sort_order', 'asc')
         ->get();
 
-    return view('home', compact('products', 'bestSellers', 'newArrivals', 'banners', 'testimonials', 'genders'));
+    $moments = \App\Models\Moment::active()
+        ->showInHomepage()
+        ->orderBy('sort_order', 'asc')
+        ->get();
+
+    return view('home', compact('products', 'bestSellers', 'newArrivals', 'banners', 'testimonials', 'genders', 'moments'));
 })->name('home');
 
 // About Us Page
@@ -98,19 +103,19 @@ Route::get('/product/{slug}', function ($slug) {
         ->where('slug', $slug)
         ->where('status', 'active')
         ->firstOrFail();
-    
+
     // Get related products from same category or gender
     $relatedProducts = \App\Models\Product::with(['genders', 'tagsList'])
         ->where('status', 'active')
         ->where('id', '!=', $product->id)
-        ->where(function($query) use ($product) {
+        ->where(function ($query) use ($product) {
             if ($product->category_id) {
                 $query->where('category_id', $product->category_id);
             }
         })
         ->limit(4)
         ->get();
-    
+
     return view('product.show', compact('product', 'relatedProducts'));
 })->name('product.show');
 
@@ -329,6 +334,17 @@ Route::prefix('admin')->group(function () {
         Route::post('/categories/bulk-action', [App\Http\Controllers\Admin\CategoryController::class, 'bulkAction'])->name('admin.categories.bulk-action');
         Route::get('/categories/export', [App\Http\Controllers\Admin\CategoryController::class, 'export'])->name('admin.categories.export');
         Route::post('/categories/bulk-delete', [App\Http\Controllers\Admin\CategoryController::class, 'bulkDelete'])->name('admin.categories.bulk-delete');
+
+        Route::post('/moments/upload-image', [App\Http\Controllers\Admin\MomentController::class, 'uploadImage'])->name('admin.moments.upload-image');
+        Route::resource('/moments', App\Http\Controllers\Admin\MomentController::class, [
+            'as' => 'admin'
+        ]);
+        Route::post('/moments/{moment}/toggle-status', [App\Http\Controllers\Admin\MomentController::class, 'toggleStatus'])->name('admin.moments.toggle-status');
+        Route::post('/moments/{moment}/toggle-featured', [App\Http\Controllers\Admin\MomentController::class, 'toggleFeatured'])->name('admin.moments.toggle-featured');
+        Route::post('/moments/{moment}/toggle', [App\Http\Controllers\Admin\MomentController::class, 'toggle'])->name('admin.moments.toggle');
+        Route::post('/moments/bulk-action', [App\Http\Controllers\Admin\MomentController::class, 'bulkAction'])->name('admin.moments.bulk-action');
+        Route::get('/moments/export', [App\Http\Controllers\Admin\MomentController::class, 'export'])->name('admin.moments.export');
+        Route::post('/moments/bulk-delete', [App\Http\Controllers\Admin\MomentController::class, 'bulkDelete'])->name('admin.moments.bulk-delete');
 
         Route::resource('/sizes', App\Http\Controllers\Admin\SizeController::class, [
             'as' => 'admin'

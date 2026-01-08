@@ -6,13 +6,7 @@
             <div class="sm:col-span-2 lg:col-span-1">
                 <!-- Logo -->
                 <div class="mb-6">
-                    @if(isset($settings['site_logo']) && $settings['site_logo'])
-                        <img src="{{ $settings['site_logo'] }}" alt="{{ $settings['business_name'] ?? 'Scents N Smile' }}" class="h-10 w-auto">
-                    @else
-                        <h2 class="text-2xl font-black text-gray-900 tracking-tight">
-                            {{ $settings['business_name'] ?? 'Scents N Smile' }}
-                        </h2>
-                    @endif
+                    <img src="{{ asset('images/logo-transparent.png') }}" alt="{{ $settings['business_name'] ?? 'Scents N Smile' }}" class="h-12 w-auto">
                 </div>
                 <p class="text-sm text-gray-600 mb-6 leading-relaxed">
                     Discover your signature scent. Premium fragrances crafted with love, designed to make you smile.

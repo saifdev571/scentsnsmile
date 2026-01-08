@@ -218,8 +218,7 @@
             <!-- Center Logo -->
             <div class="absolute left-1/2 transform -translate-x-1/2">
                 <a href="{{ route('home') }}" class="block">
-                    <h1 class="text-xs sm:text-sm md:text-base font-light tracking-wide lowercase text-black px-3 sm:px-4 md:px-5 py-1 sm:py-1.5 bg-white bg-opacity-90 rounded-full backdrop-blur-sm hover:bg-opacity-100 transition-all"
-                        style="letter-spacing: 0.05em;">{{ $settings['business_name'] ?? 'scents n smile' }}</h1>
+                    <img src="{{ asset('images/logo-transparent.png') }}" alt="{{ $settings['business_name'] ?? 'Scents N Smile' }}" class="h-20 sm:h-24 md:h-32 lg:h-36 w-auto">
                 </a>
             </div>
 
@@ -354,7 +353,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
             </button>
-            <h2 class="text-lg font-bold tracking-wider">{{ $settings['business_name'] ?? 'Scents N Smile' }}</h2>
+            <img src="{{ asset('images/logo-transparent.png') }}" alt="{{ $settings['business_name'] ?? 'Scents N Smile' }}" class="h-8 w-auto">
             <div class="w-6"></div>
         </div>
 
