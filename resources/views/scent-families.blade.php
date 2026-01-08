@@ -19,7 +19,7 @@
             <div class="relative w-full overflow-hidden transition-all duration-500 ease-in-out" 
                  style="background-color: {{ $activeFamily->color_code ?? '#dcfce7' }};"> {{-- Default green-100 --}}
                 
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+                <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
                     <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
                         
                         {{-- Left Content: Text & Description --}}
