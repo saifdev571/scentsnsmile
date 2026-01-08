@@ -30,9 +30,11 @@ class CollectionController extends Controller
         $highlightNotes = HighlightNote::where('is_active', true)->orderBy('name')->get();
         $moments = Moment::where('is_active', true)->orderBy('sort_order')->get();
 
+        $promotionalCards = \App\Models\PromotionalCard::where('is_active', true)->orderBy('position')->get()->keyBy('position');
+
         // Handle "all" - show all products
         if ($slug === 'all') {
-            $item = (object)[
+            $item = (object) [
                 'name' => 'All Perfumes',
                 'description' => 'Explore our complete collection of designer-inspired perfumes.',
                 'id' => 0
@@ -42,46 +44,48 @@ class CollectionController extends Controller
                 ->where('is_bundle_product', false) // Exclude bundle products
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
-                
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // Handle "bestsellers" or "best-sellers" - show bestseller products
         if ($slug === 'bestsellers' || $slug === 'best-sellers') {
-            $item = (object)[
+            $item = (object) [
                 'name' => 'Bestsellers',
                 'description' => 'Our most loved fragrances.',
                 'id' => 0
             ];
             $type = 'special';
-            
+
             // Use is_bestseller column
             $products = Product::where('status', 'active')
                 ->where('is_bestseller', true)
                 ->where('is_bundle_product', false) // Exclude bundle products
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
-                
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+
+            $promotionalCards = \App\Models\PromotionalCard::where('is_active', true)->orderBy('position')->get()->keyBy('position');
+
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // Handle "new-arrivals" - show new products
         if ($slug === 'new-arrivals') {
-            $item = (object)[
+            $item = (object) [
                 'name' => 'New Arrivals',
                 'description' => 'Discover our latest fragrances.',
                 'id' => 0
             ];
             $type = 'special';
-            
+
             // Use is_new column
             $products = Product::where('status', 'active')
                 ->where('is_new', true)
                 ->where('is_bundle_product', false) // Exclude bundle products
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
-                
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // Try to find in Gender first
@@ -90,7 +94,7 @@ class CollectionController extends Controller
             $item = $gender;
             $type = 'gender';
             $products = $gender->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // Try Category
@@ -102,7 +106,7 @@ class CollectionController extends Controller
                 ->where('category_id', $category->id)
                 ->orderBy('created_at', 'desc')
                 ->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // Try Moment
@@ -111,7 +115,7 @@ class CollectionController extends Controller
             $item = $moment;
             $type = 'moment';
             $products = $moment->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // Try Tag
@@ -120,7 +124,7 @@ class CollectionController extends Controller
             $item = $tag;
             $type = 'tag';
             $products = $tag->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // Try Collection
@@ -129,11 +133,11 @@ class CollectionController extends Controller
             $item = $collection;
             $type = 'collection';
             $products = $collection->products()->where('status', 'active')->orderBy('created_at', 'desc')->paginate(12);
-            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+            return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
         }
 
         // If nothing found, show all products
-        $item = (object)[
+        $item = (object) [
             'name' => ucfirst(str_replace('-', ' ', $slug)),
             'description' => '',
             'id' => 0
@@ -142,8 +146,8 @@ class CollectionController extends Controller
         $products = Product::where('status', 'active')
             ->orderBy('created_at', 'desc')
             ->paginate(12);
-            
-        return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug'));
+
+        return view('collection-show', compact('item', 'type', 'products', 'genders', 'tags', 'scentFamilies', 'collections', 'highlightNotes', 'moments', 'slug', 'promotionalCards'));
     }
 
     /**
@@ -158,7 +162,7 @@ class CollectionController extends Controller
         if ($request->has('genders') && !empty($request->genders)) {
             $genderIds = array_filter($request->genders);
             if (!empty($genderIds)) {
-                $query->whereHas('genders', function($q) use ($genderIds) {
+                $query->whereHas('genders', function ($q) use ($genderIds) {
                     $q->whereIn('genders.id', $genderIds);
                 });
             }
@@ -168,7 +172,7 @@ class CollectionController extends Controller
         if ($request->has('moments') && !empty($request->moments)) {
             $momentIds = array_filter($request->moments);
             if (!empty($momentIds)) {
-                $query->whereHas('moments', function($q) use ($momentIds) {
+                $query->whereHas('moments', function ($q) use ($momentIds) {
                     $q->whereIn('moments.id', $momentIds);
                 });
             }
@@ -178,7 +182,7 @@ class CollectionController extends Controller
         if ($request->has('tags') && !empty($request->tags)) {
             $tagIds = array_filter($request->tags);
             if (!empty($tagIds)) {
-                $query->whereHas('tagsList', function($q) use ($tagIds) {
+                $query->whereHas('tagsList', function ($q) use ($tagIds) {
                     $q->whereIn('tags.id', $tagIds);
                 });
             }
@@ -188,7 +192,7 @@ class CollectionController extends Controller
         if ($request->has('scent_families') && !empty($request->scent_families)) {
             $scentFamilyIds = array_filter($request->scent_families);
             if (!empty($scentFamilyIds)) {
-                $query->whereHas('scentFamilies', function($q) use ($scentFamilyIds) {
+                $query->whereHas('scentFamilies', function ($q) use ($scentFamilyIds) {
                     $q->whereIn('scent_families.id', $scentFamilyIds);
                 });
             }
@@ -198,7 +202,7 @@ class CollectionController extends Controller
         if ($request->has('collections') && !empty($request->collections)) {
             $collectionIds = array_filter($request->collections);
             if (!empty($collectionIds)) {
-                $query->whereHas('collectionsList', function($q) use ($collectionIds) {
+                $query->whereHas('collectionsList', function ($q) use ($collectionIds) {
                     $q->whereIn('collections.id', $collectionIds);
                 });
             }
@@ -208,7 +212,7 @@ class CollectionController extends Controller
         if ($request->has('highlight_notes') && !empty($request->highlight_notes)) {
             $noteIds = array_filter($request->highlight_notes);
             if (!empty($noteIds)) {
-                $query->whereHas('highlightNotes', function($q) use ($noteIds) {
+                $query->whereHas('highlightNotes', function ($q) use ($noteIds) {
                     $q->whereIn('highlight_notes.id', $noteIds);
                 });
             }
@@ -225,57 +229,57 @@ class CollectionController extends Controller
         // Search filter - Enhanced to search across multiple fields and relationships
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 // Search in product fields
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('short_description', 'like', "%{$search}%")
-                  ->orWhere('inspired_by', 'like', "%{$search}%")
-                  ->orWhere('ingredients', 'like', "%{$search}%")
-                  
-                  // Search in genders
-                  ->orWhereHas('genders', function($gq) use ($search) {
-                      $gq->where('name', 'like', "%{$search}%");
-                  })
-                  
-                  // Search in moments
-                  ->orWhereHas('moments', function($mq) use ($search) {
-                      $mq->where('name', 'like', "%{$search}%");
-                  })
-                  
-                  // Search in categories
-                  ->orWhereHas('category', function($cq) use ($search) {
-                      $cq->where('name', 'like', "%{$search}%");
-                  })
-                  
-                  // Search in scent families
-                  ->orWhereHas('scentFamilies', function($sq) use ($search) {
-                      $sq->where('name', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%");
-                  })
-                  
-                  // Search in highlight notes
-                  ->orWhereHas('highlightNotes', function($hq) use ($search) {
-                      $hq->where('name', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%");
-                  })
-                  
-                  // Search in tags
-                  ->orWhereHas('tagsList', function($tq) use ($search) {
-                      $tq->where('name', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%");
-                  })
-                  
-                  // Search in collections
-                  ->orWhereHas('collectionsList', function($clq) use ($search) {
-                      $clq->where('name', 'like', "%{$search}%")
-                         ->orWhere('description', 'like', "%{$search}%");
-                  })
-                  
-                  // Search in brand
-                  ->orWhereHas('brand', function($bq) use ($search) {
-                      $bq->where('name', 'like', "%{$search}%");
-                  });
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('short_description', 'like', "%{$search}%")
+                    ->orWhere('inspired_by', 'like', "%{$search}%")
+                    ->orWhere('ingredients', 'like', "%{$search}%")
+
+                    // Search in genders
+                    ->orWhereHas('genders', function ($gq) use ($search) {
+                        $gq->where('name', 'like', "%{$search}%");
+                    })
+
+                    // Search in moments
+                    ->orWhereHas('moments', function ($mq) use ($search) {
+                        $mq->where('name', 'like', "%{$search}%");
+                    })
+
+                    // Search in categories
+                    ->orWhereHas('category', function ($cq) use ($search) {
+                        $cq->where('name', 'like', "%{$search}%");
+                    })
+
+                    // Search in scent families
+                    ->orWhereHas('scentFamilies', function ($sq) use ($search) {
+                        $sq->where('name', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+                    })
+
+                    // Search in highlight notes
+                    ->orWhereHas('highlightNotes', function ($hq) use ($search) {
+                        $hq->where('name', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+                    })
+
+                    // Search in tags
+                    ->orWhereHas('tagsList', function ($tq) use ($search) {
+                        $tq->where('name', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+                    })
+
+                    // Search in collections
+                    ->orWhereHas('collectionsList', function ($clq) use ($search) {
+                        $clq->where('name', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%");
+                    })
+
+                    // Search in brand
+                    ->orWhereHas('brand', function ($bq) use ($search) {
+                        $bq->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -300,8 +304,10 @@ class CollectionController extends Controller
 
         $products = $query->paginate(12);
 
+        $promotionalCards = \App\Models\PromotionalCard::where('is_active', true)->orderBy('position')->get()->keyBy('position');
+
         // Return HTML for products grid
-        $html = view('partials.products-grid', compact('products'))->render();
+        $html = view('partials.products-grid', compact('products', 'promotionalCards'))->render();
 
         return response()->json([
             'success' => true,

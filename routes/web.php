@@ -434,6 +434,11 @@ Route::prefix('admin')->group(function () {
         Route::post('/scent-families/bulk-action', [App\Http\Controllers\Admin\ScentFamilyController::class, 'bulkAction'])->name('admin.scent-families.bulk-action');
         Route::get('/scent-families/export', [App\Http\Controllers\Admin\ScentFamilyController::class, 'export'])->name('admin.scent-families.export');
 
+        // Promotional Cards Management
+        Route::resource('/promotional-cards', App\Http\Controllers\Admin\PromotionalCardController::class, [
+            'as' => 'admin'
+        ]);
+
         Route::resource('/coupons', App\Http\Controllers\Admin\CouponController::class, [
             'as' => 'admin'
         ]);

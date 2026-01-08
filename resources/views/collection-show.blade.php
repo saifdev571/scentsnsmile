@@ -467,34 +467,12 @@
                 </div>
 
                 <!-- Products Grid -->
-                @if($products->count() > 0)
-                    <div id="productsGrid">
-                        <div id="productsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-                            @foreach($products as $product)
-                                @include('partials.product-card', ['product' => $product])
-                            @endforeach
-                        </div>
+                <!-- Products Grid -->
+                <div id="productsGrid">
+                    <div id="productsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                        @include('partials.products-grid')
                     </div>
-                @else
-                    <div id="productsGrid">
-                        <div id="productsContainer">
-                            <div class="text-center py-20">
-                                <div class="w-24 h-24 mx-auto mb-6 bg-[#F4ECDD] rounded-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-[#F27F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                    </svg>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">No Products Found</h3>
-                                <p class="text-gray-500 mb-6">No products in "{{ $item->name }}" at the moment.</p>
-                                <a href="{{ route('collections.show', 'all') }}"
-                                    class="inline-flex items-center px-8 py-3 bg-[#F27F6E] text-white rounded-full font-medium hover:bg-[#e06b5a] transition-colors">
-                                    Browse All Perfumes
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                </div>
 
                 <!-- Load More Button (Outside productsGrid so it doesn't get replaced) -->
                 <!-- Debug: Total={{ $products->total() }}, Count={{ $products->count() }}, HasMore={{ $products->hasMorePages() ? 'Yes' : 'No' }}, CurrentPage={{ $products->currentPage() }}, LastPage={{ $products->lastPage() }} -->
@@ -942,17 +920,17 @@
                                 if (data.total > 0) {
                                     // Has products - create grid directly
                                     productsGrid.innerHTML = `
-                                    <div id="productsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-                                        ${data.html}
-                                    </div>
-                                `;
+                                        <div id="productsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                                            ${data.html}
+                                        </div>
+                                    `;
                                 } else {
                                     // No products - simple container
                                     productsGrid.innerHTML = `
-                                    <div id="productsContainer">
-                                        ${data.html}
-                                    </div>
-                                `;
+                                        <div id="productsContainer">
+                                            ${data.html}
+                                        </div>
+                                    `;
                                 }
                             }
                             productCount.textContent = data.total + ' Products';
@@ -971,17 +949,17 @@
                                 }
 
                                 loadMoreContainer.innerHTML = `
-                                <button id="loadMoreBtn" 
-                                        data-next-page="${data.current_page + 1}"
-                                        data-last-page="${data.last_page}"
-                                        data-filters='${JSON.stringify(filters)}'
-                                        class="px-8 py-4 bg-gradient-to-r from-gray-900 to-gray-700 text-white rounded-full font-semibold hover:from-black hover:to-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2">
-                                    <span>Load More Products</span>
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </button>
-                            `;
+                                    <button id="loadMoreBtn" 
+                                            data-next-page="${data.current_page + 1}"
+                                            data-last-page="${data.last_page}"
+                                            data-filters='${JSON.stringify(filters)}'
+                                            class="px-8 py-4 bg-gradient-to-r from-gray-900 to-gray-700 text-white rounded-full font-semibold hover:from-black hover:to-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2">
+                                        <span>Load More Products</span>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </button>
+                                `;
 
                                 // Re-attach event listener
                                 attachLoadMoreListener();
@@ -1028,12 +1006,12 @@
                         button.disabled = true;
                         const originalHTML = button.innerHTML;
                         button.innerHTML = `
-                            <svg class="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span>Loading...</span>
-                        `;
+                                <svg class="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>Loading...</span>
+                            `;
 
                         try {
                             let response;
