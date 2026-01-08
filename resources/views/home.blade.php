@@ -638,14 +638,14 @@
                             <!-- Moment Item -->
                             <a href="{{ route('collections.show', $moment->slug) }}" 
                                class="flex-shrink-0 flex flex-col items-center justify-center w-24 sm:w-28 md:w-32 lg:w-36 group cursor-pointer">
-                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110 rounded-full overflow-hidden shadow-lg">
                                     @if($moment->hasImageKitImage())
                                         <img src="{{ $moment->getOptimizedImageUrl(200, 200, 90) }}" 
                                              alt="{{ $moment->name }}" 
-                                             class="w-full h-full object-contain"
+                                             class="w-full h-full object-cover"
                                              loading="lazy">
                                     @else
-                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center">
+                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
                                             <span class="text-3xl sm:text-4xl">🎉</span>
                                         </div>
                                     @endif
@@ -660,14 +660,14 @@
                         @foreach($moments as $moment)
                             <a href="{{ route('collections.show', $moment->slug) }}" 
                                class="flex-shrink-0 flex flex-col items-center justify-center w-24 sm:w-28 md:w-32 lg:w-36 group cursor-pointer">
-                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110">
+                                <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4 transition-transform duration-300 group-hover:scale-110 rounded-full overflow-hidden shadow-lg">
                                     @if($moment->hasImageKitImage())
                                         <img src="{{ $moment->getOptimizedImageUrl(200, 200, 90) }}" 
                                              alt="{{ $moment->name }}" 
-                                             class="w-full h-full object-contain"
+                                             class="w-full h-full object-cover"
                                              loading="lazy">
                                     @else
-                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center">
+                                        <div class="w-full h-full bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
                                             <span class="text-3xl sm:text-4xl">🎉</span>
                                         </div>
                                     @endif
