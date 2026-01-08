@@ -295,95 +295,122 @@
 
         // Image Upload with Progress Bar
         function removeImage() {
-            document.getElementById('imageInput').value = '';
-            document.getElementById('imagekitFileId').value = '';
-            document.getElementById('imagekitUrl').value = '';
-            document.getElementById('imagekitThumbnailUrl').value = '';
-            document.getElementById('imagekitFilePath').value = '';
+            const imageInput = document.getElementById('imageInput');
+            const imagekitFileId = document.getElementById('imagekitFileId');
+            const imagekitUrl = document.getElementById('imagekitUrl');
+            const imagekitThumbnailUrl = document.getElementById('imagekitThumbnailUrl');
+            const imagekitFilePath = document.getElementById('imagekitFilePath');
+            const uploadArea = document.getElementById('uploadArea');
+            const imagePreview = document.getElementById('imagePreview');
+            const uploadProgress = document.getElementById('uploadProgress');
             
-            document.getElementById('uploadArea').classList.remove('hidden');
-            document.getElementById('imagePreview').classList.add('hidden');
-            document.getElementById('uploadProgress').classList.add('hidden');
+            if (imageInput) imageInput.value = '';
+            if (imagekitFileId) imagekitFileId.value = '';
+            if (imagekitUrl) imagekitUrl.value = '';
+            if (imagekitThumbnailUrl) imagekitThumbnailUrl.value = '';
+            if (imagekitFilePath) imagekitFilePath.value = '';
+            
+            if (uploadArea) uploadArea.classList.remove('hidden');
+            if (imagePreview) imagePreview.classList.add('hidden');
+            if (uploadProgress) uploadProgress.classList.add('hidden');
         }
 
         // Image upload handler with live progress bar
-        document.getElementById('imageInput')?.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+        const imageInputElement = document.getElementById('imageInput');
+        if (imageInputElement) {
+            imageInputElement.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
 
-            // Validate file type
-            if (!file.type.match('image.*')) {
-                showToastNotification('Please select an image file', 'error');
-                return;
-            }
-
-            // Validate file size (10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                showToastNotification('Image size must be less than 10MB', 'error');
-                return;
-            }
-
-            // Show progress
-            document.getElementById('uploadArea').classList.add('hidden');
-            document.getElementById('uploadProgress').classList.remove('hidden');
-
-            // Upload to ImageKit
-            const formData = new FormData();
-            formData.append('image', file);
-            formData.append('folder', 'moments');
-
-            const xhr = new XMLHttpRequest();
-
-            // Progress tracking
-            xhr.upload.addEventListener('progress', function(e) {
-                if (e.lengthComputable) {
-                    const percentComplete = Math.round((e.loaded / e.total) * 100);
-                    document.getElementById('progressBar').style.width = percentComplete + '%';
-                    document.getElementById('progressText').textContent = `Uploading... ${percentComplete}%`;
+                // Validate file type
+                if (!file.type.match('image.*')) {
+                    showToastNotification('Please select an image file', 'error');
+                    return;
                 }
-            });
 
-            xhr.addEventListener('load', function() {
-                if (xhr.status === 200) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
+                // Validate file size (10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    showToastNotification('Image size must be less than 10MB', 'error');
+                    return;
+                }
+
+                // Show progress
+                const uploadArea = document.getElementById('uploadArea');
+                const uploadProgress = document.getElementById('uploadProgress');
+                
+                if (uploadArea) uploadArea.classList.add('hidden');
+                if (uploadProgress) uploadProgress.classList.remove('hidden');
+
+                // Upload to ImageKit
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('folder', 'moments');
+
+                const xhr = new XMLHttpRequest();
+
+                // Progress tracking
+                xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = Math.round((e.loaded / e.total) * 100);
+                        const progressBar = document.getElementById('progressBar');
+                        const progressText = document.getElementById('progressText');
                         
-                        if (response.success) {
-                            // Store ImageKit data
-                            document.getElementById('imagekitFileId').value = response.file_id;
-                            document.getElementById('imagekitUrl').value = response.url;
-                            document.getElementById('imagekitThumbnailUrl').value = response.thumbnail_url;
-                            document.getElementById('imagekitFilePath').value = response.file_path;
+                        if (progressBar) progressBar.style.width = percentComplete + '%';
+                        if (progressText) progressText.textContent = `Uploading... ${percentComplete}%`;
+                    }
+                });
 
-                            // Show preview
-                            document.getElementById('previewImg').src = response.url;
-                            document.getElementById('uploadProgress').classList.add('hidden');
-                            document.getElementById('imagePreview').classList.remove('hidden');
+                xhr.addEventListener('load', function() {
+                    if (xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            
+                            if (response.success) {
+                                // Store ImageKit data
+                                const imagekitFileId = document.getElementById('imagekitFileId');
+                                const imagekitUrl = document.getElementById('imagekitUrl');
+                                const imagekitThumbnailUrl = document.getElementById('imagekitThumbnailUrl');
+                                const imagekitFilePath = document.getElementById('imagekitFilePath');
+                                
+                                if (imagekitFileId) imagekitFileId.value = response.file_id;
+                                if (imagekitUrl) imagekitUrl.value = response.url;
+                                if (imagekitThumbnailUrl) imagekitThumbnailUrl.value = response.thumbnail_url;
+                                if (imagekitFilePath) imagekitFilePath.value = response.file_path;
 
-                            showToastNotification('Image uploaded successfully!', 'success');
-                        } else {
-                            throw new Error(response.message || 'Upload failed');
+                                // Show preview
+                                const previewImg = document.getElementById('previewImg');
+                                const uploadProgress = document.getElementById('uploadProgress');
+                                const imagePreview = document.getElementById('imagePreview');
+                                
+                                if (previewImg) previewImg.src = response.url;
+                                if (uploadProgress) uploadProgress.classList.add('hidden');
+                                if (imagePreview) imagePreview.classList.remove('hidden');
+
+                                showToastNotification('Image uploaded successfully!', 'success');
+                            } else {
+                                throw new Error(response.message || 'Upload failed');
+                            }
+                        } catch (error) {
+                            console.error('Upload error:', error);
+                            showToastNotification('Failed to upload image', 'error');
+                            removeImage();
                         }
-                    } catch (error) {
-                        console.error('Upload error:', error);
-                        showToastNotification('Failed to upload image', 'error');
+                    } else {
+                        showToastNotification('Upload failed. Please try again.', 'error');
                         removeImage();
                     }
-                } else {
-                    showToastNotification('Upload failed. Please try again.', 'error');
+                });
+
+                xhr.addEventListener('error', function() {
+                    showToastNotification('Network error occurred', 'error');
                     removeImage();
-                }
-            });
+                });
 
-            xhr.addEventListener('error', function() {
-                showToastNotification('Network error occurred', 'error');
-                removeImage();
+                xhr.open('POST', '/admin/moments/upload-image');
+                xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                xhr.send(formData);
             });
-
-            xhr.open('POST', '/admin/moments/upload-image');
-            xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-            xhr.send(formData);
-        });
+        }
 
         // Make removeImage globally accessible
         window.removeImage = removeImage;
