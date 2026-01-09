@@ -38,7 +38,13 @@
                     style="background-color: {{ $activeFamily->color_code ?? '#dcfce7' }};">
 
                     {{-- Background Image with Overlay --}}
-
+                    @if($activeFamily->imagekit_url)
+                        <div class="absolute inset-0 z-0">
+                            <img src="{{ $activeFamily->imagekit_url }}" alt="{{ $activeFamily->name }}"
+                                class="w-full h-full object-cover opacity-60">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/70 via-white/40 to-transparent"></div>
+                        </div>
+                    @endif
 
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative z-10">
                         <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
@@ -94,7 +100,7 @@
                                     <div id="scent-products-slider"
                                         class="flex overflow-x-auto gap-4 py-8 px-4 -mx-4 snap-x snap-proximity hide-scroll-bar scroll-smooth">
                                         @foreach($activeFamily->products as $product)
-                                            <div class="flex-none w-80 sm:w-96 snap-center">
+                                            <div class="flex-none w-72 snap-center">
                                                 @include('partials.product-card', ['product' => $product])
                                             </div>
                                         @endforeach
