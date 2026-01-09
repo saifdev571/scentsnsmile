@@ -417,9 +417,11 @@
                         <!-- Description -->
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
-                            <textarea name="description" id="description" rows="3"
-                                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
-                                placeholder="Enter description (optional)"></textarea>
+                            <div class="quill-editor-wrapper" id="descriptionSection">
+                                <div id="descriptionEditor" style="height: 150px;"></div>
+                            </div>
+                            <textarea name="description" id="descriptionHidden" class="hidden"></textarea>
+                            <p class="text-xs text-gray-500 mt-1">Add a detailed description for this scent family</p>
                         </div>
 
                         <!-- Image Upload -->
@@ -507,6 +509,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Quill Editor CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <!-- Quill Editor JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     @include('admin.scent-families.scripts')
 @endsection

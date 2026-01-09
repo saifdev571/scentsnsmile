@@ -18,7 +18,10 @@
         document.getElementById('methodField').value = 'POST';
         document.getElementById('scentFamilyId').value = '';
         document.getElementById('name').value = ''; // Ensure name is cleared
-        document.getElementById('description').value = '';
+        if (window.descriptionQuill) {
+            window.descriptionQuill.setText(''); // Clear Quill editor
+        }
+        document.getElementById('descriptionHidden').value = '';
         document.getElementById('scentFamilyForm').reset();
         removeImage();
     }
@@ -35,7 +38,10 @@
         document.getElementById('methodField').value = 'PATCH';
         document.getElementById('scentFamilyId').value = data.id;
         document.getElementById('name').value = data.name;
-        document.getElementById('description').value = data.description || '';
+        if (window.descriptionQuill) {
+            window.descriptionQuill.root.innerHTML = data.description || '';
+        }
+        document.getElementById('descriptionHidden').value = data.description || '';
         document.querySelector('input[name="is_active"]').checked = data.isActive;
 
         if (data.imageUrl && data.imagekitFileId) {
@@ -381,6 +387,28 @@
                 btn.textContent = selected > 0 ? 'Apply (' + selected + ')' : 'Apply';
             }
             if (count) count.textContent = selected;
+        }
+
+        // Initialize Quill Editor for Description
+        if (document.getElementById('descriptionEditor')) {
+            window.descriptionQuill = new Quill('#descriptionEditor', {
+                theme: 'snow',
+                placeholder: 'Enter description for this scent family...',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        ['link'],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Sync Quill content to hidden textarea
+            window.descriptionQuill.on('text-change', function () {
+                document.getElementById('descriptionHidden').value = window.descriptionQuill.root.innerHTML;
+            });
         }
     });
 </script>
