@@ -67,10 +67,10 @@
                 <!-- Categories Dropdown (Refactored to match About style) -->
                 <div class="relative group">
                     <button id="categoriesBtn"
-                        class="nav-button flex items-center gap-1 xl:gap-2 px-3 py-1.5 bg-white bg-opacity-90 text-gray-800 rounded-full text-xs font-medium hover:bg-opacity-100 backdrop-blur-sm">
+                        class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
                         CATEGORIES
-                        <svg class="w-3 xl:w-4 h-3 xl:h-4 transition-transform group-hover:rotate-180"
-                            fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="currentColor"
+                            viewBox="0 0 20 20">
                             <path
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                         </svg>
@@ -225,7 +225,7 @@
                 <!-- Sale Badge (Dynamic) -->
                 @if(isset($headerPromotion) && $headerPromotion && $headerPromotion->badge_text)
                     <button
-                        class="nav-button flex items-center gap-1 xl:gap-2 px-3 py-1.5 bg-opacity-90 rounded-full text-xs font-medium hover:bg-opacity-100 backdrop-blur-sm"
+                        class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-opacity-90 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm"
                         style="background-color: {{ $headerPromotion->badge_color ?? '#ef4444' }}20; color: {{ $headerPromotion->badge_color ?? '#ef4444' }}">
                         <span>❤️</span>
                         <span class="hidden md:inline">{{ $headerPromotion->badge_text }}</span>
@@ -248,7 +248,7 @@
                 <!-- Make a Bundle - Hidden on mobile/tablet -->
                 <div class="hidden xl:block relative group">
                     <button id="bundleBtn"
-                        class="nav-button px-3 py-1.5 bg-white bg-opacity-90 text-gray-800 rounded-full text-xs font-medium hover:bg-opacity-100 backdrop-blur-sm">
+                        class="nav-button px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
                         MAKE A BUNDLE
                     </button>
 
@@ -276,9 +276,9 @@
                 <!-- About Dropdown - Hidden on mobile -->
                 <div class="hidden lg:block relative group">
                     <button
-                        class="nav-button flex items-center gap-1 xl:gap-2 px-3 py-1.5 bg-white bg-opacity-90 text-gray-800 rounded-full text-xs font-medium hover:bg-opacity-100 backdrop-blur-sm">
+                        class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
                         ABOUT
-                        <svg class="w-3 h-3 transition-transform group-hover:rotate-180" fill="currentColor"
+                        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
