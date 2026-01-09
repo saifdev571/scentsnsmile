@@ -12,17 +12,20 @@
         <div class="h-16 md:h-20"></div>
 
         {{-- Hero Section --}}
-        <div class="w-full bg-white py-12 md:py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full relative py-16 md:py-24 bg-cover bg-center" style="background-image: url('{{ asset('images/Perfume Background.jpg') }}');">
+            {{-- Overlay --}}
+            <div class="absolute inset-0 bg-white/70 backdrop-blur-[2px]"></div>
+            
+            <div class="px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
-                        Find out more about our<br>
-                        <span class="text-gray-900">Scent Families.</span>
+                        Our Scent Families
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed">
-                        We've categorized our collection into <span class="text-orange-500 font-semibold">6 unique olfactive families.</span><br>
-                        These serve as the foundation for every composition we develop.
-                    </p>
+                    <div class="space-y-4 text-lg md:text-xl text-gray-800 font-medium leading-relaxed">
+                        <p>Step into the world of ScentsNsmile, where every fragrance begins with intention.</p>
+                        <p>Our collection is curated into seven distinctive olfactive families, each telling its own story through mood, depth, and emotion.</p>
+                        <p>These families are the heart of our craft—the creative pillars that shape every composition, guiding its character from the first note to the lasting impression.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,7 +120,7 @@
             @endif
 
             {{-- Other Families (Accordion List) --}}
-            <div class="w-full bg-white mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            <div class="w-full bg-white mt-8 space-y-4">
                 @foreach($allFamilies as $family)
                     @if(!$activeFamily || $family->id !== $activeFamily->id)
                         <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
