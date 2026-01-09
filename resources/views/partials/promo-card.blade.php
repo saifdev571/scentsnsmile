@@ -66,7 +66,7 @@
 
             {{-- Modal Content --}}
             <div
-                class="relative w-full max-w-4xl bg-[#e5e9d9] rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
+                class="relative w-full max-w-6xl bg-[#e5e9d9] rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
 
                 {{-- Close Button --}}
                 <button @click="showModal = false"
@@ -75,7 +75,7 @@
                 </button>
 
                 {{-- Left Side: Image/Background --}}
-                <div class="w-full md:w-1/2 relative min-h-[300px] md:min-h-full">
+                <div class="w-full md:w-3/5 relative min-h-[300px] md:min-h-full">
                     @if($card->modal_image_url)
                         <img src="{{ $card->modal_image_url }}" alt="{{ $card->modal_title }}"
                             class="absolute inset-0 w-full h-full object-cover">
@@ -88,7 +88,7 @@
 
                 {{-- Right Side: Content --}}
                 <div
-                    class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center text-center bg-gradient-to-br from-[#f8f9f0] to-[#e5e9d9]">
+                    class="w-full md:w-2/5 p-8 md:p-12 flex flex-col justify-center items-center text-center bg-gradient-to-br from-[#f8f9f0] to-[#e5e9d9]">
 
                     @if($card->modal_title)
                         <div class="bg-white px-8 py-4 rounded-2xl shadow-sm mb-6 max-w-sm">

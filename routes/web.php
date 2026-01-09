@@ -57,7 +57,11 @@ Route::get('/', function () {
         ->orderBy('sort_order', 'asc')
         ->get();
 
-    return view('home', compact('products', 'bestSellers', 'newArrivals', 'banners', 'testimonials', 'genders', 'moments', 'socialGalleryItems'));
+    $videoTestimonials = \App\Models\VideoTestimonial::active()
+        ->orderBy('sort_order', 'asc')
+        ->get();
+
+    return view('home', compact('products', 'bestSellers', 'newArrivals', 'banners', 'testimonials', 'genders', 'moments', 'socialGalleryItems', 'videoTestimonials'));
 })->name('home');
 
 // About Us Page
@@ -448,6 +452,14 @@ Route::prefix('admin')->group(function () {
             'as' => 'admin',
             'parameters' => [
                 'social-gallery' => 'socialGalleryItem'
+            ]
+        ]);
+
+        // Video Testimonials Management
+        Route::resource('/video-testimonials', App\Http\Controllers\Admin\VideoTestimonialController::class, [
+            'as' => 'admin',
+            'parameters' => [
+                'video-testimonials' => 'videoTestimonial'
             ]
         ]);
 

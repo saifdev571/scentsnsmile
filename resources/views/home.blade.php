@@ -733,6 +733,9 @@
     </script>
     @endif
 
+    <!-- Video Testimonials Section -->
+    <x-video-testimonials :items="$videoTestimonials" />
+
     <!-- Social Gallery Section -->
     <x-social-gallery :items="$socialGalleryItems" />
 @endsection
