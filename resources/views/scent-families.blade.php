@@ -11,6 +11,22 @@
         {{-- Header Spacing --}}
         <div class="h-16 md:h-20"></div>
 
+        {{-- Hero Section --}}
+        <div class="w-full bg-white py-12 md:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+                        Find out more about our<br>
+                        <span class="text-gray-900">Scent Families.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed">
+                        We've categorized our collection into <span class="text-orange-500 font-semibold">6 unique olfactive families.</span><br>
+                        These serve as the foundation for every composition we develop.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         {{-- Main Container --}}
         <div class="w-full">
 
