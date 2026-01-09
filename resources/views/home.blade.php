@@ -514,6 +514,11 @@
         </div>
     </section>
 
+    </section>
+
+    <!-- Social Gallery Section -->
+    <x-social-gallery :items="$socialGalleryItems" />
+
     <!-- Features Section -->
     <section class="py-12 sm:py-16 lg:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4">

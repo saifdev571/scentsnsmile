@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class SocialGalleryItem extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'image_url',
+        'username',
+        'external_link',
+        'sort_order',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'sort_order' => 'integer',
+    ];
+
+    // Scope for active items
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    // Scope for sorting
+    public function scopeSorted($query)
+    {
+        return $query->orderBy('sort_order', 'asc');
+    }
+}

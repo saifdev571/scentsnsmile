@@ -53,7 +53,11 @@ Route::get('/', function () {
         ->orderBy('sort_order', 'asc')
         ->get();
 
-    return view('home', compact('products', 'bestSellers', 'newArrivals', 'banners', 'testimonials', 'genders', 'moments'));
+    $socialGalleryItems = \App\Models\SocialGalleryItem::active()
+        ->orderBy('sort_order', 'asc')
+        ->get();
+
+    return view('home', compact('products', 'bestSellers', 'newArrivals', 'banners', 'testimonials', 'genders', 'moments', 'socialGalleryItems'));
 })->name('home');
 
 // About Us Page
@@ -437,6 +441,14 @@ Route::prefix('admin')->group(function () {
         // Promotional Cards Management
         Route::resource('/promotional-cards', App\Http\Controllers\Admin\PromotionalCardController::class, [
             'as' => 'admin'
+        ]);
+
+        // Social Gallery Management
+        Route::resource('/social-gallery', App\Http\Controllers\Admin\SocialGalleryController::class, [
+            'as' => 'admin',
+            'parameters' => [
+                'social-gallery' => 'socialGalleryItem'
+            ]
         ]);
 
         Route::resource('/coupons', App\Http\Controllers\Admin\CouponController::class, [
