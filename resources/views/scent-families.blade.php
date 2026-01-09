@@ -122,7 +122,7 @@
                                         style="background-color: {{ $family->color_code ?? '#e5e7eb' }};"></div>
 
                                     <h2
-                                        class="text-2xl md:text-3xl font-bold text-gray-400 group-hover:text-gray-900 transition-colors uppercase tracking-tight">
+                                        class="text-2xl md:text-3xl font-bold text-gray-900 transition-colors uppercase tracking-tight">
                                         {{ $family->name }}
                                     </h2>
                                 </div>
