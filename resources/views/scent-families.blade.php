@@ -23,8 +23,8 @@
                     @if($activeFamily->imagekit_url)
                         <div class="absolute inset-0 z-0">
                             <img src="{{ $activeFamily->imagekit_url }}" alt="{{ $activeFamily->name }}"
-                                class="w-full h-full object-cover opacity-30">
-                            <div class="absolute inset-0 bg-gradient-to-r from-white/80 via-white/60 to-transparent"></div>
+                                class="w-full h-full object-cover opacity-60">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/70 via-white/40 to-transparent"></div>
                         </div>
                     @endif
 
