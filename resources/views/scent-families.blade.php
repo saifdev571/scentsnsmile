@@ -105,8 +105,18 @@
                 @foreach($allFamilies as $family)
                     @if(!$activeFamily || $family->id !== $activeFamily->id)
                         <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
-                            class="group block border-b border-gray-100 hover:bg-gray-50 transition-colors duration-300">
-                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
+                            class="group block border-b border-gray-100 hover:bg-gray-50 transition-colors duration-300 relative overflow-hidden">
+                            
+                            {{-- Background Image with Overlay --}}
+                            @if($family->imagekit_url)
+                                <div class="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <img src="{{ $family->imagekit_url }}" alt="{{ $family->name }}"
+                                        class="w-full h-full object-cover opacity-20">
+                                    <div class="absolute inset-0 bg-white/90"></div>
+                                </div>
+                            @endif
+                            
+                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between relative z-10">
                                 <div class="flex items-center gap-6">
                                     {{-- Family Color Dot --}}
                                     <div class="w-3 h-12 rounded-full"
