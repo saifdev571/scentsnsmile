@@ -145,12 +145,17 @@
                         <input type="text" placeholder="Search notes..." x-model="search" class="w-full px-3 py-2 border-b border-gray-200 focus:outline-none focus:ring-1 focus:ring-amber-500">
                         <template x-for="note in filteredNotes" :key="note.id">
                             <label class="flex items-center px-4 py-2 cursor-pointer hover:bg-amber-50">
-                                <input type="checkbox" :value="note.id" x-model="selected" name="highlight_notes[]" class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-500 mr-3">
+                                <input type="checkbox" :value="note.id" x-model="selected" class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-500 mr-3">
                                 <span x-text="note.name" class="text-sm text-gray-700"></span>
                             </label>
                         </template>
                         <div x-show="filteredNotes.length === 0" class="px-4 py-2 text-gray-400">No results found.</div>
                     </div>
+                    </div>
+                    <!-- Hidden inputs for form submission -->
+                    <template x-for="id in selected" :key="id">
+                        <input type="hidden" name="highlight_notes[]" :value="id">
+                    </template>
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Select highlight notes to display on product page (searchable)</p>
             </div>
@@ -179,12 +184,17 @@
                         <input type="text" placeholder="Search families..." x-model="search" class="w-full px-3 py-2 border-b border-gray-200 focus:outline-none focus:ring-1 focus:ring-purple-500">
                         <template x-for="family in filteredFamilies" :key="family.id">
                             <label class="flex items-center px-4 py-2 cursor-pointer hover:bg-purple-50">
-                                <input type="checkbox" :value="family.id" x-model="selected" name="scent_families[]" class="w-4 h-4 text-purple-500 border-gray-300 rounded focus:ring-purple-500 mr-3">
+                                <input type="checkbox" :value="family.id" x-model="selected" class="w-4 h-4 text-purple-500 border-gray-300 rounded focus:ring-purple-500 mr-3">
                                 <span x-text="family.name" class="text-sm text-gray-700"></span>
                             </label>
                         </template>
                         <div x-show="filteredFamilies.length === 0" class="px-4 py-2 text-gray-400">No results found.</div>
                     </div>
+                    </div>
+                    <!-- Hidden inputs for form submission -->
+                    <template x-for="id in selected" :key="id">
+                        <input type="hidden" name="scent_families[]" :value="id">
+                    </template>
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Select scent families for this product (searchable)</p>
             </div>
