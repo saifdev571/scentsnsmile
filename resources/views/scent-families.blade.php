@@ -121,33 +121,36 @@
                 @foreach($allFamilies as $family)
                     @if(!$activeFamily || $family->id !== $activeFamily->id)
                         <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
-                            class="group block mb-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-300 relative overflow-hidden">
+                            class="group block mb-4 border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 relative overflow-hidden rounded-3xl mx-2 md:mx-0 shadow-sm hover:shadow-md">
                             
                             {{-- Background Image with Overlay --}}
                             @if($family->imagekit_url)
                                 <div class="absolute inset-0 z-0">
                                     <img src="{{ $family->imagekit_url }}" alt="{{ $family->name }}"
-                                        class="w-full h-full object-cover opacity-40">
+                                        class="w-full h-full object-cover opacity-50 transition-opacity group-hover:opacity-60">
                                 </div>
                             @endif
                             
-                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex items-center justify-between relative z-10">
-                                <div class="flex items-center gap-6">
-                                    {{-- Family Color Dot --}}
-                                    <div class="w-3 h-12 rounded-full"
-                                        style="background-color: {{ $family->color_code ?? '#e5e7eb' }};"></div>
-
-                                    <h2
-                                        class="text-2xl md:text-3xl font-bold text-gray-900 transition-colors uppercase tracking-tight">
+                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex items-center justify-between relative z-10">
+                                {{-- White Pill Title --}}
+                                <div class="bg-white rounded-full py-2 pl-6 pr-2 flex items-center gap-4 shadow-sm min-w-[200px] justify-between">
+                                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 uppercase tracking-tight">
                                         {{ $family->name }}
                                     </h2>
+                                    
+                                    @if($family->imagekit_url)
+                                        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-inner">
+                                            <img src="{{ $family->imagekit_thumbnail_url ?? $family->imagekit_url }}" 
+                                                 alt="{{ $family->name }}" 
+                                                 class="w-full h-full object-cover">
+                                        </div>
+                                    @endif
                                 </div>
 
                                 {{-- Expand Icon --}}
-                                <div
-                                    class="w-10 h-10 rounded-full border-2 border-gray-200 flex items-center justify-center group-hover:border-black group-hover:bg-black group-hover:text-white transition-all">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                <div class="w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-gray-600 border border-white/50 group-hover:bg-white group-hover:scale-110 transition-all duration-300 shadow-sm">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6" />
                                     </svg>
                                 </div>
                             </div>
