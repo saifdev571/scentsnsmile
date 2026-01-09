@@ -32,7 +32,7 @@
                                 <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 relative z-10">{{ $activeFamily->name }}</h1>
                                 
                                 <p class="text-gray-700 text-lg leading-relaxed mb-6 relative z-10">
-                                    {{ $activeFamily->description ?? 'Discover our collection of fresh, vibrant scents perfect for everyday wear.' }}
+                                    {!! $activeFamily->description ?? 'Discover our collection of fresh, vibrant scents perfect for everyday wear.' !!}
                                 </p>
                                 
                                 <a href="#products-grid" class="inline-block bg-black text-white font-bold py-3 px-8 rounded-full hover:bg-gray-800 transition-transform transform hover:scale-105 shadow-lg">
