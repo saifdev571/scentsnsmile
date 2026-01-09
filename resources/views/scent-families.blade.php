@@ -117,11 +117,11 @@
             @endif
 
             {{-- Other Families (Accordion List) --}}
-            <div class="w-full bg-white mt-8">
+            <div class="w-full bg-white mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
                 @foreach($allFamilies as $family)
                     @if(!$activeFamily || $family->id !== $activeFamily->id)
                         <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
-                            class="group block mb-4 border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 relative overflow-hidden rounded-3xl mx-2 md:mx-0 shadow-sm hover:shadow-md">
+                            class="group block border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 relative overflow-hidden rounded-3xl shadow-sm hover:shadow-md">
                             
                             {{-- Background Image with Overlay --}}
                             @if($family->imagekit_url)
@@ -131,15 +131,15 @@
                                 </div>
                             @endif
                             
-                            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex items-center justify-between relative z-10">
+                            <div class="px-6 py-12 flex items-center justify-between relative z-10">
                                 {{-- White Pill Title --}}
-                                <div class="bg-white rounded-full py-2 pl-6 pr-2 flex items-center gap-4 shadow-sm min-w-[200px] justify-between">
-                                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 uppercase tracking-tight">
+                                <div class="bg-white rounded-full py-2 pl-6 pr-2 flex items-center gap-4 shadow-sm w-fit">
+                                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 uppercase tracking-tight whitespace-nowrap">
                                         {{ $family->name }}
                                     </h2>
                                     
                                     @if($family->imagekit_url)
-                                        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-inner">
+                                        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-inner flex-shrink-0">
                                             <img src="{{ $family->imagekit_thumbnail_url ?? $family->imagekit_url }}" 
                                                  alt="{{ $family->name }}" 
                                                  class="w-full h-full object-cover">
