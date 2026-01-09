@@ -46,7 +46,7 @@
                         </div>
                     @endif
 
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative z-10">
+                    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative z-10">
                         <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
 
                             {{-- Left Content: Text & Description --}}
@@ -59,14 +59,28 @@
                                         class="absolute -top-6 -right-6 w-24 h-24 bg-yellow-300 rounded-full opacity-20 blur-xl">
                                     </div>
                                     <div
-                                        class="absolute bottom-0 left-0 w-32 h-32 bg-green-300 rounded-full opacity-20 blur-2xl">
+                                        class="absolute -bottom-6 -left-6 w-32 h-32 bg-pink-300 rounded-full opacity-20 blur-xl">
                                     </div>
 
-                                    <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 relative z-10">
-                                        {{ $activeFamily->name }}</h1>
+                                    {{-- Icon & Title --}}
+                                    <div class="flex flex-col items-center md:items-start relative z-10">
+                                        <div class="mb-4 transform hover:scale-110 transition-transform duration-300">
+                                            @if($activeFamily->icon)
+                                                <i class="{{ $activeFamily->icon }} text-5xl md:text-6xl text-gray-800 drop-shadow-sm"></i>
+                                            @else
+                                                <img src="{{ asset('images/icons/' . strtolower($activeFamily->name) . '.png') }}" 
+                                                    alt="{{ $activeFamily->name }}" class="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-sm">
+                                            @endif
+                                        </div>
+                                        <h2
+                                            class="text-4xl md:text-5xl font-black text-gray-900 uppercase tracking-tighter leading-none mb-2">
+                                            {{ $activeFamily->name }}
+                                        </h2>
+                                        <div class="h-1 w-20 bg-gray-900 rounded-full mb-6"></div>
+                                    </div>
 
-                                    <div
-                                        class="text-gray-700 text-lg leading-relaxed relative z-10 prose prose-sm max-w-none">
+                                    {{-- Description --}}
+                                    <div class="text-gray-700 text-lg leading-relaxed relative z-10 font-medium">
                                         {!! $activeFamily->description ?? 'Discover our collection of fresh, vibrant scents perfect for everyday wear.' !!}
                                     </div>
                                 </div>
@@ -77,7 +91,7 @@
                                 @if($activeFamily->products->isNotEmpty())
                                     {{-- Custom Grid Container --}}
                                     <div id="scent-products-grid"
-                                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 py-4">
+                                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 py-4">
                                         @foreach($activeFamily->products as $product)
                                             <div class="w-full">
                                                 @include('partials.product-card', ['product' => $product])
@@ -91,7 +105,6 @@
                                     </div>
                                 @endif
                             </div>
-
                         </div>
                     </div>
                 </div>
