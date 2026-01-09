@@ -12,8 +12,10 @@
         <div class="h-16 md:h-20"></div>
 
         {{-- Hero Section --}}
-        <div class="w-full bg-white py-12 md:py-16">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full relative bg-cover bg-center py-16 md:py-24" style="background-image: url('{{ asset('images/Perfume Background.jpg') }}');">
+            <!-- Overlay for better text readability -->
+            <div class="absolute inset-0 bg-white/60"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="max-w-3xl">
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
                         Our Scent Families
