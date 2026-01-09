@@ -316,6 +316,7 @@
                                         <button
                                             class="edit-btn inline-flex items-center justify-center w-9 h-9 text-purple-600 bg-purple-50 border-2 border-purple-200 rounded-lg hover:bg-purple-100 hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                                             title="Edit" data-id="{{ $family->id }}" data-name="{{ $family->name }}"
+                                            data-description="{{ $family->description }}"
                                             data-is-active="{{ $family->is_active ? 'true' : 'false' }}"
                                             data-image-url="{{ $family->getImageUrl() }}"
                                             data-imagekit-file-id="{{ $family->imagekit_file_id }}"
