@@ -101,7 +101,7 @@
             @endif
 
             {{-- Other Families (Accordion List) --}}
-            <div class="w-full bg-white">
+            <div class="w-full bg-white mt-8">
                 @foreach($allFamilies as $family)
                     @if(!$activeFamily || $family->id !== $activeFamily->id)
                         <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
