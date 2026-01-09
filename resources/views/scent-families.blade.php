@@ -75,32 +75,11 @@
                             {{-- Right Content: Product Carousel / Grid --}}
                             <div class="w-full md:w-2/3 relative z-10 group" id="products-grid">
                                 @if($activeFamily->products->isNotEmpty())
-                                    {{-- Slider Arrows (Only if more than 3 products) --}}
-                                    @if($activeFamily->products->count() > 3)
-                                        <button
-                                            onclick="document.getElementById('scent-products-slider').scrollBy({left: -305, behavior: 'smooth'})"
-                                            class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-30 bg-white shadow-lg text-gray-800 p-3 rounded-full hover:bg-gray-50 focus:outline-none hidden md:flex items-center justify-center border border-gray-100 cursor-pointer">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15 19l-7-7 7-7" />
-                                            </svg>
-                                        </button>
-
-                                        <button
-                                            onclick="document.getElementById('scent-products-slider').scrollBy({left: 305, behavior: 'smooth'})"
-                                            class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-30 bg-white shadow-lg text-gray-800 p-3 rounded-full hover:bg-gray-50 focus:outline-none hidden md:flex items-center justify-center border border-gray-100 cursor-pointer">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </button>
-                                    @endif
-
-                                    {{-- Custom Scrollbar Container --}}
-                                    <div id="scent-products-slider"
-                                        class="flex overflow-x-auto gap-4 py-8 px-4 -mx-4 snap-x snap-proximity hide-scroll-bar scroll-smooth">
+                                    {{-- Custom Grid Container --}}
+                                    <div id="scent-products-grid"
+                                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 py-4">
                                         @foreach($activeFamily->products as $product)
-                                            <div class="flex-none w-72 snap-center">
+                                            <div class="w-full">
                                                 @include('partials.product-card', ['product' => $product])
                                             </div>
                                         @endforeach
