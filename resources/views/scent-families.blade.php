@@ -111,8 +111,7 @@
                             @if($family->imagekit_url)
                                 <div class="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <img src="{{ $family->imagekit_url }}" alt="{{ $family->name }}"
-                                        class="w-full h-full object-cover opacity-20">
-                                    <div class="absolute inset-0 bg-white/90"></div>
+                                        class="w-full h-full object-cover opacity-40">
                                 </div>
                             @endif
                             
