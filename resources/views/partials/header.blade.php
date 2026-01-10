@@ -203,21 +203,7 @@
                                 </div>
                             </div>
 
-                            <!-- Discover -->
-                            <div>
-                                <h3 class="text-[10px] font-bold text-gray-900 uppercase tracking-wide mb-2 pl-1">
-                                    DISCOVER</h3>
-                                <div class="bg-white rounded-xl overflow-hidden p-1">
-                                    <!-- Scent Families Link (Fixed) -->
-                                    <a href="{{ route('scent-families') }}"
-                                        class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                        <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
-                                            <span class="text-lg">🌸</span>
-                                        </div>
-                                        <span class="text-sm font-medium text-gray-800">Scent Families</span>
-                                    </a>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
