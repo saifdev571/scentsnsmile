@@ -52,7 +52,7 @@
 <!-- Header Navigation -->
 <header id="header"
     class="fixed {{ $hasPromoBanner ? 'top-10 md:top-12' : 'top-2' }} left-0 right-0 z-50 bg-transparent">
-    <div class="mx-auto px-2 sm:px-4 py-1.5 md:py-2">
+    <div class="mx-auto px-2 sm:px-4 py-3 md:py-4">
         <div class="flex items-center justify-between">
             <!-- Mobile Menu Button -->
             <button id="mobileMenuBtn"
