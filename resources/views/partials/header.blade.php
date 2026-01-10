@@ -203,182 +203,189 @@
                                 </div>
                             </div>
 
+                            <!-- Discover -->
+                            <div>
+                                <h3 class="text-[10px] font-bold text-gray-900 uppercase tracking-wide mb-2 pl-1">
+                                    DISCOVER</h3>
+                                <div class="bg-white rounded-xl overflow-hidden p-1">
+                                    <div class="group/scent relative">
+                                        <a href="{{ route('scent-families') }}"
+                                            class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                                            <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                                                <span class="text-lg">🌸</span>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-800">Scent Families</span>
+                                            
+                                            <!-- Hover Indicator -->
+                                            <svg class="w-4 h-4 ml-auto text-gray-400 group-hover/scent:rotate-90 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
 
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Scent Families Dropdown -->
-                <div class="relative group ml-1">
-                    <button
-                        class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
-                        SCENT FAMILIES
-                        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                        </svg>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div
-                        class="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden z-50 border border-gray-100">
-                        <div class="p-2 space-y-1">
-                            @foreach($scentFamilies as $family)
-                                <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
-                                    class="flex items-center gap-3 p-2 hover:bg-orange-50 rounded-xl transition-all group/item">
-                                    @if($family->imagekit_url)
-                                        <img src="{{ $family->imagekit_thumbnail_url ?? $family->imagekit_url }}"
-                                            alt="{{ $family->name }}"
-                                            class="w-10 h-10 rounded-lg object-cover shadow-sm group-hover/item:scale-110 transition-transform duration-300">
-                                    @else
-                                        <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                                            <span
-                                                class="text-xs font-bold text-gray-500">{{ substr($family->name, 0, 1) }}</span>
+                                        <!-- Nested List (Appears below/inline) -->
+                                        <div class="hidden group-hover/scent:block pl-4 pr-1 pb-1 space-y-1 bg-gray-50 rounded-b-xl border-t border-gray-100">
+                                            @foreach($scentFamilies as $family)
+                                                <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
+                                                    class="flex items-center gap-3 p-2 hover:bg-white rounded-lg transition-all group/item">
+                                                    @if($family->imagekit_url)
+                                                        <img src="{{ $family->imagekit_thumbnail_url ?? $family->imagekit_url }}"
+                                                            alt="{{ $family->name }}"
+                                                            class="w-8 h-8 rounded-lg object-cover shadow-sm">
+                                                    @else
+                                                        <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center">
+                                                            <span
+                                                                class="text-[10px] font-bold text-gray-500">{{ substr($family->name, 0, 1) }}</span>
+                                                        </div>
+                                                    @endif
+                                                    <span class="text-xs font-medium text-gray-700 group-hover/item:text-gray-900">{{ $family->name }}</span>
+                                                </a>
+                                            @endforeach
                                         </div>
-                                    @endif
-                                    <span class="text-sm font-medium text-gray-800">{{ $family->name }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Sale Badge (Dynamic) -->
+                    @if(isset($headerPromotion) && $headerPromotion && $headerPromotion->badge_text)
+                        <button
+                            class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-opacity-90 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm"
+                            style="background-color: {{ $headerPromotion->badge_color ?? '#ef4444' }}20; color: {{ $headerPromotion->badge_color ?? '#ef4444' }}">
+                            <span>❤️</span>
+                            <span class="hidden md:inline">{{ $headerPromotion->badge_text }}</span>
+                            <span class="md:hidden">SALE</span>
+                        </button>
+                    @endif
+                </div>
+
+                <!-- Center Logo -->
+                <div class="absolute left-1/2 transform -translate-x-1/2">
+                    <a href="{{ route('home') }}" class="block">
+                        <img src="{{ asset('images/logo-transparent.png') }}"
+                            alt="{{ $settings['business_name'] ?? 'Scents N Smile' }}"
+                            class="h-20 sm:h-24 md:h-32 lg:h-36 w-auto">
+                    </a>
+                </div>
+
+                <!-- Right Navigation -->
+                <div class="flex items-center gap-1 sm:gap-2 flex-1 justify-end">
+                    <!-- Make a Bundle - Hidden on mobile/tablet -->
+                    <div class="hidden xl:block relative group">
+                        <button id="bundleBtn"
+                            class="nav-button px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
+                            MAKE A BUNDLE
+                        </button>
+
+                        <!-- Bundle Dropdown -->
+                        <div id="bundleDropdown"
+                            class="absolute top-full left-0 mt-2 w-52 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden z-50">
+                            <!-- Bundles Section -->
+                            <div class="px-4 py-3">
+                                <a href="{{ route('bundle.index') }}"
+                                    class="block px-2 py-2 text-base font-bold text-gray-900 hover:bg-gray-50 rounded-lg transition">
+                                    Build Your Own Bundle (And Save)
                                 </a>
-                            @endforeach
+                            </div>
+
+                            <!-- Pre-Built Bundles Section -->
+                            <div class="px-4 pb-3">
+                                <a href="{{ route('bundles.prebuilt') }}"
+                                    class="block px-2 py-2 text-base font-bold text-gray-900 hover:bg-gray-50 rounded-lg transition">
+                                    Pre-Built Bundles
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Sale Badge (Dynamic) -->
-                @if(isset($headerPromotion) && $headerPromotion && $headerPromotion->badge_text)
-                    <button
-                        class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-opacity-90 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm"
-                        style="background-color: {{ $headerPromotion->badge_color ?? '#ef4444' }}20; color: {{ $headerPromotion->badge_color ?? '#ef4444' }}">
-                        <span>❤️</span>
-                        <span class="hidden md:inline">{{ $headerPromotion->badge_text }}</span>
-                        <span class="md:hidden">SALE</span>
-                    </button>
-                @endif
-            </div>
+                    <!-- About Dropdown - Hidden on mobile -->
+                    <div class="hidden lg:block relative group">
+                        <button
+                            class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
+                            ABOUT
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                            </svg>
+                        </button>
 
-            <!-- Center Logo -->
-            <div class="absolute left-1/2 transform -translate-x-1/2">
-                <a href="{{ route('home') }}" class="block">
-                    <img src="{{ asset('images/logo-transparent.png') }}"
-                        alt="{{ $settings['business_name'] ?? 'Scents N Smile' }}"
-                        class="h-20 sm:h-24 md:h-32 lg:h-36 w-auto">
-                </a>
-            </div>
+                        <!-- Dropdown Menu -->
+                        <div
+                            class="absolute top-full left-0 mt-2 w-52 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
+                            <!-- WHO WE ARE Section -->
+                            <div class="px-4 py-2">
+                                <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 mb-1.5">WHO WE ARE
+                                </h4>
+                                <a href="{{ route('about') }}"
+                                    class="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                                    About Us
+                                </a>
+                            </div>
 
-            <!-- Right Navigation -->
-            <div class="flex items-center gap-1 sm:gap-2 flex-1 justify-end">
-                <!-- Make a Bundle - Hidden on mobile/tablet -->
-                <div class="hidden xl:block relative group">
-                    <button id="bundleBtn"
-                        class="nav-button px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
-                        MAKE A BUNDLE
-                    </button>
-
-                    <!-- Bundle Dropdown -->
-                    <div id="bundleDropdown"
-                        class="absolute top-full left-0 mt-2 w-52 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden z-50">
-                        <!-- Bundles Section -->
-                        <div class="px-4 py-3">
-                            <a href="{{ route('bundle.index') }}"
-                                class="block px-2 py-2 text-base font-bold text-gray-900 hover:bg-gray-50 rounded-lg transition">
-                                Build Your Own Bundle (And Save)
-                            </a>
-                        </div>
-
-                        <!-- Pre-Built Bundles Section -->
-                        <div class="px-4 pb-3">
-                            <a href="{{ route('bundles.prebuilt') }}"
-                                class="block px-2 py-2 text-base font-bold text-gray-900 hover:bg-gray-50 rounded-lg transition">
-                                Pre-Built Bundles
-                            </a>
+                            <!-- HELP Section -->
+                            <div class="px-4 py-2">
+                                <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 mb-1.5">HELP</h4>
+                                <a href="{{ route('contact') }}"
+                                    class="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                                    Contact Us
+                                </a>
+                                <a href="#"
+                                    class="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                                    FAQ
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- About Dropdown - Hidden on mobile -->
-                <div class="hidden lg:block relative group">
-                    <button
-                        class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
-                        ABOUT
-                        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                    <!-- Search -->
+                    <button id="searchBtn"
+                        class="p-1.5 bg-white bg-opacity-90 text-gray-800 rounded-full hover:bg-opacity-100 backdrop-blur-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
 
-                    <!-- Dropdown Menu -->
-                    <div
-                        class="absolute top-full left-0 mt-2 w-52 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
-                        <!-- WHO WE ARE Section -->
-                        <div class="px-4 py-2">
-                            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 mb-1.5">WHO WE ARE
-                            </h4>
-                            <a href="{{ route('about') }}"
-                                class="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition">
-                                About Us
-                            </a>
-                        </div>
+                    <!-- Cart -->
+                    <button id="cartBtn"
+                        class="p-1.5 bg-white bg-opacity-90 text-gray-800 rounded-full hover:bg-opacity-100 backdrop-blur-sm relative">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span id="cartCount"
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[10px]">1</span>
+                    </button>
 
-                        <!-- HELP Section -->
-                        <div class="px-4 py-2">
-                            <h4 class="text-xs font-black uppercase tracking-wider text-gray-900 mb-1.5">HELP</h4>
-                            <a href="{{ route('contact') }}"
-                                class="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition">
-                                Contact Us
-                            </a>
-                            <a href="#"
-                                class="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition">
-                                FAQ
-                            </a>
-                        </div>
-                    </div>
+                    <!-- Account -->
+                    <a href="{{ route('user.login') }}"
+                        class="p-1.5 bg-blue-600 text-white rounded-full hover:bg-blue-700">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10 10a4 4 0 100-8 4 4 0 000 8zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z" />
+                        </svg>
+                    </a>
                 </div>
-
-                <!-- Search -->
-                <button id="searchBtn"
-                    class="p-1.5 bg-white bg-opacity-90 text-gray-800 rounded-full hover:bg-opacity-100 backdrop-blur-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-
-                <!-- Cart -->
-                <button id="cartBtn"
-                    class="p-1.5 bg-white bg-opacity-90 text-gray-800 rounded-full hover:bg-opacity-100 backdrop-blur-sm relative">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    <span id="cartCount"
-                        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[10px]">1</span>
-                </button>
-
-                <!-- Account -->
-                <a href="{{ route('user.login') }}" class="p-1.5 bg-blue-600 text-white rounded-full hover:bg-blue-700">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 10a4 4 0 100-8 4 4 0 000 8zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z" />
-                    </svg>
-                </a>
             </div>
         </div>
-    </div>
 
-    <!-- Mobile Menu Dropdown -->
-    <div id="mobileMenu"
-        class="hidden lg:hidden bg-white bg-opacity-95 backdrop-blur-md mx-2 mt-2 rounded-2xl shadow-lg overflow-hidden">
-        <div class="p-4 space-y-2">
-            <button
-                class="w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-lg font-medium">Perfumer</button>
-            <button class="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium">❤️ Holiday
-                Sale</button>
-            <button class="w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-lg font-medium">Make a
-                Bundle</button>
-            <a href="{{ route('about') }}"
-                class="block w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-lg font-medium">About</a>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu"
+            class="hidden lg:hidden bg-white bg-opacity-95 backdrop-blur-md mx-2 mt-2 rounded-2xl shadow-lg overflow-hidden">
+            <div class="p-4 space-y-2">
+                <button
+                    class="w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-lg font-medium">Perfumer</button>
+                <button class="w-full text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg font-medium">❤️
+                    Holiday
+                    Sale</button>
+                <button class="w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-lg font-medium">Make a
+                    Bundle</button>
+                <a href="{{ route('about') }}"
+                    class="block w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-100 rounded-lg font-medium">About</a>
+            </div>
         </div>
-    </div>
 </header>
 
 
