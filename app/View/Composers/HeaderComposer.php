@@ -7,12 +7,17 @@ use App\Models\Tag;
 use App\Models\Collection;
 use App\Models\HighlightNote;
 use App\Models\Category;
+use App\Models\ScentFamily;
 use Illuminate\View\View;
 
 class HeaderComposer
 {
     public function compose(View $view)
     {
+        $scentFamilies = ScentFamily::where('is_active', true)
+            ->orderBy('sort_order', 'asc')
+            ->get();
+
         $genders = Gender::where('is_active', true)
             ->orderBy('sort_order', 'asc')
             ->get();
@@ -41,6 +46,7 @@ class HeaderComposer
             ->get();
 
         $view->with([
+            'scentFamilies' => $scentFamilies,
             'genders' => $genders,
             'featuredTags' => $featuredTags,
             'featuredCollections' => $featuredCollections,

@@ -222,6 +222,42 @@
                     </div>
                 </div>
 
+                <!-- Scent Families Dropdown -->
+                <div class="relative group ml-1">
+                    <button
+                        class="nav-button flex items-center gap-1 xl:gap-2 px-4 py-2 bg-white bg-opacity-90 text-gray-800 rounded-full text-sm font-bold hover:bg-opacity-100 backdrop-blur-sm">
+                        SCENT FAMILIES
+                        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div
+                        class="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden z-50 border border-gray-100">
+                        <div class="p-2 space-y-1">
+                            @foreach($scentFamilies as $family)
+                                <a href="{{ route('scent-families', ['scent' => $family->slug]) }}"
+                                    class="flex items-center gap-3 p-2 hover:bg-orange-50 rounded-xl transition-all group/item">
+                                    @if($family->imagekit_url)
+                                        <img src="{{ $family->imagekit_thumbnail_url ?? $family->imagekit_url }}"
+                                            alt="{{ $family->name }}"
+                                            class="w-10 h-10 rounded-lg object-cover shadow-sm group-hover/item:scale-110 transition-transform duration-300">
+                                    @else
+                                        <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                                            <span
+                                                class="text-xs font-bold text-gray-500">{{ substr($family->name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                    <span class="text-sm font-medium text-gray-800">{{ $family->name }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Sale Badge (Dynamic) -->
                 @if(isset($headerPromotion) && $headerPromotion && $headerPromotion->badge_text)
                     <button
