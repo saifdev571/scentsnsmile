@@ -78,7 +78,7 @@
 
                     <!-- Categories Dropdown Menu -->
                     <div
-                        class="absolute top-full left-0 mt-2 w-80 bg-[#f5e6d3] rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden z-50 max-h-[80vh] overflow-y-auto">
+                        class="absolute top-full left-0 mt-2 w-96 bg-[#f5e6d3] rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden z-50 max-h-[80vh] overflow-y-auto">
                         <div class="p-4 text-left">
                             <!-- Shop All Perfumes -->
                             <a href="{{ route('collections') }}"
