@@ -142,7 +142,7 @@
 
                                         {{-- Custom Scrollbar Container --}}
                                         <div id="scent-products-slider-{{ $family->id }}"
-                                            class="flex overflow-x-auto gap-4 py-8 px-4 -mx-4 snap-x snap-proximity hide-scroll-bar scroll-smooth">
+                                            class="flex overflow-x-auto gap-4 py-8 px-4 -mx-4 snap-x snap-proximity hide-scroll-bar scroll-smooth max-w-[752px] mx-auto">
                                             @foreach($family->products as $product)
                                                 <div class="flex-none w-60 snap-center">
                                                     @include('partials.product-card', ['product' => $product])
