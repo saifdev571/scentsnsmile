@@ -8,23 +8,72 @@ use Illuminate\Support\Str;
 class Product extends Model
 {
     protected $fillable = [
-        'name', 'inspired_by', 'retail_price', 'retail_price_color', 'scent_note', 'scent_intensity', 'slug', 'sku', 'description', 'short_description', 'additional_information', 'ingredients', 'price', 'sale_price',
-        'stock', 'stock_status', 'brand_id', 'category_id', 'images',
-        'status', 'visibility', 'featured', 'is_featured', 'is_new', 'is_trending', 'is_bestseller', 
-        'is_topsale', 'is_sale', 'is_discounted', 'show_in_homepage', 'is_exclusive', 'is_limited_edition', 'is_bundle_product',
-        'meta_title', 'meta_description', 'meta_keywords', 'focus_keywords', 'canonical_url', 
-        'og_title', 'og_description',
+        'name',
+        'inspired_by',
+        'retail_price',
+        'retail_price_color',
+        'scent_note',
+        'scent_intensity',
+        'slug',
+        'sku',
+        'description',
+        'short_description',
+        'additional_information',
+        'ingredients',
+        'price',
+        'sale_price',
+        'stock',
+        'stock_status',
+        'brand_id',
+        'category_id',
+        'images',
+        'status',
+        'visibility',
+        'featured',
+        'is_featured',
+        'is_new',
+        'is_trending',
+        'is_bestseller',
+        'is_topsale',
+        'is_sale',
+        'is_discounted',
+        'show_in_homepage',
+        'is_exclusive',
+        'is_limited_edition',
+        'is_bundle_product',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'focus_keywords',
+        'canonical_url',
+        'og_title',
+        'og_description',
         // Product Tab Fields
-        'about_scent', 'fragrance_notes', 'why_love_it', 'what_makes_clean', 
-        'ingredients_details', 'shipping_info', 'disclaimer', 'ask_question',
+        'about_scent',
+        'fragrance_notes',
+        'why_love_it',
+        'what_makes_clean',
+        'ingredients_details',
+        'shipping_info',
+        'disclaimer',
+        'ask_question',
         // Shipping Dimensions (for Shiprocket)
-        'weight', 'length', 'breadth', 'height', 'hsn_code'
+        'weight',
+        'length',
+        'breadth',
+        'height',
+        'hsn_code',
+        // Scent Intensity Texts
+        'scent_intensity_soft_text',
+        'scent_intensity_significant_text',
+        'scent_intensity_statement_text'
     ];
 
     protected $hidden = [];
 
     protected $appends = [
-        'image_url', 'images_array'
+        'image_url',
+        'images_array'
     ];
 
     protected $casts = [
@@ -186,36 +235,36 @@ class Product extends Model
     {
         // Use 'images' column
         $images = $this->attributes['images'] ?? null;
-        
+
         if (is_string($images) && !empty(trim($images))) {
             $decoded = json_decode($images, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decoded) && !empty($decoded)) {
                 $firstImage = $decoded[0];
-                
+
                 // Handle if first element is string
                 if (is_string($firstImage)) {
                     return $firstImage;
                 }
-                
+
                 // Handle if first element is array with url/path
                 if (is_array($firstImage)) {
                     return $firstImage['url'] ?? $firstImage['path'] ?? null;
                 }
             }
         }
-        
+
         if (is_array($images) && !empty($images)) {
             $firstImage = $images[0];
-            
+
             if (is_string($firstImage)) {
                 return $firstImage;
             }
-            
+
             if (is_array($firstImage)) {
                 return $firstImage['url'] ?? $firstImage['path'] ?? null;
             }
         }
-        
+
         return null;
     }
 }

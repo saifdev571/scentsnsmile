@@ -201,6 +201,7 @@
             @endif
 
             <!-- Scent Intensity Scale -->
+            <!-- Scent Intensity Scale -->
             <div>
                 <label class="block text-sm font-semibold text-gray-800 mb-3">
                     <span class="flex items-center gap-2">
@@ -212,57 +213,81 @@
                 </label>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Soft -->
-                    <label class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
-                        <input type="radio" name="scent_intensity" value="soft" 
-                            class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
-                            {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'soft' ? 'checked' : '' }}>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center flex-shrink-0">
-                                <span class="text-2xl">🌸</span>
+                    <div class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
+                        <label class="cursor-pointer block">
+                            <input type="radio" name="scent_intensity" value="soft" 
+                                class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
+                                {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'soft' ? 'checked' : '' }}>
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-2xl">🌸</span>
+                                </div>
+                                <div>
+                                    <p class="text-base font-bold text-gray-900">Soft</p>
+                                    <p class="text-xs text-gray-500">Subtle & Delicate</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-base font-bold text-gray-900">Soft</p>
-                                <p class="text-xs text-gray-500">Subtle & Delicate</p>
-                            </div>
+                            <p class="text-sm text-gray-600 mt-2">Light, airy fragrance that stays close to the skin. Perfect for everyday wear and intimate settings.</p>
+                        </label>
+                        <div class="mt-3 pt-3 border-t border-gray-200/60">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Custom Description</label>
+                            <textarea name="scent_intensity_soft_text" rows="2"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                                placeholder="Override default description...">{{ old('scent_intensity_soft_text', $productData['scent_intensity_soft_text'] ?? '') }}</textarea>
                         </div>
-                        <p class="text-sm text-gray-600 mt-2">Light, airy fragrance that stays close to the skin. Perfect for everyday wear and intimate settings.</p>
-                    </label>
+                    </div>
 
                     <!-- Significant -->
-                    <label class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
-                        <input type="radio" name="scent_intensity" value="significant" 
-                            class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
-                            {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'significant' ? 'checked' : '' }}>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center flex-shrink-0">
-                                <span class="text-2xl">🌺</span>
+                    <div class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
+                        <label class="cursor-pointer block">
+                            <input type="radio" name="scent_intensity" value="significant" 
+                                class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
+                                {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'significant' ? 'checked' : '' }}>
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-2xl">🌺</span>
+                                </div>
+                                <div>
+                                    <p class="text-base font-bold text-gray-900">Significant</p>
+                                    <p class="text-xs text-gray-500">Balanced & Noticeable</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-base font-bold text-gray-900">Significant</p>
-                                <p class="text-xs text-gray-500">Balanced & Noticeable</p>
-                            </div>
+                            <p class="text-sm text-gray-600 mt-2">Moderate projection with good presence. Noticeable without being overwhelming. Ideal for most occasions.</p>
+                        </label>
+                        <div class="mt-3 pt-3 border-t border-gray-200/60">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Custom Description</label>
+                            <textarea name="scent_intensity_significant_text" rows="2"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                                placeholder="Override default description...">{{ old('scent_intensity_significant_text', $productData['scent_intensity_significant_text'] ?? '') }}</textarea>
                         </div>
-                        <p class="text-sm text-gray-600 mt-2">Moderate projection with good presence. Noticeable without being overwhelming. Ideal for most occasions.</p>
-                    </label>
+                    </div>
 
                     <!-- Statement -->
-                    <label class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
-                        <input type="radio" name="scent_intensity" value="statement" 
-                            class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
-                            {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'statement' ? 'checked' : '' }}>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-100 to-red-100 flex items-center justify-center flex-shrink-0">
-                                <span class="text-2xl">🌹</span>
+                    <div class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all duration-200 group has-[:checked]:border-purple-500 has-[:checked]:bg-purple-50">
+                        <label class="cursor-pointer block">
+                            <input type="radio" name="scent_intensity" value="statement" 
+                                class="absolute top-4 right-4 w-5 h-5 text-purple-500 border-gray-300 focus:ring-purple-500"
+                                {{ old('scent_intensity', $productData['scent_intensity'] ?? '') === 'statement' ? 'checked' : '' }}>
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-100 to-red-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-2xl">🌹</span>
+                                </div>
+                                <div>
+                                    <p class="text-base font-bold text-gray-900">Statement</p>
+                                    <p class="text-xs text-gray-500">Bold & Powerful</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-base font-bold text-gray-900">Statement</p>
-                                <p class="text-xs text-gray-500">Bold & Powerful</p>
-                            </div>
+                            <p class="text-sm text-gray-600 mt-2">Strong, commanding presence with excellent sillage. Makes a lasting impression. Best for special occasions.</p>
+                        </label>
+                        <div class="mt-3 pt-3 border-t border-gray-200/60">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Custom Description</label>
+                            <textarea name="scent_intensity_statement_text" rows="2"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                                placeholder="Override default description...">{{ old('scent_intensity_statement_text', $productData['scent_intensity_statement_text'] ?? '') }}</textarea>
                         </div>
-                        <p class="text-sm text-gray-600 mt-2">Strong, commanding presence with excellent sillage. Makes a lasting impression. Best for special occasions.</p>
-                    </label>
+                    </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Select the intensity level that best describes this fragrance</p>
+                <p class="text-xs text-gray-500 mt-2">Select the intensity level that best describes this fragrance. You can also customize the description text for each level.</p>
             </div>
 
             <!-- Moments Selection (Multiple) -->

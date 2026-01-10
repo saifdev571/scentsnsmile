@@ -134,7 +134,8 @@
                         <!-- Product Type / Scent Note -->
                         @if($product->scent_note || $product->short_description)
                             <div class="text-sm text-gray-700 mb-3 leading-relaxed">
-                                {!! strip_tags($product->scent_note ?? $product->short_description) !!}</div>
+                                {!! strip_tags($product->scent_note ?? $product->short_description) !!}
+                            </div>
                         @endif
                     </div>
 
@@ -1098,14 +1099,14 @@
 
             if (reviews.length === 0 && clearFirst) {
                 container.innerHTML = `
-                    <div class="text-center py-12">
-                        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                        </svg>
-                        <p class="text-gray-600 text-lg font-medium">No reviews yet</p>
-                        <p class="text-gray-500 text-sm mt-2">Be the first to review this product!</p>
-                    </div>
-                `;
+                        <div class="text-center py-12">
+                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                            </svg>
+                            <p class="text-gray-600 text-lg font-medium">No reviews yet</p>
+                            <p class="text-gray-500 text-sm mt-2">Be the first to review this product!</p>
+                        </div>
+                    `;
                 return;
             }
 
@@ -1131,54 +1132,54 @@
                 imagesHtml = '<div class="flex gap-2 mt-3">';
                 review.images.forEach((img, index) => {
                     imagesHtml += `
-                        <img src="${img}" alt="Review image ${index + 1}" 
-                             class="w-16 h-16 object-cover rounded border border-gray-200 cursor-pointer hover:opacity-75 transition"
-                             onclick="openImageLightbox(${JSON.stringify(review.images)}, ${index})">
-                    `;
+                            <img src="${img}" alt="Review image ${index + 1}" 
+                                 class="w-16 h-16 object-cover rounded border border-gray-200 cursor-pointer hover:opacity-75 transition"
+                                 onclick="openImageLightbox(${JSON.stringify(review.images)}, ${index})">
+                        `;
                 });
                 imagesHtml += '</div>';
             }
 
             card.innerHTML = `
-                <div class="flex items-start gap-4">
-                    <div class="flex-shrink-0">
-                        <div class="w-10 h-10 rounded-full bg-[#e8a598] text-white flex items-center justify-center font-bold text-lg">
-                            ${reviewerName.charAt(0).toUpperCase()}
-                        </div>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-1">
-                            <h4 class="font-medium text-gray-900">${reviewerName}</h4>
-                            ${review.is_verified_purchase ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">✓ Verified Purchase</span>' : ''}
-                        </div>
-
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="flex items-center gap-1 px-2 py-0.5 bg-green-600 text-white rounded text-xs font-medium">
-                                <span>${review.rating}</span>
-                                <span>★</span>
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 rounded-full bg-[#e8a598] text-white flex items-center justify-center font-bold text-lg">
+                                ${reviewerName.charAt(0).toUpperCase()}
                             </div>
-                            <span class="text-sm text-gray-500">${formattedDate}</span>
                         </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-medium text-gray-900">${reviewerName}</h4>
+                                ${review.is_verified_purchase ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">✓ Verified Purchase</span>' : ''}
+                            </div>
 
-                        ${review.title ? `<h5 class="font-medium text-gray-900 mb-2">${review.title}</h5>` : ''}
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="flex items-center gap-1 px-2 py-0.5 bg-green-600 text-white rounded text-xs font-medium">
+                                    <span>${review.rating}</span>
+                                    <span>★</span>
+                                </div>
+                                <span class="text-sm text-gray-500">${formattedDate}</span>
+                            </div>
 
-                        <p class="text-gray-700 text-sm leading-relaxed">${review.comment}</p>
+                            ${review.title ? `<h5 class="font-medium text-gray-900 mb-2">${review.title}</h5>` : ''}
 
-                        ${imagesHtml}
+                            <p class="text-gray-700 text-sm leading-relaxed">${review.comment}</p>
 
-                        <div class="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
-                            <button onclick="markReviewHelpful(${review.id})" 
-                                    class="flex items-center gap-1.5 text-sm ${review.user_marked_helpful ? 'text-[#e8a598] font-medium' : 'text-gray-600'} hover:text-[#e8a598] transition"
-                                    id="helpfulBtn${review.id}">
-                                <svg class="w-4 h-4" fill="${review.user_marked_helpful ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
-                                </svg>
-                                <span id="helpfulCount${review.id}">Helpful (${review.helpful_count})</span>
-                            </button>
+                            ${imagesHtml}
+
+                            <div class="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+                                <button onclick="markReviewHelpful(${review.id})" 
+                                        class="flex items-center gap-1.5 text-sm ${review.user_marked_helpful ? 'text-[#e8a598] font-medium' : 'text-gray-600'} hover:text-[#e8a598] transition"
+                                        id="helpfulBtn${review.id}">
+                                    <svg class="w-4 h-4" fill="${review.user_marked_helpful ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                                    </svg>
+                                    <span id="helpfulCount${review.id}">Helpful (${review.helpful_count})</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
 
             return card;
         }
@@ -1376,14 +1377,14 @@
             const preview = document.createElement('div');
             preview.className = 'relative group';
             preview.innerHTML = `
-                <img src="${url}" class="w-full aspect-square object-cover rounded-lg">
-                <button type="button" onclick="removeImage(${index})" 
-                        class="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            `;
+                    <img src="${url}" class="w-full aspect-square object-cover rounded-lg">
+                    <button type="button" onclick="removeImage(${index})" 
+                            class="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                `;
 
             grid.appendChild(preview);
         }
@@ -1545,34 +1546,34 @@
             };
 
             lightbox.innerHTML = `
-                <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white hover:text-gray-300 transition">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-
-                ${images.length > 1 ? `
-                    <button onclick="previousLightboxImage()" class="absolute left-4 text-white hover:text-gray-300 transition">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white hover:text-gray-300 transition">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
 
-                    <button onclick="nextLightboxImage()" class="absolute right-4 text-white hover:text-gray-300 transition">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-                ` : ''}
+                    ${images.length > 1 ? `
+                        <button onclick="previousLightboxImage()" class="absolute left-4 text-white hover:text-gray-300 transition">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
 
-                <img id="lightboxImage" src="${images[index]}" class="max-w-full max-h-full object-contain">
+                        <button onclick="nextLightboxImage()" class="absolute right-4 text-white hover:text-gray-300 transition">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    ` : ''}
 
-                ${images.length > 1 ? `
-                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm">
-                        <span id="lightboxCounter">${index + 1} / ${images.length}</span>
-                    </div>
-                ` : ''}
-            `;
+                    <img id="lightboxImage" src="${images[index]}" class="max-w-full max-h-full object-contain">
+
+                    ${images.length > 1 ? `
+                        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm">
+                            <span id="lightboxCounter">${index + 1} / ${images.length}</span>
+                        </div>
+                    ` : ''}
+                `;
 
             document.body.appendChild(lightbox);
             document.body.style.overflow = 'hidden';
@@ -1663,7 +1664,7 @@
                                 <h3 class="text-xl font-bold text-orange-400">Soft:</h3>
                             </div>
                             <p class="text-gray-600 text-sm leading-relaxed">
-                                Delicate, lighter scents that will entice your senses, without overpowering them.
+                                {{ $product->scent_intensity_soft_text ?: 'Delicate, lighter scents that will entice your senses, without overpowering them.' }}
                             </p>
                         </div>
 
@@ -1678,7 +1679,7 @@
                                 <h3 class="text-xl font-bold text-orange-500">Significant:</h3>
                             </div>
                             <p class="text-gray-600 text-sm leading-relaxed">
-                                Captivating scents that stay present on the skin, but won't overwhelm the room.
+                                {{ $product->scent_intensity_significant_text ?: 'Captivating scents that stay present on the skin, but won\'t overwhelm the room.' }}
                             </p>
                         </div>
 
@@ -1693,7 +1694,7 @@
                                 <h3 class="text-xl font-bold text-orange-600">Statement:</h3>
                             </div>
                             <p class="text-gray-600 text-sm leading-relaxed">
-                                Bold, head-turning fragrances. Stand out from the crowd with every spritz.
+                                {{ $product->scent_intensity_statement_text ?: 'Bold, head-turning fragrances. Stand out from the crowd with every spritz.' }}
                             </p>
                         </div>
                     </div>

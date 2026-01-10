@@ -34,8 +34,8 @@ class ProductsController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('sku', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%');
+                    ->orWhere('sku', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
 
@@ -81,9 +81,9 @@ class ProductsController extends Controller
         $genders = \App\Models\Gender::where('is_active', true)->orderBy('sort_order')->get();
         $brands = Brand::where('is_active', true)->orderBy('sort_order')->orderBy('name')->get();
         $tags = Tag::where('is_active', true)
-                   ->orderBy('usage_count', 'desc')
-                   ->orderBy('name')
-                   ->get();
+            ->orderBy('usage_count', 'desc')
+            ->orderBy('name')
+            ->get();
 
         return view('admin.products.create', compact('categories', 'collections', 'sizes', 'genders', 'brands', 'tags'));
     }
@@ -148,11 +148,11 @@ class ProductsController extends Controller
             if (!empty($tags)) {
                 $product->tagsList()->sync($tags);
             }
-            
+
             if (!empty($collections)) {
                 $product->collectionsList()->sync($collections);
             }
-            
+
             if (!empty($genders)) {
                 $product->genders()->sync($genders);
             }
@@ -190,12 +190,12 @@ class ProductsController extends Controller
     {
         // Load all relationships for the view
         $product->load([
-            'category', 
-            'brand', 
-            'tagsList', 
-            'collectionsList', 
-            'sizes', 
-            'genders', 
+            'category',
+            'brand',
+            'tagsList',
+            'collectionsList',
+            'sizes',
+            'genders',
             'variants.size'
         ]);
 
@@ -204,7 +204,7 @@ class ProductsController extends Controller
 
                 try {
                     $product->load(['category', 'brand', 'tags', 'collections', 'sizes', 'genders', 'variants.size']);
-                    
+
                     \Log::info('Product show debug', [
                         'product_id' => $product->id,
                         'category_id' => $product->category_id,
@@ -266,7 +266,7 @@ class ProductsController extends Controller
 
                         'genders' => $this->processProductField($product, 'genders'),
 
-                        'variants' => $product->variants->map(function($variant) {
+                        'variants' => $product->variants->map(function ($variant) {
                             return [
                                 'id' => $variant->id,
                                 'sku' => $variant->sku,
@@ -403,8 +403,8 @@ class ProductsController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('sku', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%');
+                    ->orWhere('sku', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
 
@@ -420,13 +420,13 @@ class ProductsController extends Controller
         $filename = 'products_' . date('Y-m-d_His') . '.csv';
         $headers = ['Content-Type' => 'text/csv', 'Content-Disposition' => "attachment; filename=\"$filename\""];
 
-        $callback = function() use ($products) {
+        $callback = function () use ($products) {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['ID', 'Name', 'SKU', 'Category', 'Price', 'Sale Price', 'Stock', 'Stock Status', 'Status', 'Featured', 'Created At']);
             foreach ($products as $product) {
                 fputcsv($file, [
-                    $product->id, 
-                    $product->name, 
+                    $product->id,
+                    $product->name,
                     $product->sku ?? 'N/A',
                     $product->category ? $product->category->name : 'Uncategorized',
                     $product->price ?? 0,
@@ -615,6 +615,9 @@ class ProductsController extends Controller
                 'highlight_notes.*' => 'exists:highlight_notes,id',
                 // Scent Intensity
                 'scent_intensity' => 'nullable|in:soft,significant,statement',
+                'scent_intensity_soft_text' => 'nullable|string',
+                'scent_intensity_significant_text' => 'nullable|string',
+                'scent_intensity_statement_text' => 'nullable|string',
                 // Scent Families
                 'scent_families' => 'nullable|array',
                 'scent_families.*' => 'exists:scent_families,id',
@@ -1009,7 +1012,7 @@ class ProductsController extends Controller
         if (empty($productData)) {
             return redirect()->route('admin.products.create.step1')->with('error', 'Please complete previous steps first.');
         }
-        
+
         return view('admin.products.create.step7', compact('productData'));
     }
 
@@ -1028,131 +1031,131 @@ class ProductsController extends Controller
                 'is_bundle_product' => 'nullable|boolean',
             ]);
 
-        // Convert checkbox values to boolean
-        $validated['is_bestseller'] = $request->has('is_bestseller');
-        $validated['is_new'] = $request->has('is_new');
-        $validated['is_featured'] = $request->has('is_featured');
-        $validated['is_trending'] = $request->has('is_trending');
-        $validated['is_topsale'] = $request->has('is_topsale');
-        $validated['show_in_homepage'] = $request->has('show_in_homepage');
-        $validated['is_bundle_product'] = $request->has('is_bundle_product');
+            // Convert checkbox values to boolean
+            $validated['is_bestseller'] = $request->has('is_bestseller');
+            $validated['is_new'] = $request->has('is_new');
+            $validated['is_featured'] = $request->has('is_featured');
+            $validated['is_trending'] = $request->has('is_trending');
+            $validated['is_topsale'] = $request->has('is_topsale');
+            $validated['show_in_homepage'] = $request->has('show_in_homepage');
+            $validated['is_bundle_product'] = $request->has('is_bundle_product');
 
-        $productData = array_merge(session('product_data', []), $validated);
+            $productData = array_merge(session('product_data', []), $validated);
 
-        try {
-            // Process additional images
-            $additionalImages = $productData['additional_images'] ?? '[]';
-            if (is_string($additionalImages)) {
-                $additionalImages = json_decode($additionalImages, true) ?? [];
-            }
-            $productData['images'] = $additionalImages;
+            try {
+                // Process additional images
+                $additionalImages = $productData['additional_images'] ?? '[]';
+                if (is_string($additionalImages)) {
+                    $additionalImages = json_decode($additionalImages, true) ?? [];
+                }
+                $productData['images'] = $additionalImages;
 
-            // Set defaults for optional fields
-            if (!isset($productData['category_id'])) {
-                $productData['category_id'] = null;
-            }
+                // Set defaults for optional fields
+                if (!isset($productData['category_id'])) {
+                    $productData['category_id'] = null;
+                }
 
-            $productData['stock_status'] = $productData['stock_status'] ?? 'in_stock';
-            $productData['stock'] = $productData['stock'] ?? 0;
-            $productData['price'] = $productData['price'] ?? 0;
+                $productData['stock_status'] = $productData['stock_status'] ?? 'in_stock';
+                $productData['stock'] = $productData['stock'] ?? 0;
+                $productData['price'] = $productData['price'] ?? 0;
 
-            // Clean empty HTML content
-            foreach (['additional_information', 'short_description', 'ingredients'] as $field) {
-                if (isset($productData[$field])) {
-                    $cleanContent = trim(strip_tags($productData[$field]));
-                    if (empty($cleanContent)) {
-                        $productData[$field] = null;
+                // Clean empty HTML content
+                foreach (['additional_information', 'short_description', 'ingredients'] as $field) {
+                    if (isset($productData[$field])) {
+                        $cleanContent = trim(strip_tags($productData[$field]));
+                        if (empty($cleanContent)) {
+                            $productData[$field] = null;
+                        }
                     }
                 }
-            }
 
-            // Extract relationship data
-            $hasVariants = $productData['has_variants'] ?? false;
-            $variantSizes = $productData['variant_sizes'] ?? '[]';
-            $tags = $productData['tags'] ?? [];
-            $collections = $productData['collections'] ?? [];
-            $genders = $productData['genders'] ?? [];
-            $highlightNotes = $productData['highlight_notes'] ?? [];
+                // Extract relationship data
+                $hasVariants = $productData['has_variants'] ?? false;
+                $variantSizes = $productData['variant_sizes'] ?? '[]';
+                $tags = $productData['tags'] ?? [];
+                $collections = $productData['collections'] ?? [];
+                $genders = $productData['genders'] ?? [];
+                $highlightNotes = $productData['highlight_notes'] ?? [];
 
-            // Remove relationship fields before creating product
-            unset($productData['additional_images']);
-            unset($productData['has_variants']);
-            unset($productData['variant_sizes']);
-            unset($productData['tags']);
-            unset($productData['collections']);
-            unset($productData['genders']);
-            unset($productData['highlight_notes']);
+                // Remove relationship fields before creating product
+                unset($productData['additional_images']);
+                unset($productData['has_variants']);
+                unset($productData['variant_sizes']);
+                unset($productData['tags']);
+                unset($productData['collections']);
+                unset($productData['genders']);
+                unset($productData['highlight_notes']);
 
-            // Create product
-            $product = Product::create($productData);
+                // Create product
+                $product = Product::create($productData);
 
-            // Sync relationships
-            if (!empty($tags)) {
-                $product->tagsList()->sync($tags);
-            }
-
-            if (!empty($collections)) {
-                $product->collectionsList()->sync($collections);
-            }
-
-            if (!empty($genders)) {
-                $product->genders()->sync($genders);
-            }
-
-            if (!empty($highlightNotes)) {
-                $product->highlightNotes()->sync($highlightNotes);
-            }
-
-            // Sync scent families
-            $scentFamilies = $productData['scent_families'] ?? [];
-            if (!empty($scentFamilies)) {
-                $product->scentFamilies()->sync($scentFamilies);
-            }
-
-            // Handle size variants
-            if ($hasVariants) {
-                $sizeIds = json_decode($variantSizes, true) ?? [];
-
-                if (!empty($sizeIds)) {
-                    $product->sizes()->sync($sizeIds);
-                    
-                    // Create variants for each size
-                    $variantData = [
-                        'variant_sizes' => $variantSizes,
-                        'variant_images' => '{}'
-                    ];
-                    $this->createProductVariants($product, $variantData);
+                // Sync relationships
+                if (!empty($tags)) {
+                    $product->tagsList()->sync($tags);
                 }
+
+                if (!empty($collections)) {
+                    $product->collectionsList()->sync($collections);
+                }
+
+                if (!empty($genders)) {
+                    $product->genders()->sync($genders);
+                }
+
+                if (!empty($highlightNotes)) {
+                    $product->highlightNotes()->sync($highlightNotes);
+                }
+
+                // Sync scent families
+                $scentFamilies = $productData['scent_families'] ?? [];
+                if (!empty($scentFamilies)) {
+                    $product->scentFamilies()->sync($scentFamilies);
+                }
+
+                // Handle size variants
+                if ($hasVariants) {
+                    $sizeIds = json_decode($variantSizes, true) ?? [];
+
+                    if (!empty($sizeIds)) {
+                        $product->sizes()->sync($sizeIds);
+
+                        // Create variants for each size
+                        $variantData = [
+                            'variant_sizes' => $variantSizes,
+                            'variant_images' => '{}'
+                        ];
+                        $this->createProductVariants($product, $variantData);
+                    }
+                }
+
+                session()->forget('product_data');
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Product created successfully!',
+                        'redirect_url' => route('admin.products'),
+                        'product_id' => $product->id
+                    ]);
+                }
+
+                return redirect()->route('admin.products')->with('success', 'Product created successfully!');
+
+            } catch (\Exception $e) {
+                $errorMessage = 'Failed to create product: ' . $e->getMessage();
+                if (config('app.debug')) {
+                    $errorMessage .= ' (Line: ' . $e->getLine() . ')';
+                }
+
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $errorMessage
+                    ], 500);
+                }
+
+                return back()->withInput()->withErrors(['error' => $errorMessage]);
             }
-
-            session()->forget('product_data');
-
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Product created successfully!',
-                    'redirect_url' => route('admin.products'),
-                    'product_id' => $product->id
-                ]);
-            }
-
-            return redirect()->route('admin.products')->with('success', 'Product created successfully!');
-
-        } catch (\Exception $e) {
-            $errorMessage = 'Failed to create product: ' . $e->getMessage();
-            if (config('app.debug')) {
-                $errorMessage .= ' (Line: ' . $e->getLine() . ')';
-            }
-
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $errorMessage
-                ], 500);
-            }
-
-            return back()->withInput()->withErrors(['error' => $errorMessage]);
-        }
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($request->expectsJson()) {
@@ -1228,7 +1231,7 @@ class ProductsController extends Controller
         $variantImages = [];
         try {
             $variants = $product->variants()->get();
-            
+
             foreach ($variants as $variant) {
                 if (!empty($variant->images) && is_array($variant->images)) {
                     foreach ($variant->images as $image) {
@@ -1253,7 +1256,7 @@ class ProductsController extends Controller
                 $relationData = $product->$fieldName;
 
                 if (is_object($relationData) && method_exists($relationData, 'map')) {
-                    return $relationData->map(function($item) use ($fieldName) {
+                    return $relationData->map(function ($item) use ($fieldName) {
                         return $this->mapFieldItem($item, $fieldName);
                     })->toArray();
                 }
@@ -1263,7 +1266,7 @@ class ProductsController extends Controller
 
             if (is_array($fieldValue)) {
 
-                return collect($fieldValue)->map(function($item) use ($fieldName) {
+                return collect($fieldValue)->map(function ($item) use ($fieldName) {
                     return $this->mapFieldItem($item, $fieldName);
                 })->toArray();
             }
@@ -1271,7 +1274,7 @@ class ProductsController extends Controller
             if (is_string($fieldValue)) {
                 $decoded = json_decode($fieldValue, true);
                 if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                    return collect($decoded)->map(function($item) use ($fieldName) {
+                    return collect($decoded)->map(function ($item) use ($fieldName) {
                         return $this->mapFieldItem($item, $fieldName);
                     })->toArray();
                 }
@@ -1338,35 +1341,40 @@ class ProductsController extends Controller
         // short_description -> notes
         // ingredients -> ingredients
         // additional_information -> details
-        session(['edit_product_data' => [
-            'product_id' => $product->id,
-            'name' => $product->name,
-            'slug' => $product->slug,
-            'inspired_by' => $product->inspired_by,
-            'retail_price' => $product->retail_price,
-            'retail_price_color' => $product->retail_price_color ?? '#B8860B',
-            'about' => $product->description,
-            'notes' => $product->short_description,
-            'ingredients' => $product->ingredients,
-            'details' => $product->additional_information,
-            // Product Tab Fields
-            'about_scent' => $product->about_scent,
-            'fragrance_notes' => $product->fragrance_notes,
-            'why_love_it' => $product->why_love_it,
-            'what_makes_clean' => $product->what_makes_clean,
-            'ingredients_details' => $product->ingredients_details,
-            'shipping_info' => $product->shipping_info,
-            'disclaimer' => $product->disclaimer,
-            'ask_question' => $product->ask_question,
-            // Highlight Notes
-            'highlight_notes' => $product->highlightNotes->pluck('id')->toArray(),
-            // Scent Intensity
-            'scent_intensity' => $product->scent_intensity,
-            // Scent Families
-            'scent_families' => $product->scentFamilies ? $product->scentFamilies->pluck('id')->toArray() : [],
-            // Moments
-            'moments' => $product->moments ? $product->moments->pluck('id')->toArray() : [],
-        ]]);
+        session([
+            'edit_product_data' => [
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'slug' => $product->slug,
+                'inspired_by' => $product->inspired_by,
+                'retail_price' => $product->retail_price,
+                'retail_price_color' => $product->retail_price_color ?? '#B8860B',
+                'about' => $product->description,
+                'notes' => $product->short_description,
+                'ingredients' => $product->ingredients,
+                'details' => $product->additional_information,
+                // Product Tab Fields
+                'about_scent' => $product->about_scent,
+                'fragrance_notes' => $product->fragrance_notes,
+                'why_love_it' => $product->why_love_it,
+                'what_makes_clean' => $product->what_makes_clean,
+                'ingredients_details' => $product->ingredients_details,
+                'shipping_info' => $product->shipping_info,
+                'disclaimer' => $product->disclaimer,
+                'ask_question' => $product->ask_question,
+                // Highlight Notes
+                'highlight_notes' => $product->highlightNotes->pluck('id')->toArray(),
+                // Scent Intensity
+                'scent_intensity' => $product->scent_intensity,
+                'scent_intensity_soft_text' => $product->scent_intensity_soft_text,
+                'scent_intensity_significant_text' => $product->scent_intensity_significant_text,
+                'scent_intensity_statement_text' => $product->scent_intensity_statement_text,
+                // Scent Families
+                'scent_families' => $product->scentFamilies ? $product->scentFamilies->pluck('id')->toArray() : [],
+                // Moments
+                'moments' => $product->moments ? $product->moments->pluck('id')->toArray() : [],
+            ]
+        ]);
 
         $productData = session('edit_product_data', []);
         $highlightNotes = \App\Models\HighlightNote::where('is_active', true)->orderBy('name')->get();
@@ -1404,6 +1412,9 @@ class ProductsController extends Controller
             'highlight_notes.*' => 'exists:highlight_notes,id',
             // Scent Intensity
             'scent_intensity' => 'nullable|in:soft,significant,statement',
+            'scent_intensity_soft_text' => 'nullable|string',
+            'scent_intensity_significant_text' => 'nullable|string',
+            'scent_intensity_statement_text' => 'nullable|string',
             // Scent Families
             'scent_families' => 'nullable|array',
             'scent_families.*' => 'exists:scent_families,id',
@@ -1441,6 +1452,9 @@ class ProductsController extends Controller
             'ask_question' => $validated['ask_question'] ?? null,
             // Scent Intensity
             'scent_intensity' => $validated['scent_intensity'] ?? null,
+            'scent_intensity_soft_text' => $validated['scent_intensity_soft_text'] ?? null,
+            'scent_intensity_significant_text' => $validated['scent_intensity_significant_text'] ?? null,
+            'scent_intensity_statement_text' => $validated['scent_intensity_statement_text'] ?? null,
         ];
 
         $product->update($updateData);
@@ -1462,7 +1476,7 @@ class ProductsController extends Controller
         session(['edit_product_data' => $editData]);
 
         return redirect()->route('admin.products.edit.step2', $product)
-                        ->with('success', 'Basic information updated!');
+            ->with('success', 'Basic information updated!');
     }
 
     public function editStep2(Product $product)
@@ -1498,7 +1512,7 @@ class ProductsController extends Controller
         session(['edit_product_data' => $editData]);
 
         return redirect()->route('admin.products.edit.step3', $product)
-                        ->with('success', 'Product images updated!');
+            ->with('success', 'Product images updated!');
     }
 
     public function editStep3(Product $product)
@@ -1563,7 +1577,7 @@ class ProductsController extends Controller
         session(['edit_product_data' => $editData]);
 
         return redirect()->route('admin.products.edit.step4', $product)
-                        ->with('success', 'Categories & Organization updated!');
+            ->with('success', 'Categories & Organization updated!');
     }
 
     public function editStep4(Product $product)
@@ -1603,7 +1617,7 @@ class ProductsController extends Controller
         session(['edit_product_data' => $editData]);
 
         return redirect()->route('admin.products.edit.step5', $product)
-                        ->with('success', 'Pricing & Inventory updated!');
+            ->with('success', 'Pricing & Inventory updated!');
     }
 
     public function editStep5(Product $product)
@@ -1653,7 +1667,7 @@ class ProductsController extends Controller
         session(['edit_product_data' => $editData]);
 
         return redirect()->route('admin.products.edit.step6', $product)
-                        ->with('success', 'Sizes & Genders updated!');
+            ->with('success', 'Sizes & Genders updated!');
     }
 
     public function editStep6(Product $product)
@@ -1693,7 +1707,7 @@ class ProductsController extends Controller
         session(['edit_product_data' => $editData]);
 
         return redirect()->route('admin.products.edit.step7', $product)
-                        ->with('success', 'SEO settings updated!');
+            ->with('success', 'SEO settings updated!');
     }
 
     public function editStep7(Product $product)
@@ -1766,7 +1780,7 @@ class ProductsController extends Controller
             }
 
             return redirect()->route('admin.products')
-                            ->with('success', 'Product updated successfully!');
+                ->with('success', 'Product updated successfully!');
 
         } catch (\Exception $e) {
             \Log::error('Product update failed', ['error' => $e->getMessage(), 'product_id' => $product->id]);
@@ -1793,7 +1807,7 @@ class ProductsController extends Controller
 
             // Create new product with copied data
             $newProduct = $product->replicate();
-            
+
             // Modify unique fields
             $newProduct->name = $product->name . ' (Copy)';
             $newProduct->slug = Str::slug($product->name . ' Copy ' . time());
@@ -1801,18 +1815,18 @@ class ProductsController extends Controller
             $newProduct->status = 'draft'; // Set as draft by default
             $newProduct->is_featured = false;
             $newProduct->show_in_homepage = false;
-            
+
             $newProduct->save();
 
             // Sync relationships
             if ($product->tagsList->count() > 0) {
                 $newProduct->tagsList()->sync($product->tagsList->pluck('id'));
             }
-            
+
             if ($product->collectionsList->count() > 0) {
                 $newProduct->collectionsList()->sync($product->collectionsList->pluck('id'));
             }
-            
+
             if ($product->genders->count() > 0) {
                 $newProduct->genders()->sync($product->genders->pluck('id'));
             }
