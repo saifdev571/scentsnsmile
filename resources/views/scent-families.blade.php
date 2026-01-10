@@ -122,7 +122,7 @@
                                         {{-- Slider Arrows (Only if more than 3 products) --}}
                                         @if($family->products->count() > 3)
                                             <button
-                                                onclick="document.getElementById('scent-products-slider-{{ $family->id }}').scrollBy({left: -305, behavior: 'smooth'})"
+                                                onclick="document.getElementById('scent-products-slider-{{ $family->id }}').scrollBy({left: -256, behavior: 'smooth'})"
                                                 class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-30 bg-white shadow-lg text-gray-800 p-3 rounded-full hover:bg-gray-50 focus:outline-none hidden md:flex items-center justify-center border border-gray-100 cursor-pointer">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,7 +131,7 @@
                                             </button>
 
                                             <button
-                                                onclick="document.getElementById('scent-products-slider-{{ $family->id }}').scrollBy({left: 305, behavior: 'smooth'})"
+                                                onclick="document.getElementById('scent-products-slider-{{ $family->id }}').scrollBy({left: 256, behavior: 'smooth'})"
                                                 class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-30 bg-white shadow-lg text-gray-800 p-3 rounded-full hover:bg-gray-50 focus:outline-none hidden md:flex items-center justify-center border border-gray-100 cursor-pointer">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -144,7 +144,7 @@
                                         <div id="scent-products-slider-{{ $family->id }}"
                                             class="flex overflow-x-auto gap-4 py-8 px-4 -mx-4 snap-x snap-proximity hide-scroll-bar scroll-smooth">
                                             @foreach($family->products as $product)
-                                                <div class="flex-none w-72 snap-center">
+                                                <div class="flex-none w-60 snap-center">
                                                     @include('partials.product-card', ['product' => $product])
                                                 </div>
                                             @endforeach
