@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -28,10 +27,11 @@ class Admin extends Authenticatable
     ];
 
     protected $casts = [
+        'password' => 'hashed',     // ✅ auto-hash when you assign plain password
         'is_active' => 'boolean',
         'last_login_at' => 'datetime',
     ];
-    
+
     // Accessor for last_login (alias for last_login_at)
     public function getLastLoginAttribute()
     {
@@ -53,13 +53,18 @@ class Admin extends Authenticatable
         return $this->hasMany(LoginHistory::class);
     }
 
-    public function hasPermission($permission)
+    public function isSuperAdmin(): bool
     {
-        return $this->role && $this->role->hasPermission($permission);
+        return $this->role?->slug === 'super-admin';
     }
 
-    public function isSuperAdmin()
+    public function hasPermission(string $permission): bool
     {
-        return $this->role && $this->role->slug === 'super-admin';
+        // ✅ Super admin always has access
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        return $this->role?->hasPermission($permission) ?? false;
     }
 }

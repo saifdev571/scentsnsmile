@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-
     use HasFactory, Notifiable;
 
     protected $fillable = [
@@ -18,6 +17,7 @@ class User extends Authenticatable
         'mobile',
         'is_active',
         'last_login_at',
+        'role_id', // ✅ add this
     ];
 
     protected $hidden = [
@@ -33,6 +33,11 @@ class User extends Authenticatable
             'last_login_at' => 'datetime',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
     public function addresses()

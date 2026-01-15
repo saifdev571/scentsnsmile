@@ -22,6 +22,11 @@ class Role extends Model
         return $this->hasMany(Admin::class);
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class); // ✅ optional
+    }
+
     public function hasPermission($permission)
     {
         return in_array($permission, $this->permissions ?? []);
