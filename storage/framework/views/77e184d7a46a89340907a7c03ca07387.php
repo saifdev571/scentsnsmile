@@ -460,4 +460,4 @@
             icon.classList.remove('rotate-180');
         }
     }
-</script><?php /**PATH /Applications/XAMPP/htdocs/scentnsmile/resources/views/admin/components/sidebar.blade.php ENDPATH**/ ?>
+</script><?php /**PATH C:\xamppp\htdocs\scentsnsmile\resources\views/admin/components/sidebar.blade.php ENDPATH**/ ?>

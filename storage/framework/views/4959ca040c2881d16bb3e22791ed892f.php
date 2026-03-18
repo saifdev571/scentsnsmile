@@ -58,4 +58,4 @@
             </div>
         </div>
     </div>
-</header><?php /**PATH /Applications/XAMPP/htdocs/scentnsmile/resources/views/admin/components/topbar.blade.php ENDPATH**/ ?>
+</header><?php /**PATH C:\xamppp\htdocs\scentsnsmile\resources\views/admin/components/topbar.blade.php ENDPATH**/ ?>

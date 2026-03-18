@@ -50,12 +50,12 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+        background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%);
         border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+        background: linear-gradient(135deg, #ea580c 0%, #d97706 100%);
     }
 
     /* Pagination Styling */
@@ -71,7 +71,7 @@
         background: white;
         border-radius: 0.75rem;
         color: #6b7280;
-        font-User: 0.875rem;
+        font-size: 0.875rem;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.2s ease;
@@ -79,18 +79,18 @@
     }
 
     .paginate_button:hover:not(.disabled) {
-        background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
-        border-color: #3b82f6;
-        color: #1e40af;
+        background: linear-gradient(135deg, #ffedd5 0%, #fef3c7 100%);
+        border-color: #f97316;
+        color: #c2410c;
         transform: translateY(-2px);
-        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+        box-shadow: 0 4px 6px -1px rgba(147, 51, 234, 0.3);
     }
 
     .paginate_button.current {
-        background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+        background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%);
         color: white;
-        border-color: #2563eb;
-        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+        border-color: #ea580c;
+        box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.5);
         font-weight: 700;
     }
 
@@ -104,11 +104,11 @@
 <script>
     // Core Functions
     function openModal() {
-        document.getElementById('UserModal').classList.remove('hidden');
+        document.getElementById('couponModal').classList.remove('hidden');
     }
 
     function closeModal() {
-        document.getElementById('UserModal').classList.add('hidden');
+        document.getElementById('couponModal').classList.add('hidden');
         const submitBtn = document.getElementById('submitBtn');
         const spinner = document.getElementById('loadingSpinner');
         if (submitBtn) {
@@ -120,16 +120,12 @@
     }
 
     function resetForm() {
-        document.getElementById('modalTitle').textContent = 'Add New User';
-        document.getElementById('submitBtnText').textContent = 'Create User';
-        document.getElementById('userForm').action = '<?php echo e(route('admin.users.store')); ?>';
+        document.getElementById('modalTitle').textContent = 'Add New Coupon';
+        document.getElementById('submitBtnText').textContent = 'Create Coupon';
+        document.getElementById('couponForm').action = '<?php echo e(route('admin.coupons.store')); ?>';
         document.getElementById('methodField').value = 'POST';
-        document.getElementById('userId').value = '';
-        document.getElementById('password').required = true;
-        if (document.getElementById('passwordHint')) {
-            document.getElementById('passwordHint').style.display = 'none';
-        }
-        document.getElementById('userForm').reset();
+        document.getElementById('couponId').value = '';
+        document.getElementById('couponForm').reset();
     }
 
     function openAddModal() {
@@ -138,18 +134,20 @@
     }
 
     function openEditModal(data) {
-        document.getElementById('modalTitle').textContent = 'Edit User';
-        document.getElementById('submitBtnText').textContent = 'Update User';
-        document.getElementById('UserForm').action = '/admin/users/' + data.id;
+        document.getElementById('modalTitle').textContent = 'Edit Coupon';
+        document.getElementById('submitBtnText').textContent = 'Update Coupon';
+        document.getElementById('couponForm').action = '/admin/coupons/' + data.id;
         document.getElementById('methodField').value = 'PATCH';
-        document.getElementById('UserId').value = data.id;
+        document.getElementById('couponId').value = data.id;
 
-        document.getElementById('name').value = data.name;
-        document.getElementById('email').value = data.email || '';
-        document.getElementById('mobile').value = data.mobile || '';
-        document.getElementById('password').value = '';
-        document.getElementById('password').required = false;
-        document.getElementById('passwordHint').style.display = 'inline';
+        document.getElementById('code').value = data.code;
+        document.getElementById('discountType').value = data.discountType;
+        document.getElementById('discountValue').value = data.discountValue;
+        document.getElementById('minPurchase').value = data.minPurchase || '';
+        document.getElementById('maxDiscount').value = data.maxDiscount || '';
+        document.getElementById('startDate').value = data.startDate || '';
+        document.getElementById('endDate').value = data.endDate || '';
+        document.getElementById('usageLimit').value = data.usageLimit || '';
         document.querySelector('input[name="is_active"]').checked = data.isActive;
 
         openModal();
@@ -249,22 +247,23 @@
 
         // Fill Up button - Auto-fill with sample data
         document.getElementById('fillUpBtn')?.addEventListener('click', function() {
-            const sampleusers = [
-                { name: 'Extra Small', abbr: 'XS' },
-                { name: 'Small', abbr: 'S' },
-                { name: 'Medium', abbr: 'M' },
-                { name: 'Large', abbr: 'L' },
-                { name: 'Extra Large', abbr: 'XL' },
-                { name: 'Double XL', abbr: 'XXL' },
-                { name: '2XL', abbr: '2XL' },
-                { name: '3XL', abbr: '3XL' }
+            const sampleCoupons = [
+                { code: 'SAVE20', type: 'percentage', value: 20 },
+                { code: 'FLAT50', type: 'fixed', value: 50 },
+                { code: 'SUMMER25', type: 'percentage', value: 25 },
+                { code: 'WELCOME10', type: 'percentage', value: 10 },
+                { code: 'MEGA100', type: 'fixed', value: 100 },
+                { code: 'FLASH30', type: 'percentage', value: 30 }
             ];
             
-            const randomUser = sampleusers[Math.floor(Math.random() * sampleusers.length)];
+            const randomCoupon = sampleCoupons[Math.floor(Math.random() * sampleCoupons.length)];
             
-            document.getElementById('name').value = randomUser.name;
-            document.getElementById('email').value = randomUser.abbr;
-            document.querySelector('input[name="sort_order"]').value = Math.floor(Math.random() * 100);
+            document.getElementById('code').value = randomCoupon.code;
+            document.getElementById('discountType').value = randomCoupon.type;
+            document.getElementById('discountValue').value = randomCoupon.value;
+            document.getElementById('minPurchase').value = Math.floor(Math.random() * 500) + 100;
+            document.getElementById('maxDiscount').value = Math.floor(Math.random() * 100) + 50;
+            document.getElementById('usageLimit').value = Math.floor(Math.random() * 100) + 10;
             document.querySelector('input[name="is_active"]').checked = true;
             
             showToastNotification('Form filled with sample data!', 'success');
@@ -275,9 +274,14 @@
             btn.addEventListener('click', function() {
                 const data = {
                     id: this.dataset.id,
-                    name: this.dataset.name,
-                    email: this.dataset.email,
-                    mobile: this.dataset.mobile,
+                    code: this.dataset.code,
+                    discountType: this.dataset.discountType,
+                    discountValue: this.dataset.discountValue,
+                    minPurchase: this.dataset.minPurchase,
+                    maxDiscount: this.dataset.maxDiscount,
+                    startDate: this.dataset.startDate,
+                    endDate: this.dataset.endDate,
+                    usageLimit: this.dataset.usageLimit,
                     isActive: this.dataset.isActive === 'true'
                 };
                 openEditModal(data);
@@ -287,18 +291,18 @@
         // Delete buttons with AJAX
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                const UserId = this.dataset.id;
-                const UserName = this.dataset.name;
+                const couponId = this.dataset.id;
+                const couponCode = this.dataset.code;
                 const deleteBtn = this;
 
                 showConfirmDialog(
-                    'Delete User?',
-                    `Are you sure you want to delete "${UserName}"? This action cannot be undone.`,
+                    'Delete Coupon?',
+                    `Are you sure you want to delete "${couponCode}"? This action cannot be undone.`,
                     () => {
                         deleteBtn.disabled = true;
                         deleteBtn.innerHTML = '<svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
 
-                        fetch('/admin/users/' + UserId, {
+                        fetch('/admin/coupons/' + couponId, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -308,20 +312,20 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        showToastNotification('User deleted successfully!', 'success');
+                        showToastNotification('Coupon deleted successfully!', 'success');
                         const row = deleteBtn.closest('tr');
-                        const UserData = {
+                        const couponData = {
                             is_active: row.dataset.status === '1'
                         };
 
-                        updateStatsOnDelete(UserData);
+                        updateStatsOnDelete(couponData);
 
                         row.style.transition = 'all 0.3s ease';
                         row.style.opacity = '0';
                         row.style.transform = 'translateX(-20px)';
                         setTimeout(() => row.remove(), 300);
                     } else {
-                        showToastNotification(data.message || 'Failed to delete User', 'error');
+                        showToastNotification(data.message || 'Failed to delete coupon', 'error');
                         deleteBtn.disabled = false;
                         deleteBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>';
                     }
@@ -336,63 +340,14 @@
             });
         });
 
-        // Ban/Unban buttons
-        document.querySelectorAll('.ban-btn, .unban-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const userId = this.dataset.id;
-                const userName = this.dataset.name;
-                const isBan = this.classList.contains('ban-btn');
-                const actionBtn = this;
-
-                showConfirmDialog(
-                    isBan ? 'Ban User?' : 'Unban User?',
-                    `Are you sure you want to ${isBan ? 'ban' : 'unban'} "${userName}"?`,
-                    () => {
-                        actionBtn.disabled = true;
-                        actionBtn.innerHTML = '<svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-
-                        fetch('/admin/users/' + userId + '/toggle', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify({ 
-                                field: 'is_active', 
-                                value: isBan ? 0 : 1 
-                            })
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                showToastNotification(isBan ? 'User banned successfully!' : 'User unbanned successfully!', 'success');
-                                setTimeout(() => location.reload(), 1000);
-                            } else {
-                                showToastNotification(data.message || 'Action failed', 'error');
-                                actionBtn.disabled = false;
-                                actionBtn.innerHTML = isBan ? 
-                                    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>' :
-                                    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
-                            }
-                        })
-                        .catch(error => {
-                            showToastNotification('Network error occurred', 'error');
-                            actionBtn.disabled = false;
-                        });
-                    }
-                );
-            });
-        });
-
         // Toggle switches for status
         document.querySelectorAll('.status-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
-                const UserId = this.dataset.id;
+                const couponId = this.dataset.id;
                 const field = this.dataset.field;
                 const value = this.checked ? 1 : 0;
 
-                fetch('/admin/users/' + UserId + '/toggle', {
+                fetch('/admin/coupons/' + couponId + '/toggle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -406,6 +361,7 @@
                     if (data.success) {
                         showToastNotification(data.message, 'success');
                         updateStatsOnToggle(field, value);
+                        this.closest('tr').dataset.status = value ? '1' : '0';
                     } else {
                         this.checked = !this.checked;
                         showToastNotification(data.message, 'error');
@@ -422,7 +378,7 @@
         document.getElementById('refreshBtn')?.addEventListener('click', () => location.reload());
 
         // AJAX Form Submission
-        document.getElementById('UserForm')?.addEventListener('submit', function(e) {
+        document.getElementById('couponForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const submitBtn = document.getElementById('submitBtn');
@@ -449,16 +405,16 @@
 
                     const methodField = document.getElementById('methodField').value;
                     if (methodField === 'POST') {
-                        updateStatsOnCreate(data.User);
-                        addUserRow(data.User);
+                        updateStatsOnCreate(data.coupon);
+                        addCouponRow(data.coupon);
                     } else {
-                        const oldRow = document.querySelector(`#usersTable tbody tr[data-id="${data.User.id}"]`);
+                        const oldRow = document.querySelector(`#couponsTable tbody tr[data-id="${data.coupon.id}"]`);
                         if (oldRow) {
                             const oldData = {
                                 isActive: oldRow.dataset.status === '1'
                             };
-                            updateStatsOnEdit(data.User, oldData);
-                            updateUserRow(data.User);
+                            updateStatsOnEdit(data.coupon, oldData);
+                            updateCouponRow(data.coupon);
                         }
                     }
                 } else {
@@ -473,7 +429,7 @@
                         });
                         showToastNotification(allErrors.join(', '), 'error');
                     } else {
-                        showToastNotification(data.message || 'Failed to save User', 'error');
+                        showToastNotification(data.message || 'Failed to save coupon', 'error');
                     }
                     submitBtn.disabled = false;
                     spinner?.classList.add('hidden');
@@ -489,7 +445,7 @@
 
         // Export button
         document.getElementById('exportBtn')?.addEventListener('click', function() {
-            window.open('/admin/users/export', '_blank');
+            window.open('/admin/coupons/export', '_blank');
             showToastNotification('Export started', 'success');
         });
 
@@ -514,8 +470,8 @@
 
             if (action === 'delete') {
                 showConfirmDialog(
-                    'Delete Multiple users?',
-                    `Are you sure you want to delete ${selected.length} selected User${selected.length > 1 ? 's' : ''}? This action cannot be undone.`,
+                    'Delete Multiple Coupons?',
+                    `Are you sure you want to delete ${selected.length} selected coupon${selected.length > 1 ? 's' : ''}? This action cannot be undone.`,
                     () => {
                         performBulkAction(action, selected);
                     }
@@ -528,7 +484,7 @@
 
         function performBulkAction(action, selected) {
 
-                fetch('/admin/users/bulk-action', {
+                fetch('/admin/coupons/bulk-action', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -563,36 +519,36 @@
     });
 
     // Helper Functions for Dynamic Stats Updates
-    function updateStatsOnCreate(User) {
-        // Total users
-        const totalEl = document.querySelector('.bg-gradient-to-br.from-blue-500 .text-4xl');
+    function updateStatsOnCreate(coupon) {
+        // Total coupons
+        const totalEl = document.querySelector('.bg-orange-600 .text-4xl');
         if (totalEl) {
             totalEl.textContent = parseInt(totalEl.textContent) + 1;
         }
 
-        // Active users
-        if (User.is_active) {
-            const activeEl = document.querySelector('.bg-gradient-to-br.from-green-500 .text-4xl');
+        // Active coupons
+        if (coupon.is_active) {
+            const activeEl = document.querySelector('.bg-emerald-600 .text-4xl');
             if (activeEl) {
                 activeEl.textContent = parseInt(activeEl.textContent) + 1;
             }
         }
     }
 
-    function updateStatsOnEdit(newUser, oldData) {
+    function updateStatsOnEdit(newCoupon, oldData) {
         // Active status changed?
-        if (newUser.is_active !== oldData.isActive) {
-            const activeEl = document.querySelector('.bg-gradient-to-br.from-green-500 .text-4xl');
+        if (newCoupon.is_active !== oldData.isActive) {
+            const activeEl = document.querySelector('.bg-emerald-600 .text-4xl');
             if (activeEl) {
                 let count = parseInt(activeEl.textContent);
-                activeEl.textContent = newUser.is_active ? count + 1 : count - 1;
+                activeEl.textContent = newCoupon.is_active ? count + 1 : count - 1;
             }
         }
     }
 
     function updateStatsOnToggle(field, value) {
         if (field === 'is_active') {
-            const activeEl = document.querySelector('.bg-gradient-to-br.from-green-500 .text-4xl');
+            const activeEl = document.querySelector('.bg-emerald-600 .text-4xl');
             if (activeEl) {
                 let count = parseInt(activeEl.textContent);
                 activeEl.textContent = value ? count + 1 : count - 1;
@@ -600,31 +556,31 @@
         }
     }
 
-    function updateStatsOnDelete(User) {
-        // Total users
-        const totalEl = document.querySelector('.bg-gradient-to-br.from-blue-500 .text-4xl');
+    function updateStatsOnDelete(coupon) {
+        // Total coupons
+        const totalEl = document.querySelector('.bg-purple-600 .text-4xl');
         if (totalEl) {
             totalEl.textContent = Math.max(0, parseInt(totalEl.textContent) - 1);
         }
 
-        // Active users
-        if (User.is_active) {
-            const activeEl = document.querySelector('.bg-gradient-to-br.from-green-500 .text-4xl');
+        // Active coupons
+        if (coupon.is_active) {
+            const activeEl = document.querySelector('.bg-emerald-600 .text-4xl');
             if (activeEl) {
                 activeEl.textContent = Math.max(0, parseInt(activeEl.textContent) - 1);
             }
         }
     }
 
-    function addUserRow(User) {
-        const tbody = document.querySelector('#usersTable tbody');
+    function addCouponRow(coupon) {
+        const tbody = document.querySelector('#couponsTable tbody');
         if (!tbody) return;
 
         // Remove empty state if exists
         const emptyRow = tbody.querySelector('#emptyState');
         if (emptyRow) emptyRow.remove();
 
-        const row = createUserRow(User);
+        const row = createCouponRow(coupon);
         tbody.insertBefore(row, tbody.firstChild);
 
         // Add fade-in animation
@@ -635,26 +591,26 @@
         }, 10);
     }
 
-    function updateUserRow(User) {
-        const row = document.querySelector(`#usersTable tbody tr[data-id="${User.id}"]`);
+    function updateCouponRow(coupon) {
+        const row = document.querySelector(`#couponsTable tbody tr[data-id="${coupon.id}"]`);
         if (!row) return;
 
-        const newRow = createUserRow(User);
+        const newRow = createCouponRow(coupon);
         row.replaceWith(newRow);
 
         // Add highlight animation
-        newRow.style.backgroundColor = '#dbeafe';
+        newRow.style.backgroundColor = '#ffedd5';
         setTimeout(() => {
             newRow.style.transition = 'background-color 1s ease';
             newRow.style.backgroundColor = '';
         }, 100);
     }
 
-    function createUserRow(User) {
+    function createCouponRow(coupon) {
         const row = document.createElement('tr');
-        row.className = 'group hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200';
-        row.dataset.id = User.id;
-        row.dataset.status = User.is_active ? '1' : '0';
+        row.className = 'group hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 transition-all duration-200';
+        row.dataset.id = coupon.id;
+        row.dataset.status = coupon.is_active ? '1' : '0';
 
         const escapeHtml = (text) => {
             if (!text) return '';
@@ -663,47 +619,69 @@
             return div.innerHTML;
         };
 
+        const typeClass = coupon.discount_type === 'percentage' 
+            ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 border border-blue-300' 
+            : 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-300';
+
+        const valueDisplay = coupon.discount_type === 'percentage' 
+            ? coupon.discount_value + '%' 
+            : '₹' + parseFloat(coupon.discount_value).toFixed(2);
+
+        const usageDisplay = coupon.used_count + '/' + (coupon.usage_limit || '∞');
+
         row.innerHTML = `
             <td class="px-4 py-4 text-center">
-                <input type="checkbox" class="row-select w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" value="${User.id}">
+                <input type="checkbox" class="row-select w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-2 focus:ring-orange-500" value="${coupon.id}">
             </td>
             <td class="px-4 py-4 text-center">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 border border-gray-300">#${User.id}</span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 border border-gray-300">#${coupon.id}</span>
             </td>
             <td class="px-4 py-4">
-                <p class="text-sm font-bold text-gray-900 group-hover:text-blue-700">${escapeHtml(User.name)}</p>
+                <p class="text-sm font-bold text-gray-900 group-hover:text-orange-700 font-mono">${escapeHtml(coupon.code)}</p>
             </td>
             <td class="px-4 py-4 text-center">
-                <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 border border-blue-300">
-                    ${escapeHtml(User.email) || 'N/A'}
+                <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold ${typeClass}">
+                    ${coupon.discount_type.charAt(0).toUpperCase() + coupon.discount_type.slice(1)}
                 </span>
             </td>
             <td class="px-4 py-4 text-center">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 border border-blue-300">${User.sort_order}</span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700 border border-orange-300">
+                    ${valueDisplay}
+                </span>
+            </td>
+            <td class="px-4 py-4 text-center">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 border border-rose-300">
+                    ${usageDisplay}
+                </span>
             </td>
             <td class="px-4 py-4 text-center">
                 <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer status-toggle" data-id="${User.id}" data-field="is_active" ${User.is_active ? 'checked' : ''}>
-                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-green-400 peer-checked:to-emerald-500"></div>
+                    <input type="checkbox" class="sr-only peer status-toggle" data-id="${coupon.id}" data-field="is_active" ${coupon.is_active ? 'checked' : ''}>
+                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-green-400 peer-checked:to-emerald-500"></div>
                 </label>
             </td>
             <td class="px-4 py-4">
                 <div class="flex items-center justify-center space-x-2">
                     <button class="edit-btn inline-flex items-center justify-center w-9 h-9 text-blue-600 bg-blue-50 border-2 border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                        title="Edit User"
-                        data-id="${User.id}"
-                        data-name="${escapeHtml(User.name)}"
-                        data-email="${escapeHtml(User.email)}"
-                        data-sort-order="${User.sort_order}"
-                        data-is-active="${User.is_active ? 'true' : 'false'}">
+                        title="Edit Coupon"
+                        data-id="${coupon.id}"
+                        data-code="${escapeHtml(coupon.code)}"
+                        data-discount-type="${coupon.discount_type}"
+                        data-discount-value="${coupon.discount_value}"
+                        data-min-purchase="${coupon.min_purchase || ''}"
+                        data-max-discount="${coupon.max_discount || ''}"
+                        data-start-date="${coupon.start_date || ''}"
+                        data-end-date="${coupon.end_date || ''}"
+                        data-usage-limit="${coupon.usage_limit || ''}"
+                        data-is-active="${coupon.is_active ? 'true' : 'false'}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
                     </button>
                     <button type="button" class="delete-btn inline-flex items-center justify-center w-9 h-9 text-red-600 bg-red-50 border-2 border-red-200 rounded-lg hover:bg-red-100 hover:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
-                        title="Delete User"
-                        data-id="${User.id}"
-                        data-name="${escapeHtml(User.name)}">
+                        title="Delete Coupon"
+                        data-id="${coupon.id}"
+                        data-code="${escapeHtml(coupon.code)}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
@@ -724,9 +702,14 @@
             editBtn.addEventListener('click', function() {
                 const data = {
                     id: this.dataset.id,
-                    name: this.dataset.name,
-                    email: this.dataset.email,
-                    mobile: this.dataset.mobile,
+                    code: this.dataset.code,
+                    discountType: this.dataset.discountType,
+                    discountValue: this.dataset.discountValue,
+                    minPurchase: this.dataset.minPurchase,
+                    maxDiscount: this.dataset.maxDiscount,
+                    startDate: this.dataset.startDate,
+                    endDate: this.dataset.endDate,
+                    usageLimit: this.dataset.usageLimit,
                     isActive: this.dataset.isActive === 'true'
                 };
                 openEditModal(data);
@@ -737,18 +720,18 @@
         const deleteBtn = row.querySelector('.delete-btn');
         if (deleteBtn) {
             deleteBtn.addEventListener('click', function() {
-                const UserId = this.dataset.id;
-                const UserName = this.dataset.name;
+                const couponId = this.dataset.id;
+                const couponCode = this.dataset.code;
                 const btn = this;
 
                 showConfirmDialog(
-                    'Delete User?',
-                    `Are you sure you want to delete "${UserName}"? This action cannot be undone.`,
+                    'Delete Coupon?',
+                    `Are you sure you want to delete "${couponCode}"? This action cannot be undone.`,
                     () => {
                         btn.disabled = true;
                         btn.innerHTML = '<svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
 
-                        fetch('/admin/users/' + UserId, {
+                        fetch('/admin/coupons/' + couponId, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -758,20 +741,20 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        showToastNotification('User deleted successfully!', 'success');
+                        showToastNotification('Coupon deleted successfully!', 'success');
                         const rowToDelete = btn.closest('tr');
-                        const UserData = {
+                        const couponData = {
                             is_active: rowToDelete.dataset.status === '1'
                         };
 
-                        updateStatsOnDelete(UserData);
+                        updateStatsOnDelete(couponData);
 
                         rowToDelete.style.transition = 'all 0.3s ease';
                         rowToDelete.style.opacity = '0';
                         rowToDelete.style.transform = 'translateX(-20px)';
                         setTimeout(() => rowToDelete.remove(), 300);
                     } else {
-                        showToastNotification(data.message || 'Failed to delete User', 'error');
+                        showToastNotification(data.message || 'Failed to delete coupon', 'error');
                         btn.disabled = false;
                         btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>';
                     }
@@ -790,11 +773,11 @@
         const statusToggle = row.querySelector('.status-toggle');
         if (statusToggle) {
             statusToggle.addEventListener('change', function() {
-                const UserId = this.dataset.id;
+                const couponId = this.dataset.id;
                 const field = this.dataset.field;
                 const value = this.checked ? 1 : 0;
 
-                fetch('/admin/users/' + UserId + '/toggle', {
+                fetch('/admin/coupons/' + couponId + '/toggle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -840,5 +823,4 @@
         }
     }
 </script>
-
-<?php /**PATH /Applications/XAMPP/htdocs/scentnsmile/resources/views/admin/users/scripts.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xamppp\htdocs\scentsnsmile\resources\views/admin/coupons/scripts.blade.php ENDPATH**/ ?>

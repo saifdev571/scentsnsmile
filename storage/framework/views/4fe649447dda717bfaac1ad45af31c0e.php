@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', 'Create Product - Step <?php echo e($currentStep ?? 1); ?> of 7'); ?>
 
 <?php $__env->startPush('styles'); ?>
@@ -268,4 +270,4 @@ function showNotification(message, type = 'info') {
 </script>
 <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Applications/XAMPP/htdocs/scentnsmile/resources/views/admin/products/create/_layout.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xamppp\htdocs\scentsnsmile\resources\views/admin/products/create/_layout.blade.php ENDPATH**/ ?>

@@ -191,4 +191,4 @@
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
-<?php /**PATH /Applications/XAMPP/htdocs/scentnsmile/resources/views/admin/layouts/app.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xamppp\htdocs\scentsnsmile\resources\views/admin/layouts/app.blade.php ENDPATH**/ ?>
